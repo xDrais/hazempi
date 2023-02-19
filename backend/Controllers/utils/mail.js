@@ -1,6 +1,6 @@
 const optGenerator = require('otp-generator')
 const nodemail = require('nodemailer')
-
+const jwt = require('jsonwebtoken')
 
 let otp= ''
 exports.generatorOTP = () => {
@@ -18,3 +18,8 @@ exports.mailTransport = ()=>
 
     })
 
+exports.generateToken =(id)=>{
+    return jwt.sign({id},process.env.jwt_Secret,{
+        expiresIn: "1d",
+    })
+}

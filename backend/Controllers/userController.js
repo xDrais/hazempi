@@ -1,18 +1,20 @@
 const asynHandler = require("express-async-handler")
 const bcrypt = require('bcryptjs')
 const User = require('../Models/user.js')
-const { generatorOTP ,mailTransport } = require('./utils/mail.js')
+const { generatorOTP ,mailTransport,generateToken } = require('./utils/mail.js')
 const verficationToken = require('../Models/token.js')
 const { isValidObjectId  } = require("mongoose")
+const validator = require("email-validator");
+
+
 
 
 const registerUser = asynHandler( async ( req , res )=> {
     const {  firstName ,lastName , email , password , imageUser , cin  ,dateOfBirth , role ,phone} = req.body
-    if (!firstName || !lastName ||  !email ||  !password || !imageUser ||  !cin  || !dateOfBirth || !phone ){
+    if (!firstName || !lastName ||  !validator.validate(email) ||  !password || !imageUser ||  !cin  || !dateOfBirth || !phone ){
             res.status(400)
             throw new Error('Please add  all fields')
     }
-
     //verifier user exits by email
     const userExists  =  await User.findOne({email})
     if(userExists){
@@ -89,7 +91,7 @@ const  verifyEmail = asynHandler( async (req,res) => {
     }
     if (user.verify) {
         res.status(404)
-        throw new Error(" User Already Verified !! ")
+        throw new Error(" User Already Verified !!")
     }
     const token = await verficationToken.findOne({owner: user._id})
 
@@ -115,4 +117,70 @@ const  verifyEmail = asynHandler( async (req,res) => {
 
 })
 
-module.exports = { registerUser, verifyEmail }
+const logIn = asynHandler( async (req,res)=>{
+        const  { email , password } = req.body
+        
+        const user = await User.findOne({ email: email })
+
+        if (user &&(await bcrypt.compare(password,user.password) ) ) {
+            res.json({
+                _id: user._id,
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                imageUrl: user.imageUrl,
+                phone: user.phone,
+                cin: user.cin,
+                role : user.role, 
+                verify : user.verify, 
+                bloque : user.bloque, 
+                dateOfBirth : user.dateOfBirth, 
+                token: generateToken(user._id)
+            })
+            
+        }else{
+            res.status(400)
+            throw new Error("Invalid Credentials")
+        }
+})
+
+const bloque = asynHandler( async(req,res)  =>{
+   const  { id } =req.body
+   const user = await User.findById(id)
+   user.bloque=true
+   await user.save()
+   res.json("User bloqued")
+})
+// Give Role
+const makeAdmin = asynHandler( async(req,res)  =>{
+    const  { id } =req.body
+    const user = await User.findById(id)
+    user.role.name="adminRole"
+    await user.save()
+    res.json("make it admin , Done !!")
+ })
+ const makeSponsor = asynHandler( async(req,res)  =>{
+    const  { id } =req.body
+    const user = await User.findById(id)
+    user.role.name="sponsorRole"
+    await user.save()
+    res.json("make it sponsor , Done !!")
+ })
+ const makeCoach = asynHandler( async(req,res)  =>{
+    const  { id } =req.body
+    const user = await User.findById(id)
+    user.role.name="coachRole"
+    await user.save()
+    res.json("make it coach , Done !!")
+ })
+ // Give Role Done
+ 
+module.exports = { 
+    registerUser,
+    verifyEmail,
+    logIn,
+    bloque,
+    makeAdmin,
+    makeSponsor,
+    makeCoach,
+ }

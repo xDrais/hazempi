@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema({
     password: {type:String, required:true},
     phone: {type:String, required:true}, 
     dateOfBirth: {type:Date, required:true},
-    imageUser: {type:String},
+    imageUrl: {type:String},
     createdAt: {type:Date, required:true, default: Date.now},
     bloque: {type:Boolean, required:true, default: false},
     verify: {type:Boolean, required:true, default: false},
