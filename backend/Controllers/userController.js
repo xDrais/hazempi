@@ -1,6 +1,8 @@
 const asynHandler = require("express-async-handler")
 const bcrypt = require('bcryptjs')
 const User = require('../Models/user.js')
+const Coach = require('../Models/coach.js')
+const Sponsor = require('../Models/sponsor.js')
 const { generatorOTP ,mailTransport,generateToken } = require('./utils/mail.js')
 const verficationToken = require('../Models/token.js')
 const { isValidObjectId  } = require("mongoose")
@@ -10,8 +12,21 @@ const validator = require("email-validator");
 
 
 const registerUser = asynHandler( async ( req , res )=> {
-    const {  firstName ,lastName , email , password , imageUser , cin  ,dateOfBirth , role ,phone} = req.body
-    if (!firstName || !lastName ||  !validator.validate(email) ||  !password || !imageUser ||  !cin  || !dateOfBirth || !phone ){
+    const {  firstName ,
+        lastName , 
+        email , 
+        password , 
+        imageUrl , 
+        cin  ,
+        dateOfBirth , 
+        role ,
+        phone,
+
+    } = req.body
+    const { entrepriseName,sector,descriptionSponsor} = req.body
+    const { speciality,descriptionCoach} = req.body
+
+    if (!firstName || !lastName ||  !validator.validate(email) ||  !password || !imageUrl ||  !cin  || !dateOfBirth || !phone ){
             res.status(400)
             throw new Error('Please add  all fields')
     }
@@ -28,6 +43,7 @@ const registerUser = asynHandler( async ( req , res )=> {
 
     const otp = generatorOTP()
 
+
     //create user
 
     const user = await User.create({
@@ -35,13 +51,33 @@ const registerUser = asynHandler( async ( req , res )=> {
         lastName ,
         email , 
         password: headPassword  , 
-        imageUser ,
+        imageUrl ,
         cin ,
         dateOfBirth ,
         phone,
         role,
+        
     })
+    //Sponsor Creation
 
+    if (entrepriseName && sector && descriptionSponsor ){
+        const sponsor = await Sponsor.create({
+            user:user._id,
+            entrepriseName:entrepriseName,
+            sector:sector,
+            descriptionSponsor:descriptionSponsor
+        })
+            
+    }
+    if (speciality &&  descriptionCoach ){
+        const coach = await Coach.create({
+            user:user._id,
+            speciality:speciality,
+            descriptionCoach:descriptionCoach
+        })
+            
+    }
+    
     const verfication = await verficationToken.create({
         owner : user._id,
         vtoken: otp
@@ -143,7 +179,7 @@ const logIn = asynHandler( async (req,res)=>{
             throw new Error("Invalid Credentials")
         }
 })
-
+//admin
 const bloque = asynHandler( async(req,res)  =>{
    const  { id } =req.body
    const user = await User.findById(id)
@@ -174,7 +210,7 @@ const makeAdmin = asynHandler( async(req,res)  =>{
     res.json("make it coach , Done !!")
  })
  // Give Role Done
- 
+
 module.exports = { 
     registerUser,
     verifyEmail,

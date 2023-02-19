@@ -17,6 +17,10 @@ const UserSchema = new mongoose.Schema({
     createdAt: {type:Date, required:true, default: Date.now},
     bloque: {type:Boolean, required:true, default: false},
     verify: {type:Boolean, required:true, default: false},
-    role :RoleSchema
+    role :RoleSchema,
+    
+    
+
+
 })
 module.exports = mongoose.model('User', UserSchema)
