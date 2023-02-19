@@ -179,6 +179,62 @@ const logIn = asynHandler( async (req,res)=>{
             throw new Error("Invalid Credentials")
         }
 })
+
+
+const forgetPass = asynHandler(async (req,res)=>{
+    const  { email } = req.body
+
+    const user = await User.findOne({ email: email })
+    console.log(user)
+    if(!user){
+        res.status(400)
+        throw new Error("Invalid User")
+    }
+    const otp = generatorOTP()
+    console.log(otp)
+    await verficationToken.create({
+        owner : user._id,
+        vtoken: otp
+    })
+    console.log("mail")
+    mailTransport().sendMail({
+        from:"devtestmailer101@gmail.com",
+        to: user.email,
+        subject: "Rest Password Mail",
+        html: `<a href="http://localhost:5000/api/user/reset-password/${user._id}/${otp}"> http://localhost:5000/api/user/reset-password/${user._id}/${otp}</a>`
+    })
+   return res.json("done")
+})
+const reset = asynHandler(async ( req,res)=>{
+    const { id , otp } =req.params
+    const { password } =req.body
+    const user = await User.findById(id)
+    if (!user) {
+        res.Error(404)
+        throw new Error(" User Not Found !!")
+    }
+    const token = await verficationToken.findOne({ owner : user._id })
+    if (!token) {
+        res.Error(404)
+        throw new Error(" Token Not Found !!")
+    }
+    const isMatch = await bcrypt.compareSync(otp,token.vtoken)
+    if (!isMatch) {
+        res.status(404)
+        throw  new Error(" Invalid Token !! ")
+    }
+
+    const salt = await bcrypt.genSalt(10)
+    const headPassword = await bcrypt.hash(password,salt)
+
+    user.password = headPassword
+    await verficationToken.deleteOne({ owner : user._id })
+    await user.save()
+     res.json(" Password Updated ")
+
+
+})
+
 //admin
 const bloque = asynHandler( async(req,res)  =>{
    const  { id } =req.body
@@ -187,7 +243,7 @@ const bloque = asynHandler( async(req,res)  =>{
    await user.save()
    res.json("User bloqued")
 })
-// Give Role
+// Give Role admin
 const makeAdmin = asynHandler( async(req,res)  =>{
     const  { id } =req.body
     const user = await User.findById(id)
@@ -210,6 +266,13 @@ const makeAdmin = asynHandler( async(req,res)  =>{
     res.json("make it coach , Done !!")
  })
  // Give Role Done
+ //admin get all snponsors
+ const test = asynHandler( async(req,res)  =>{
+    //const  { id } =req.body
+    const user = await Sponsor.find().populate('user')
+    return res.json(user)
+ })
+
 
 module.exports = { 
     registerUser,
@@ -219,4 +282,7 @@ module.exports = {
     makeAdmin,
     makeSponsor,
     makeCoach,
+    reset,
+    forgetPass,
+    
  }
