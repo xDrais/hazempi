@@ -3,6 +3,8 @@ const User = require('../Models/user.js')
 const bcrypt =require('bcryptjs')
 const asynHandler = require('express-async-handler')
 const { isValidObjectId } =require("mongoose")
+const verficationToken = require('../Models/token.js')
+
 
 
 const protectSimpleUser = asynHandler(async (req,res,next)=>{
@@ -27,4 +29,31 @@ const protectSimpleUser = asynHandler(async (req,res,next)=>{
         }
 
 })
-module.exports={ protectSimpleUser }
+const validator  = asynHandler(async (req, res, next) => {
+    const {token,id} = req.query
+    console.log("======")
+    console.log(token)
+    //console.log(req.query)
+    if (!token || !id ){
+      throw new Error(" Invalid request")
+    }
+    if(!isValidObjectId(id)){
+      throw new Error(" Invalid User")
+    }
+    const user = await User.findById(id)
+    if (!user){
+      throw new Error("User Not Found ")
+    }  
+    const reset = await verficationToken.findOne({ owner : user._id })
+    if(!reset){
+      throw new Error("reset token not found")
+    }
+    const isMatch = await bcrypt.compareSync(token,reset.vtoken)
+    if (!isMatch) {
+        res.status(404)
+        throw  new Error(" Invalid Token !! ")
+    }
+    req.user=user
+    next()
+  })
+module.exports={ protectSimpleUser, validator }

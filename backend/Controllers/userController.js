@@ -183,7 +183,10 @@ const logIn = asynHandler( async (req,res)=>{
 
 const forgetPass = asynHandler(async (req,res)=>{
     const  { email } = req.body
-
+if (!email){
+    res.status(401)
+    res.json('Invalid email')
+  }
     const user = await User.findOne({ email: email })
     console.log(user)
     if(!user){
@@ -201,35 +204,29 @@ const forgetPass = asynHandler(async (req,res)=>{
         from:"devtestmailer101@gmail.com",
         to: user.email,
         subject: "Rest Password Mail",
-        html: `<a href="http://localhost:5000/api/user/reset-password/${user._id}/${otp}"> http://localhost:5000/api/user/reset-password/${user._id}/${otp}</a>`
+        html: `<a href="http://localhost:5000/api/user/reset-password?id=${user._id}&token=${otp}"> http://localhost:5000/api/user/reset-password?id=${user._id}&token=${otp}</a>`
     })
    return res.json("done")
 })
 const reset = asynHandler(async ( req,res)=>{
-    const { id , otp } =req.params
     const { password } =req.body
-    const user = await User.findById(id)
+    const user = await User.findById(req.user._id)
     if (!user) {
         res.Error(404)
         throw new Error(" User Not Found !!")
     }
-    const token = await verficationToken.findOne({ owner : user._id })
-    if (!token) {
-        res.Error(404)
-        throw new Error(" Token Not Found !!")
-    }
-    const isMatch = await bcrypt.compareSync(otp,token.vtoken)
-    if (!isMatch) {
-        res.status(404)
-        throw  new Error(" Invalid Token !! ")
-    }
-
     const salt = await bcrypt.genSalt(10)
     const headPassword = await bcrypt.hash(password,salt)
 
     user.password = headPassword
     await verficationToken.deleteOne({ owner : user._id })
     await user.save()
+    mailTransport().sendMail({
+        from: 'hazemmega55@gmail.com',
+        to: user.email,
+        subject: 'password changed',
+        html: `<h1>password changed</h1>`
+      })
      res.json(" Password Updated ")
 
 
@@ -273,7 +270,52 @@ const makeAdmin = asynHandler( async(req,res)  =>{
     return res.json(user)
  })
 
+const updateUser = asynHandler(async(req,res)=>{
+    const { email,  firstName , lastName ,phone ,imageUrl,password} = req.body 
+    const user = await User.findById( req.params.id  )
+    if (password) {
+        
+        const salt = await bcrypt.genSalt(10)
+        const headPassword = await bcrypt.hash(password,salt)
+    
+        if (user) {
+            user.firstName = firstName  || user.firstName
+            user.lastName  = lastName || user.lastName
+            user.phone = phone || user.phone
+            user.imageUrl = imageUrl || user.imageUrl
+            user.email = validator(email) || user.email
+            user.password = headPassword || user.password
+        }
+    }
+    if (user) {
+        user.firstName = firstName  || user.firstName
+        user.lastName  = lastName || user.lastName
+        user.phone = phone || user.phone
+        user.imageUrl = imageUrl || user.imageUrl
+        user.email =validator(email) || user.email
+    }
+    const updateUser = await user.save()
+        res.json({
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phone: user.phone,
+        imageUrl: user.imageUrl,
+        email: user.email,
+        password: user.password,
+    })
+        
+})
+const findUserById = asynHandler(async(req,res)=>{
+    const { id } = req.params
+    const user = await User.findById( id ).select('-password')
+    if (!user) {
+        res.Error(404)
+        throw new Error(" User Not Found !!")
+    }
+    res.json(user)
 
+})
 module.exports = { 
     registerUser,
     verifyEmail,
@@ -284,5 +326,7 @@ module.exports = {
     makeCoach,
     reset,
     forgetPass,
+    updateUser,
+    findUserById
     
  }

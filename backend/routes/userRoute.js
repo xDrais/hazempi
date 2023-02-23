@@ -6,17 +6,20 @@ const {
     logIn,
     reset,
     forgetPass,
-
+    updateUser,
+    findUserById
 
 } = require('../Controllers/userController.js')
 
-const { protectSimpleUser }= require('../Middelware/userMiddelware.js')
+const { protectSimpleUser,validator }= require('../Middelware/userMiddelware.js')
 
 router.post('/register',registerUser)
 router.post('/verify-email',verifyEmail)
 router.post('/login',logIn)
 router.post('/forget-password',forgetPass)
-router.post('/reset-password/:id/:otp',reset)
+router.post('/reset-password',validator,reset)
+router.put('/updateUser/:id',protectSimpleUser,updateUser)
+router.get('/getuser/:id',protectSimpleUser,findUserById)
 
 
 //router.get('/test',protectSimpleUser,test)
