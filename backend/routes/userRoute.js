@@ -11,7 +11,7 @@ const {
 
 } = require('../Controllers/userController.js')
 
-const { protectSimpleUser,validator }= require('../Middelware/userMiddelware.js')
+const { protectSimpleUser,validator,isAdmin }= require('../Middelware/userMiddelware.js')
 
 router.post('/register',registerUser)
 router.post('/verify-email',verifyEmail)

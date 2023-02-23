@@ -29,6 +29,15 @@ const protectSimpleUser = asynHandler(async (req,res,next)=>{
         }
 
 })
+const isAdmin  = asynHandler(async (req, res, next) => {
+    if (req.user && req.user.role.name==="adminRole") {
+      next()
+    } else {
+      res.status(401)
+      throw new Error ('Not Authorized as an admin')
+    }
+  
+  })
 const validator  = asynHandler(async (req, res, next) => {
     const {token,id} = req.query
     console.log("======")
@@ -56,4 +65,4 @@ const validator  = asynHandler(async (req, res, next) => {
     req.user=user
     next()
   })
-module.exports={ protectSimpleUser, validator }
+module.exports={ protectSimpleUser, validator,isAdmin }
