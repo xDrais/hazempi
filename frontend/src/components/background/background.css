@@ -1,0 +1,172 @@
+.imageback{
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    object-fit: cover;
+    transition: .35s;
+    filter: grayscale();
+    cursor: pointer;
+
+
+}
+.imageback:hover{
+    filter: grayscale(0%);
+
+    
+}
+.background{
+    margin-top: -70px;
+   
+}
+.bigtext{
+    font-family: 'Raleway', sans-serif;
+    z-index: 3;
+    position: absolute;
+    font-size: 2.1rem;
+    color: white;
+    margin-top: -420px;
+    width: 600px;
+	 right: 25%;
+    	left: 25%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.left{
+margin-right: 20px;
+font-family: 'Raleway', sans-serif;
+    z-index: 3;
+    position: absolute;
+    font-size: 1rem;
+    color: white;
+    margin-top: -330px;
+    width: 350px;
+    letter-spacing: 2px;
+    right: 35%;
+    	left: 35%;
+}
+.smalltext{
+    font-family: 'Raleway', sans-serif;
+    z-index: 3;
+    position: absolute;
+    font-size: 0.7rem;
+    color: white;
+    margin-top: -420px;
+    width: 350px;
+    letter-spacing: 2px;
+    right: 35%;
+    	left: 35%;
+
+
+}
+.circleandtext{
+  margin-top: -400px;
+  align-items: center;
+
+}
+.tunisia{
+	margin-top: -470px;
+	 z-index: 4;
+    position: absolute;
+     right: 37%;
+    	left: 38%;
+
+}
+
+@-webkit-keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.section1{
+	width:100%;
+	height: 700px;
+  background-color: #8B9A46;
+  align-content: center;
+    right: 50%;
+    left: 50%;
+}
+.bigtextword{
+    
+    font-family: 'Merriweather', serif;
+}
+
+
+.navbar{
+    background-image: linear-gradient(rgb(40, 38, 38), transparent);
+    z-index: 2;
+}
+svg path {
+    fill: none;
+    stroke: #aa2525;
+    stroke-width: 2;
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+    -webkit-animation: dash 15s linear forwards;
+    animation: dash 15s linear forwards;
+  }
+
+  @-webkit-keyframes dash {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes dash {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+
+
+
+
+
+
+
+
+ 
+
+
+.body-circle{
+  width: 100%;
+  height: 100vh;
+  background-color: #24282b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+
+  .circ{
+    font-size: 3vmin;
+    font-family: 'cousine',monospace;
+    text-transform: uppercase;
+    animation: spin 14s linear infinite;
+    color: #bebbbc;
+    margin-top: -550px;
+    z-index: 4;
+    margin-bottom: 150px;
+}
+@keyframes spin{
+    100%{
+        transform: rotate(360deg);
+    }}

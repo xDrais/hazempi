@@ -1,0 +1,48 @@
+.sign-up-as{
+    height: 320px;
+    width: 300px;
+    background-color: rgba(255, 255, 255, 0.03);
+    position: relative;
+    transform: translate(-50%, -50%);
+top:120%;      border-radius: 10px;
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+    padding: 50px 35px;
+    margin:30px;
+    left:15%;
+    right:30%;
+
+}
+
+  .sign-up-as > h3{
+    color: #c9bcbc;
+    letter-spacing: 3px;
+    font-size: small;
+    text-transform: uppercase;
+    text-align: center;
+    outline: none;
+    border: none;
+  }
+  .sign-up-as > h4{
+    color: #c9bcbc;
+    letter-spacing: 3px;
+    font-size: 19px;
+ text-align: center;
+ font-family: 'Creattion demo';
+ outline: none;
+ margin-top: -10px;
+    border: none;
+  }
+
+
+  .HOVERED{
+display: none;
+z-index: 2;
+position: absolute;
+  }
+  @media screen and (max-width:600px) {
+    .sign-up-group  {
+        display:inline-flex;
+        
+    }}
