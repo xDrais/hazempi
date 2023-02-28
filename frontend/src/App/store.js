@@ -1,8 +1,7 @@
-import {createStore , combineReducers , } from 'redux'
 import { createStore, combineReducers , applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension';
-
+//el store houwa objet bch ykounou fih des données partagées bin el components lkol
 
 const reducer = combineReducers({
     //reducers
