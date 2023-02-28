@@ -17,4 +17,4 @@ const initialState ={
     initialState, 
     composeWithDevTools(applyMiddleware(...middleware)));
   
-  export default store
+  export default store 

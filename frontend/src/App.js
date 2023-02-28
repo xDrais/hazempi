@@ -7,21 +7,22 @@ import HeroSection from './components/HeroSection/HeroSection';
 import Products from './components/Products/products';
 import Crowdfunding from "./components/crowdfunding/crowdfunding";
 import SignUpPartner from './components/signup/signupPartner';
-
+import { Provider } from 'react-redux';
+import {store} from './App/store'
 function App() {
   return (
     <div className="App">
-<Navbar />
-<HeroSection />
-<div align="center" className="eventbackground">
-<Events /> </div>
-<Products />
+    <Navbar />
+    <HeroSection />
+    <div align="center" className="eventbackground">
+    <Events /> </div>
+    <Products />
 
-     <Section1 />
-     <div align="center">
-     <Crowdfunding /></div>
-<br />
-     <Partenairec />
+        <Section1 />
+        <div align="center">
+        <Crowdfunding /></div>
+          <br />
+        <Partenairec />
      <br />
     </div>
   );
