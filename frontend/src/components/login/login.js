@@ -4,34 +4,36 @@ import video from "../HeroSection/pottery2.mp4"
 import Button from "../Button/button"
 import {useRef, useState,useEffect} from 'react';
 function Login(){
-  const userRef= useRef();
-  const errRef = useRef();
-  const [ user,setUser] = useState('');
-  const [pwd,setPwd] = useState('');
-const[errMsg,setErrMsg] = useState('');
-const [success,setSuccess]= useState(false);
-useEffect(()=>{
-  useRef.current.focus();
-},[])
-useEffect(()=>{
-  setErrMsg('');
-
-},[user,pwd])
+ 
+  const [ email,setEmail] = useState('');
+  const [password,setPassword] = useState('');
 
 
     return(
         <div className='hero-container'>
         <video src={video} autoPlay loop muted />
-        <form >
+        <form onSubmit={submitHandler}>
+          
   <h3 align="center">Login </h3>
 
-  <label for="username">Username</label>
-  <input type="text" placeholder="Email or Phone" id="username" />
+  <label for="email">Username</label>
+  <input 
+  
+  type="email" 
+  placeholder="Enter email"
+   id="email"
+   value={email}
+   onChange={(e)=>setEmail(e.target.value)} />
 
   <label for="password">Password</label>
-  <input type="password" placeholder="Password" id="password" />
+  <input type="password"
+   placeholder="Password"
+    id="password" 
+    value={password}
+    onChange={(e)=>setPassword(e.target.value)} 
+    />
 
-  <Button name="Log In"></Button>
+  <Button type="submit" name="Log In"></Button>
   <div class="social">
     <div class="go"><i class="fab fa-google"></i> Google</div>
     <div class="fb"><i class="fab fa-facebook"></i> Facebook</div>
