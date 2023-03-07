@@ -1,6 +1,6 @@
-import Crowdfunding from "../components/crowdfunding/crowdfunding";
-import ImageonTop from "../components/imageontop/Imageontop";
-import Navbarr from "../components/Navbar/navbar";
+import Crowdfunding from "../Components/crowdfunding/crowdfunding";
+import ImageonTop from "../Components/imageontop/Imageontop";
+import Navbarr from "../Components/Navbar/navbar";
 
 
 function Crowdfundingpage(){

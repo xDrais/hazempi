@@ -1,7 +1,7 @@
-import Courses from "../components/courses/courses";
-import Navbarr from "../components/Navbar/navbar";
-import ImageonTop from "../components/imageontop/Imageontop";
-import Course from "../components/course/course";
+import Courses from "../Components/courses/courses";
+import Navbarr from "../Components/Navbar/navbar";
+import ImageonTop from "../Components/imageontop/Imageontop";
+import Course from "../Components/course/course";
 function CoursesPage(){
     return(
         <>

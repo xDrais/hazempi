@@ -1,22 +1,10 @@
+
 import "../HeroSection/HeroSection.css"
 import "./login.css"
 import video from "../HeroSection/pottery2.mp4"
 import Button from "../Button/button"
-import {useRef, useState,useEffect} from 'react';
 function Login(){
-  const userRef= useRef();
-  const errRef = useRef();
-  const [ user,setUser] = useState('');
-  const [pwd,setPwd] = useState('');
-const[errMsg,setErrMsg] = useState('');
-const [success,setSuccess]= useState(false);
-useEffect(()=>{
-  useRef.current.focus();
-},[])
-useEffect(()=>{
-  setErrMsg('');
 
-},[user,pwd])
 
 
     return(
@@ -25,16 +13,16 @@ useEffect(()=>{
         <form >
   <h3 align="center">Login </h3>
 
-  <label for="username">Username</label>
+  <label htmlFor="username">Username</label>
   <input type="text" placeholder="Email or Phone" id="username" />
 
-  <label for="password">Password</label>
+  <label htmlFor="password">Password</label>
   <input type="password" placeholder="Password" id="password" />
 
   <Button name="Log In"></Button>
-  <div class="social">
-    <div class="go"><i class="fab fa-google"></i> Google</div>
-    <div class="fb"><i class="fab fa-facebook"></i> Facebook</div>
+  <div className="social">
+    <div className="go"><i className="fab fa-google"></i> Google</div>
+    <div className="fb"><i className="fab fa-facebook"></i> Facebook</div>
   </div>
 </form>
 

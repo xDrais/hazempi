@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
 import './index.css';
 import App from './App';
+import store from './App/store';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter as Router,Route,Routes,Navigate} from 'react-router-dom';
 import Crowdfundingpage from './pages/productdetail';
@@ -9,11 +11,16 @@ import CoursesPage from './pages/CoursesPage';
 import Loginpage from './pages/Login';
 import PreSignUpPage from './pages/PreSignUpPage';
 import SignupPage from './pages/Signup';
-import SignUpPartner from './components/signup/signupPartner';
+import SignUpPartner from './Components/signup/signupPartner';
+import LoginScreen from './screens/LoginScreen.js';
+import Login from './Components/login/login';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-<Router>
+    
+        <Router>
+
 <Routes>
 
 <Route path="/" element={<App/>} />
@@ -26,6 +33,7 @@ root.render(
 <Route path="/signuppartner" element={<SignUpPartner/>} />
 </Routes>
 </Router>
+
 );
 
 // If you want to start measuring performance in your app, pass a function

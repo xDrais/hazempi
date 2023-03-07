@@ -1,13 +1,13 @@
 
-import Navbarr from "../components/Navbar/navbar";
-import PreSignUp from "../components/PreSignUp/PreSignUp";
+import Navbarr from "../Components/Navbar/navbar";
+import PreSignUp from "../Components/PreSignUp/PreSignUp";
 
 
 function PreSignUpPage(){
     return(
         <>
-        <Navbarr/>
-        <PreSignUp/>
+        <Navbarr />
+        <PreSignUp />
        
         </>
     )

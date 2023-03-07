@@ -1,7 +1,7 @@
 
-import Login from "../components/login/login";
-import Navbarr from "../components/Navbar/navbar";
-import Signup from "../components/signup/signup";
+import Login from "../Components/login/login.js";
+import Navbarr from "../Components/Navbar/navbar";
+import Signup from "../Components/signup/signup";
 
 
 function SignupPage(){

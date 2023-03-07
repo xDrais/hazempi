@@ -1,12 +1,12 @@
 
-import Login from "../components/login/login";
-import Navbarr from "../components/Navbar/navbar";
+import Login from "../Components/login/login.js";
+import Navbarr from "../Components/Navbar/navbar.js";
 
 
 function Loginpage(){
     return(
         <>
-        <Navbarr/>
+        <Navbarr />
         <Login />
        
         </>
