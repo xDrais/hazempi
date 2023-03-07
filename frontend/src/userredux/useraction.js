@@ -12,11 +12,11 @@ export const login = (email,password) => async (dispatch)=>{
             }
         }
 
-        const {data } =await axios.post(
-            '/api/users/login',
-            {email,password},
+        const { data } = await axios.post(
+            'http://localhost:5000/api/user/login',
+            { email, password },
             config
-        )
+          );
 
         dispatch({
             type : USER_LOGIN_SUCCESS,

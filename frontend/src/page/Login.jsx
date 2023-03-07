@@ -2,7 +2,7 @@ import React, {useState,useEffect} from "react";
 import {Link, redirect, useNavigate} from 'react-router-dom'
 import {Form , Button,Row,Col,Message} from 'react-bootstrap'
 import { useDispatch , useSelector } from "react-redux";
-
+import { login } from "../userredux/useraction";
 const Login = () => {
     const [email , setEmail]=useState('')
     const [password , setPassword] = useState('')
@@ -13,6 +13,8 @@ const Login = () => {
     const submitHandler=(e)=>{
         e.preventDefault()
         //Dispatch LOGIN
+        dispatch(login(email, password))
+
        
     }
  
@@ -30,7 +32,7 @@ const Login = () => {
                 </Form.Control>
             </Form.Group>
 
-            <Form.Group controlId="email">
+            <Form.Group controlId="Password">
                 <Form.Label>
                     Email Address
                 </Form.Label>               
