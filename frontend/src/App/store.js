@@ -1,9 +1,9 @@
 import { createStore, combineReducers , applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension';
+import {userLoginReducer} from '../userredux/userreducer'
 //el store houwa objet bch ykounou fih des données partagées bin el components lkol
 
-import {userLoginReducer} from '../Reducers/UserReducers'
 const reducer = combineReducers({
     //reducers
     userLogin : userLoginReducer
