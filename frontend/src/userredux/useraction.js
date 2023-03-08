@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS ,USER_REGISTER_FAIL} from "./userconstant"
-
+import { useNavigate } from 'react-router-dom'
 export const login = (email,password) => async (dispatch)=>{
     try {
         dispatch({
@@ -21,9 +21,11 @@ export const login = (email,password) => async (dispatch)=>{
         dispatch({
             type : USER_LOGIN_SUCCESS,
             payload : data
-        })
-
+        }) 
         localStorage.setItem('userInfo', JSON.stringify(data))
+   
+    
+
 
     } catch(error){
         dispatch ({
@@ -61,7 +63,6 @@ export const register = (firstName,lastName,cin,phone,dateOfBirth,imageUrl,email
             type : USER_LOGIN_SUCCESS,
             payload : data
         })
-
         localStorage.setItem('userInfo', JSON.stringify(data))
 
     } catch(error){
