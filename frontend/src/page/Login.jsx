@@ -1,26 +1,34 @@
 import React, {useState,useEffect} from "react";
 import {Link, redirect, useNavigate} from 'react-router-dom'
-import {Form , Button,Row,Col,Message} from 'react-bootstrap'
+import {Form , Button,Row,Col} from 'react-bootstrap'
 import { useDispatch , useSelector } from "react-redux";
+import { login } from "../userredux/useraction";
+ //import log from '../page/login.css'
+ import Message from "../Components/Message";
+ import Loader from "../Components/Loader";
+ import { Alert } from "react-bootstrap";
+import FormContainer from "../Components/FormConatainer";
 
 const Login = () => {
     const [email , setEmail]=useState('')
     const [password , setPassword] = useState('')
     const dispatch = useDispatch()
     const userLogin = useSelector(state => state.userLogin)
-    const {loading , error , userInfo} = userLogin
+    const {loading , error } = userLogin
 
     const submitHandler=(e)=>{
         e.preventDefault()
         //Dispatch LOGIN
-       
+        dispatch(login(email, password))
     }
  
   return (
-    <>
-        <h1>Sign In</h1>
-        {error && <div variant="danger">{error}</div>}
-        
+    <>      
+        <br /> 
+        <FormContainer>
+      <center>  <h1 className="sign">Sign In</h1> </center>
+      {error && <Message variant='danger'>{error}</Message>}
+      {loading && <Loader />}
         <Form onSubmit={submitHandler}>
             <Form.Group controlId="email">
                 <Form.Label>
@@ -30,9 +38,9 @@ const Login = () => {
                 </Form.Control>
             </Form.Group>
 
-            <Form.Group controlId="email">
+            <Form.Group controlId="password">
                 <Form.Label>
-                    Email Address
+                    Password
                 </Form.Label>               
                 <Form.Control type="password" 
                 placeholder="Password" 
@@ -48,7 +56,7 @@ const Login = () => {
                 </Col>
             </Row>
         </Form>
-
+        </FormContainer>
     </>
   )
 }

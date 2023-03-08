@@ -5,11 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store from './app/store';
 import { Provider } from 'react-redux';
+import './bootstrap.min.css'
+import Navbarr from './Components/Navbar.js';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
+    <Navbarr />
     <App />
   </Provider>
 );
