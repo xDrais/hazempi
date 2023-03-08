@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store from './App/store';
 import { Provider } from 'react-redux';
+import Dashboard from './page/Dashboard';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
