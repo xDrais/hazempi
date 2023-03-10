@@ -5,10 +5,10 @@ import { useDispatch , useSelector } from "react-redux";
 import { login } from "../userredux/useraction";
 
  //import log from '../page/login.css'
- import Message from "../Components/Message";
- import Loader from "../Components/Loader";
+ import Message from "../components/Message";
+ import Loader from "../components/Loader";
  import { Alert } from "react-bootstrap";
-import FormContainer from "../Components/FormConatainer";
+import FormContainer from "../components/FormContainer";
 
 const Login = () => {
     const [email , setEmail]=useState('')

@@ -7,7 +7,7 @@ import store from './App/store';
 import { Provider } from 'react-redux';
 import Dashboard from './page/Dashboard';
 import './bootstrap.min.css'
-import Navbarr from './Components/Navbar.js';
+import Navbarr from './components/Navbar.js';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

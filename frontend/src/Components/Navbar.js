@@ -3,7 +3,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import LinkContainer from 'react-bootstrap/NavLink'
-import '../Components/Navbar.css'
+import '../components/Navbar.css'
 import { useDispatch , useSelector } from 'react-redux';
 import { Logout } from '../userredux/useraction';
 
