@@ -1,6 +1,7 @@
 import axios from 'axios'
-import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS ,USER_REGISTER_FAIL} from "./userconstant"
+import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS ,USER_REGISTER_FAIL} from "./userconstant"
 import { useNavigate } from 'react-router-dom'
+
 export const login = (email,password) => async (dispatch)=>{
     try {
         dispatch({
@@ -15,6 +16,7 @@ export const login = (email,password) => async (dispatch)=>{
         const { data } = await axios.post(
             'http://localhost:5000/api/user/login',
             { email, password },
+       
             config
           );
 
@@ -28,13 +30,13 @@ export const login = (email,password) => async (dispatch)=>{
 
 
     } catch(error){
-        dispatch ({
-            type : USER_LOGIN_FAIL,
-            payload : 
-                error.response && error.response.data.message
-                ? error.response.data.data.message
+        dispatch({
+            type: USER_LOGIN_FAIL,
+            payload:
+              error.response && error.response.data.message
+                ? error.response.data.message
                 : error.message,
-        })
+          })
 
     }
 }
@@ -76,3 +78,9 @@ export const register = (firstName,lastName,cin,phone,dateOfBirth,imageUrl,email
 
     }
 }
+
+export const Logout = ()=>(dispatch) =>{
+    localStorage.removeItem('userInfo')
+    dispatch({
+        type:USER_LOGOUT
+    })}
