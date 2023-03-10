@@ -3,7 +3,8 @@ import {Link, redirect, useNavigate} from 'react-router-dom'
 import {Form , Button,Row,Col} from 'react-bootstrap'
 import { useDispatch , useSelector } from "react-redux";
 import { login } from "../userredux/useraction";
-
+import video from "../components/HeroSection/pottery2.mp4"
+import "./login.css"
  //import log from '../page/login.css'
  import Message from "../components/Message";
  import Loader from "../components/Loader";
@@ -26,30 +27,33 @@ const Login = () => {
  
   return (
     <>      
-        <br /> 
-        <FormContainer>
-      <center>  <h1 className="sign">Sign In</h1> </center>
+        <div className='hero-container'>
+        <video src={video} autoPlay loop muted />
+        <br />   <br />   <br />   <br />  
+        <br />   <br />   <br />   <br />  
+
       {error && <Message variant='danger'>{error}</Message>}
       {loading && <Loader />}
-        <Form onSubmit={submitHandler}>
-            <Form.Group controlId="email">
-                <Form.Label>
-                    Email Address
-                </Form.Label>
-                <Form.Control type="email" placeholder="Email" value={email} onChange={(e)=> setEmail(e.target.value)}>
-                </Form.Control>
-            </Form.Group>
 
-            <Form.Group controlId="Password">
-                <Form.Label>
+        <form className="login" onSubmit={submitHandler}>
+        <center>  <h1 className="sign">Sign In</h1> </center>
+
+                <label htmlFor="email">
+                    Email Address
+                </label>
+                <input id="email" type="email" placeholder="Email" value={email} onChange={(e)=> setEmail(e.target.value)}>
+                </input>
+           
+
+            
+                <label htmlFor="password">
                     Password
-                </Form.Label>               
-                <Form.Control type="password" 
+                </label>               
+                <input id="password" type="password" 
                 placeholder="Password" 
                 value={password} 
                 onChange={(e)=> setPassword(e.target.value)}>
-                </Form.Control>
-            </Form.Group>
+                </input>
             <Button type="submit" variant="primary" >Sign In</Button>
 
             <Row className="py-3">
@@ -57,8 +61,8 @@ const Login = () => {
                         New Customer?{''} <Link to={redirect ? `register?redirect=${redirect}`:'/register'}  >Register</Link>
                 </Col>
             </Row>
-        </Form>
-        </FormContainer>
+        </form>
+         </div>
     </>
   )
 }

@@ -94,7 +94,6 @@ const Register = () => {
         <br />   <br />   <br />   <br />  
         <form id="regForm" className ="register" onSubmit={submitHandler}>
        <div align ="center" className="h11"> <h1>Sign In</h1> </div>
-<div className="tab">
                
                 <input id="firstName" type="text" placeholder="First Name" value={firstName} onChange={(e)=> setFirstName(e.target.value)}>
                 </input>
@@ -142,7 +141,7 @@ const Register = () => {
                 <ReCAPTCHA
     sitekey="6Ldzy-UkAAAAAOF98pseL_XgounD7zAY-IT1kms1"
     onChange={handleCaptcha}
-  />  </div>
+  /> 
             <Button type="submit" disabled={!isCaptchaVerified} >Sign In</Button>
 
             <Row className="py-3">
@@ -151,7 +150,7 @@ const Register = () => {
                 </Col> 
             </Row>
         
-           
+
         </form>  </div> 
            
        

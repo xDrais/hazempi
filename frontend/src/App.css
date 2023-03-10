@@ -5,3 +5,13 @@
 *{
     font-family: 'Varela Round', sans-serif;
 }
+@font-face {
+    font-family: 'Creattion Demo';
+    src: url('./Creattion\ Demo.otf');
+    src: url('./Creattion\ Demo.otf') format('embedded-opentype'),
+        url('./Creattion\ Demo.otf') format('woff2'),
+        url('./Creattion\ Demo.otf') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
