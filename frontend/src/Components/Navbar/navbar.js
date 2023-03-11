@@ -50,17 +50,17 @@ function Navbarr () {
                                <Link to="/presignup" style={{marginLeft: '700px'}}className="nav_links">
 
 SIGNUP                          </Link>
-<Nav className='about'>
+<Nav className='nav_links'>
            
             {userInfo?(
-                    <NavDropdown title={userInfo.lastName + " " + userInfo.firstName} id="username">
-                        <LinkContainer to='/profile'>
+                    <NavDropdown className='hey' title={userInfo.lastName + " " + userInfo.firstName} id="username">
+                        <LinkContainer  to='/profile'>
                             <NavDropdown.Item >Profile</NavDropdown.Item>
                         </LinkContainer>
                         <NavDropdown.Item onClick={logoutHandler} >Logout</NavDropdown.Item>
                     </NavDropdown>
             ): 
-            <LinkContainer to='/'>
+            <LinkContainer style={{color: "white"}} to='/'>
             <Nav.Link >
              Sign in
             </Nav.Link>
