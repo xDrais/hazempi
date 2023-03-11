@@ -1,7 +1,7 @@
 
  import {BrowserRouter,Routes,Route} from "react-router-dom";
-import NavBar from "../components/Dashboard/NavBar";
-import { DashboardHTML } from "../components/dashboard";
+import NavBar from "../Components/Dashboard/NavBar";
+import { DashboardHTML } from "../Components/dashboard";
 import ReactHtmlParser from 'react-html-parser';
 
 

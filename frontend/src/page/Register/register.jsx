@@ -2,13 +2,13 @@ import React, {useState} from "react";
 import {Link, useNavigate} from 'react-router-dom'
 import { Button,Row,Col} from 'react-bootstrap'
 import { useDispatch , useSelector } from "react-redux";
-import video from "../../components/HeroSection/pottery2.mp4"
-import "../../components/HeroSection/HeroSection.css"
+import video from "../../Components/HeroSection/pottery2.mp4"
+import "../../Components/HeroSection/HeroSection.css"
 import "./register.css"
 import "./arrows.css"
 
-import SpecialButton from "../../components/Button/button";
-import Loader from "../../components/Loader"
+import SpecialButton from "../../Components/Button/button";
+import Loader from "../../Components/Loader"
 import { register } from "../../userredux/useraction";
 import ReCAPTCHA from "react-google-recaptcha"
 

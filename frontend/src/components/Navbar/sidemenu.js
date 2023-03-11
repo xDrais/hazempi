@@ -14,6 +14,7 @@ class Example extends React.Component {
         <a id="about" className="menu-item" href="/about">ABOUT</a>
         <a id="contact" className="menu-item" href="/contact">CONTACT</a>
         <a onClick={ this.showSettings } className="menu-item" href="">SETTINGS</a>
+        
       </Menu></div>
     );
   }
