@@ -1,6 +1,6 @@
-import React, {useState,useEffect} from "react";
-import {Link, redirect, useNavigate} from 'react-router-dom'
-import {Form , Button,Row,Col,Alert} from 'react-bootstrap'
+import React, {useState} from "react";
+import {Link, useNavigate} from 'react-router-dom'
+import { Button,Row,Col} from 'react-bootstrap'
 import { useDispatch , useSelector } from "react-redux";
 import video from "../../components/HeroSection/pottery2.mp4"
 import "../../components/HeroSection/HeroSection.css"
@@ -50,12 +50,10 @@ const Register = () => {
 
     const dispatch = useDispatch()
     const userRegister = useSelector(state => state.userRegister)
-    console.log(userRegister)
     const {loading , error , userInfo} = userRegister
-    const navigate= useNavigate()
     
-      // If the valid status is true, mark the step as finished and valid:
-   
+    //hedhi bch taamelek el redirection 
+    const navigate= useNavigate()   
     
     
 
@@ -98,8 +96,7 @@ const Register = () => {
         else return false 
       
       }
-        if( dispatch(register(firstName,lastName,phone,cin,dateOfBirth,imageUrl,email, password)))
-         return 
+        dispatch(register(firstName,lastName,phone,cin,dateOfBirth,imageUrl,email, password, speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste,certification))
     }
 
     //Fonction Onclick taa el previous step 
@@ -226,11 +223,11 @@ const Register = () => {
 
  {/* step 3 mtaa be9i el form for sponsor */}
 
-{step === 3 && (  <> Sponsor</>)}
+              {step === 3 && (  <> Sponsor</>)}
  {/* step 4 mtaa be9i el form for Coach */}
 
-{step === 4 && (  <>
-  <input id="speciality" 
+              {step === 4 && (  <>
+                <input id="speciality" 
                   type="text" 
                   placeholder="Speciality"
                   value={speciality}
@@ -252,40 +249,56 @@ const Register = () => {
                   onChange={(e)=> setTitrePoste(e.target.value)}>
                 </input>
 
-                <input id="Date Debut Ex "
-                 type="text" 
-                 placeholder="Titre Poste"
-                  value={titrePoste} 
-                  onChange={(e)=> setTitrePoste(e.target.value)}>
+                <input id="certification"
+                 type="file" 
+                 placeholder="Certification"
+                  value={certification} 
+                  onChange={(e)=> setCertification(e.target.value)}>
                 </input>
 
-</>)}
+                <input id="dateDebutExperience"
+                 type="date" 
+                 placeholder="Date Debut Ex"
+                  value={dateDebutExperience} 
+                  onChange={(e)=> setDateDebutExperience(e.target.value)}>
+                </input>
+                <input id="dateFinExperience"
+                 type="date" 
+                 placeholder="Date Fin Ex"
+                  value={dateFinExperience} 
+                  onChange={(e)=> setDateFinExperience(e.target.value)}>
+                </input>
+
+
+                </>)}
 
  {/* step 5 mtaa terms of use w submit simple user */}
 
 
-{step === 5 && (  <>      <Button style={{ marginTop: "5px"}}type="submit">Sign In</Button>
+                {step === 5 && (  <> 
+                <Button style={{ marginTop: "5px"}}type="submit">Sign In</Button>
           
-          <Row className="py-3">
-              <Col>
+                 <Row className="py-3">
+                     <Col>
                       Have an account?{''} <Link to="/login"  >Register</Link>
-              </Col> 
-          </Row>
-Terms and Services</>)}
+                    </Col> 
+                 </Row>
+                  Terms and Services</>
+                  )}
 
 
 
  {/* les boutons mtaa previous w next */}
 
        
-            <div>
-        <button type="button" onClick={handlePrevStep} disabled={step === 1}>
+                   <div>
+         <button type="button" onClick={handlePrevStep} disabled={step === 1}>
           Previous Step
         </button>
         <button type="button" onClick={handleNextStep}  disabled={step === 2 || ( !isCaptchaVerified) }>
           {step === 5 ? "Submit" : "Next Step"}
         </button>
-      </div> 
+                  </div> 
 
         </form> 
          {/* fin form */}

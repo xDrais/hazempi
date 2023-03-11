@@ -4,9 +4,9 @@ const CoachSchema = new mongoose.Schema({
     user : {type: mongoose.Types.ObjectId,required:true,ref:"User"},
     speciality : {type : String , required : true },
     descriptionCoach : {type : String , required : true },
-    dateDebutExperience : {type : Date , required : true },
-    dateFinExperience : {type : Date , required : true },
-    titrePoste : {type : String , required : true},
+    dateDebutExperience : {type : Date , required : false },
+    dateFinExperience : {type : Date , required : false},
+    titrePoste : {type : String , required :false },
     certification : { type: String , required : false}
 
 
