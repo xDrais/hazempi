@@ -18,6 +18,13 @@
     z-index:2;
 
 }
+#username {
+  color: #e0d4cc;
+}
+.o{
+  margin-right: -200px;
+
+}
 .navlinkmargin{
    
    margin-left: 700px;

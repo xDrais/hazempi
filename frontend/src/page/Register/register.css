@@ -27,6 +27,13 @@
 
 
 }
+
+@media (max-width: 767px) {
+  .register {
+margin-top: 200px;
+  }
+ 
+}
 .tab {
   display: none;
 }
