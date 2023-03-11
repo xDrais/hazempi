@@ -5,12 +5,14 @@ import { useDispatch , useSelector } from "react-redux";
 import video from "../../components/HeroSection/pottery2.mp4"
 import "../../components/HeroSection/HeroSection.css"
 import "./register.css"
-import Message from "../../components/Message";
+import SpecialButton from "../../components/Button/button";
 import Loader from "../../components/Loader"
 import { register } from "../../userredux/useraction";
 import ReCAPTCHA from "react-google-recaptcha"
+
 const Register = () => {
-  
+    const [step, setStep] = useState(1);
+
     const [firstName , setFirstName]=useState('')
     const [lastName , setLastName]=useState('')
     const [cin , setCin]=useState('')
@@ -73,29 +75,53 @@ const Register = () => {
         }}
         console.log(lastName,firstName,password);
         if( dispatch(register(firstName,lastName,phone,cin,dateOfBirth,imageUrl,email, password)))
-        navigate('/dashboard')
-         
+         return 
         
 
 
 
-        //Dispatch LOGIN
        
 
 
     }
- 
+
+    const handlePrevStep = () => {
+      if (step === 4) {
+        setStep(1);
+      } else 
+      if (step === 3) {
+        setStep(1);
+      } else 
+      setStep((prevStep) => prevStep - 1);
+    
+    };
+  
+    const handleNextStep = () => {
+      if (step === 4) {
+        setStep(5);
+      } else 
+      if (step === 3) {
+        setStep(5);
+      } else 
+      setStep((prevStep) => prevStep + 1);
+    };    
   return (
     <> <div id='alert' align="center">
-    {message && <div className="alert">{message}</div>}
-      {loading && <Loader />}  </div>
+    </div>
      <div className='hero-container'>
-        <video src={video} autoPlay loop muted />
-        <br />   <br />   <br />   <br />  
-        <form id="regForm" className ="register" onSubmit={submitHandler}>
-       <div align ="center" className="h11"> <h1>Sign In</h1> </div>
+        <video src={video} autoPlay loop muted />  
+        {message && <div className="alert">{message}</div>}
+      {loading && <Loader />} 
+        <form  className ="register" onSubmit={submitHandler}>
+       <div align ="center" style={{ marginBottom: "20px",marginTop: "-20px"}}> <h1>Sign In</h1> </div>
                
-                <input id="firstName" type="text" placeholder="First Name" value={firstName} onChange={(e)=> setFirstName(e.target.value)}>
+
+
+       
+
+       {step === 1 && (
+
+<>    <input id="firstName" type="text" placeholder="First Name" value={firstName} onChange={(e)=> setFirstName(e.target.value)}>
                 </input>
                
                 <input id="lastName" type="text" placeholder="Last Name" value={lastName} onChange={(e)=> setLastName(e.target.value)}>
@@ -141,21 +167,41 @@ const Register = () => {
                 <ReCAPTCHA
     sitekey="6Ldzy-UkAAAAAOF98pseL_XgounD7zAY-IT1kms1"
     onChange={handleCaptcha}
-  /> 
-            <Button type="submit" disabled={!isCaptchaVerified} >Sign In</Button>
+  />  </>  )}
 
-            <Row className="py-3">
-                <Col>
-                        Have an account?{''} <Link to="/login"  >Register</Link>
-                </Col> 
-            </Row>
-        
+{step === 2 && (  <> <SpecialButton  name="Become a Coach" onClick={() => setStep(4)} /> 
+<SpecialButton onClick={() => setStep(3)} name="Become a Sponsor" />
+<SpecialButton name="Continue as a Student" /></>)}
+{step === 3 && (  <> Sponsor</>)}
+{step === 4 && (  <> Coach</>)}
 
-        </form>  </div> 
+{step === 5 && (  <>      <Button style={{ marginTop: "5px"}}type="submit" disabled={!isCaptchaVerified} >Sign In</Button>
+          
+          <Row className="py-3">
+              <Col>
+                      Have an account?{''} <Link to="/login"  >Register</Link>
+              </Col> 
+          </Row>
+Terms and Services</>)}
+
+
+
+
+       
+            <div>
+        <button type="button" onClick={handlePrevStep} disabled={step === 1}>
+          Previous Step
+        </button>
+        <button type="button" onClick={handleNextStep}  disabled={step === 2}>
+          {step === 5 ? "Submit" : "Next Step"}
+        </button>
+      </div> 
+
+        </form> 
+       </div> 
            
        
-        <div className="div2" >
-</div>
+       
     </>
   )
 }

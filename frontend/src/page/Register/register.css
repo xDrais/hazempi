@@ -1,5 +1,5 @@
 .register {
-  height: 680px;
+  height: auto;
   width: 400px;
   background-color: rgba(255, 255, 255, 0.03);
   position: absolute;
@@ -11,12 +11,26 @@
   border: 2px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
   padding: 50px 35px;
-  margin-top: 120px;
+  margin-top: 50px;
+
+}
+.register > h1 {
+  margin-bottom: 10px;
+  margin-top: 10px;
+
+
+}
+.register > .Button {
+  margin-top: -20px;
+
+
+
 
 }
 .tab {
   display: none;
 }
+
 .step {
   height: 15px;
   width: 15px;
