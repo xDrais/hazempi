@@ -11,8 +11,12 @@ import { register } from "../../userredux/useraction";
 import ReCAPTCHA from "react-google-recaptcha"
 
 const Register = () => {
-    const [step, setStep] = useState(1);
+    //State taa el captcha keni verified wala le 
+    const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
 
+    //steps taa el form 
+    const [step, setStep] = useState(1);
+    // states taa simple user 
     const [firstName , setFirstName]=useState('')
     const [lastName , setLastName]=useState('')
     const [cin , setCin]=useState('')
@@ -23,6 +27,23 @@ const Register = () => {
     const [confirmPassword , setConfirmPassword] = useState('')
     const [message , setMessage] = useState(null)
     const [password , setPassword] = useState('')
+    //states taa Coach 
+    const [speciality , setSpeciality]=useState('')
+    const [descriptionCoach , setDescriptionCoach]=useState('')
+    const [dateDebutExperience , setDateDebutExperience]=useState('')
+    const [dateFinExperience , setDateFinExperience]=useState('')
+    const [titrePoste , setTitrePoste]=useState('')
+    const [certification , setCertification]=useState('')
+
+      // Clear the input field when the user interacts with it
+
+    function handleInputFocus(e) {
+      e.target.value = '';
+    }
+
+
+
+    //Controle de saisie taa el user 
     const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
     const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
     const DATE_REGEX =  /^(?:19|20)\d{2}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])$/;
@@ -32,14 +53,13 @@ const Register = () => {
     console.log(userRegister)
     const {loading , error , userInfo} = userRegister
     const navigate= useNavigate()
-    const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
     
       // If the valid status is true, mark the step as finished and valid:
    
     
     
 
-
+    //Fonction etat el captcha
     const handleCaptcha = (value) => {
       if (value) {
         setIsCaptchaVerified(true);
@@ -47,6 +67,7 @@ const Register = () => {
         setIsCaptchaVerified(false);
       }
     };
+    //Controle de saisie + Simple user 
         const submitHandler=(e)=>{
         e.preventDefault()
         const FnameControl = USER_REGEX.test(firstName);
@@ -72,19 +93,16 @@ const Register = () => {
           if (ageInYears < 18) {
           setMessage("You need to be at least 18 years old ");
           return ;
-        }}
-        console.log(lastName,firstName,password);
+        } if(AgeControl && LnameControl && FnameControl && PwdControl)
+        return true ; 
+        else return false 
+      
+      }
         if( dispatch(register(firstName,lastName,phone,cin,dateOfBirth,imageUrl,email, password)))
          return 
-        
-
-
-
-       
-
-
     }
 
+    //Fonction Onclick taa el previous step 
     const handlePrevStep = () => {
       if (step === 4) {
         setStep(1);
@@ -95,7 +113,8 @@ const Register = () => {
       setStep((prevStep) => prevStep - 1);
     
     };
-  
+      //Fonction Onclick taa el next step 
+
     const handleNextStep = () => {
       if (step === 4) {
         setStep(5);
@@ -105,30 +124,48 @@ const Register = () => {
       } else 
       setStep((prevStep) => prevStep + 1);
     };    
+
+
+
   return (
-    <> <div id='alert' align="center">
-    </div>
+    <> 
+    {/* el video taa el background */}
      <div className='hero-container'>
         <video src={video} autoPlay loop muted />  
+         {/* el message taa el controle de saisie w el loader   */}
         {message && <div className="alert">{message}</div>}
       {loading && <Loader />} 
+
+       {/* form start    */}
         <form  className ="register" onSubmit={submitHandler}>
        <div align ="center" style={{ marginBottom: "20px",marginTop: "-20px"}}> <h1>Sign In</h1> </div>
                
 
 
        
-
+ {/* step lowla mtaa el form eli fiha el info taa simple user */}
        {step === 1 && (
 
-<>    <input id="firstName" type="text" placeholder="First Name" value={firstName} onChange={(e)=> setFirstName(e.target.value)}>
+<>              <input id="firstName" 
+                  type="text" 
+                  placeholder="First Name"
+                  value={firstName}
+                   onChange={(e)=> setFirstName(e.target.value)}>
                 </input>
                
-                <input id="lastName" type="text" placeholder="Last Name" value={lastName} onChange={(e)=> setLastName(e.target.value)}>
+                <input id="lastName"
+                 type="text"
+                  placeholder="Last Name" 
+                  value={lastName} 
+                  onChange={(e)=> setLastName(e.target.value)}>
                 </input>
            
               
-                <input id="email" type="email" placeholder="Email" value={email} onChange={(e)=> setEmail(e.target.value)}>
+                <input id="email"
+                 type="email" 
+                 placeholder="Email"
+                  value={email} 
+                  onChange={(e)=> setEmail(e.target.value)}>
                 </input>
 
                           
@@ -146,18 +183,29 @@ const Register = () => {
                 </input>
                            
                 <input id="phone" type="phone" 
-                placeholder="phone number
-                " 
+                placeholder="phone number" 
                 value={phone} 
                 onChange={(e)=> setPhone(e.target.value)}>
                 </input>
                              
-                <input id="dateOfBirth" type="date" 
-                placeholder="                dateOfBirth
-                " 
-                value={dateOfBirth} 
-                onChange={(e)=> setDateOfBirth(e.target.value)}>
-                </input>
+                {dateOfBirth ? (
+        <input
+          id="dateOfBirth"
+          type="date"
+          value={dateOfBirth}
+          onFocus={handleInputFocus}
+          onChange={(event) => setDateOfBirth(event.target.value)}
+        />
+      ) : (
+        <input
+          id="dateOfBirth"
+          type="text"
+          value=""
+          placeholder="Date of Birth"
+          onFocus={handleInputFocus}
+          onChange={(event) => setDateOfBirth(event.target.value)}
+        />
+      )}
                             
                 <input id="imageUrl" type="file" 
                 placeholder="imageUrl" 
@@ -165,17 +213,58 @@ const Register = () => {
                 onChange={(e)=> setImageUrl(e.target.value)}>
                 </input> 
                 <ReCAPTCHA
-    sitekey="6Ldzy-UkAAAAAOF98pseL_XgounD7zAY-IT1kms1"
-    onChange={handleCaptcha}
-  />  </>  )}
+                sitekey="6Ldzy-UkAAAAAOF98pseL_XgounD7zAY-IT1kms1"
+                onChange={handleCaptcha}
+                                              />  </>  )}
+
+ {/* step 2 fin tekhtar ken theb tkoun coach wala sponsor */}
 
 {step === 2 && (  <> <SpecialButton  name="Become a Coach" onClick={() => setStep(4)} /> 
 <SpecialButton onClick={() => setStep(3)} name="Become a Sponsor" />
-<SpecialButton name="Continue as a Student" /></>)}
-{step === 3 && (  <> Sponsor</>)}
-{step === 4 && (  <> Coach</>)}
+<SpecialButton name="Continue as a Student"  onClick={() => setStep(5)}/></>)}
 
-{step === 5 && (  <>      <Button style={{ marginTop: "5px"}}type="submit" disabled={!isCaptchaVerified} >Sign In</Button>
+
+ {/* step 3 mtaa be9i el form for sponsor */}
+
+{step === 3 && (  <> Sponsor</>)}
+ {/* step 4 mtaa be9i el form for Coach */}
+
+{step === 4 && (  <>
+  <input id="speciality" 
+                  type="text" 
+                  placeholder="Speciality"
+                  value={speciality}
+                   onChange={(e)=> setSpeciality(e.target.value)}>
+                </input>
+               
+                <input id="descriptionCoach"
+                 type="text"
+                  placeholder="Description Coach" 
+                  value={descriptionCoach} 
+                  onChange={(e)=> setDescriptionCoach(e.target.value)}>
+                </input>
+           
+              
+                <input id="titrePoste"
+                 type="text" 
+                 placeholder="Titre Poste"
+                  value={titrePoste} 
+                  onChange={(e)=> setTitrePoste(e.target.value)}>
+                </input>
+
+                <input id="Date Debut Ex "
+                 type="text" 
+                 placeholder="Titre Poste"
+                  value={titrePoste} 
+                  onChange={(e)=> setTitrePoste(e.target.value)}>
+                </input>
+
+</>)}
+
+ {/* step 5 mtaa terms of use w submit simple user */}
+
+
+{step === 5 && (  <>      <Button style={{ marginTop: "5px"}}type="submit">Sign In</Button>
           
           <Row className="py-3">
               <Col>
@@ -186,19 +275,23 @@ Terms and Services</>)}
 
 
 
+ {/* les boutons mtaa previous w next */}
 
        
             <div>
         <button type="button" onClick={handlePrevStep} disabled={step === 1}>
           Previous Step
         </button>
-        <button type="button" onClick={handleNextStep}  disabled={step === 2}>
+        <button type="button" onClick={handleNextStep}  disabled={step === 2 || ( !isCaptchaVerified) }>
           {step === 5 ? "Submit" : "Next Step"}
         </button>
       </div> 
 
         </form> 
-       </div> 
+         {/* fin form */}
+
+       </div>  {/* fin video background */}
+
            
        
        
