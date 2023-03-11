@@ -327,6 +327,17 @@ const findUserById = asynHandler(async(req,res)=>{
     res.json(user)
 
 })
+
+const getAllUser = asynHandler(async(req,res)=>{
+    
+    const user = await User.find( {}).select('-password')
+    if (!user) {
+        res.Error(404)
+        throw new Error(" User Not Found !!")
+    }
+    res.json(user)
+
+})
 module.exports = { 
     registerUser,
     verifyEmail,
@@ -338,6 +349,7 @@ module.exports = {
     reset,
     forgetPass,
     updateUser,
-    findUserById
+    findUserById,
+    getAllUser
     
  }

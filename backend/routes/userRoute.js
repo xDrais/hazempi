@@ -7,7 +7,8 @@ const {
     reset,
     forgetPass,
     updateUser,
-    findUserById
+    findUserById,
+    getAllUser
 
 } = require('../Controllers/userController.js')
 
@@ -20,6 +21,7 @@ router.post('/forget-password',forgetPass)
 router.post('/reset-password',validator,reset)
 router.put('/updateUser/:id',protectSimpleUser,updateUser)
 router.get('/getuser/:id',protectSimpleUser,findUserById)
+router.get('/getalluser',getAllUser)
 
 
 //router.get('/test',protectSimpleUser,test)
