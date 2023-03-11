@@ -5,10 +5,85 @@ import { useDispatch , useSelector } from "react-redux";
 import video from "../../components/HeroSection/pottery2.mp4"
 import "../../components/HeroSection/HeroSection.css"
 import "./register.css"
+import "./arrows.css"
+
 import SpecialButton from "../../components/Button/button";
 import Loader from "../../components/Loader"
 import { register } from "../../userredux/useraction";
 import ReCAPTCHA from "react-google-recaptcha"
+
+
+
+
+
+
+
+function ArrowWrapperLeft({ disabled, onClick,visibility }) {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        zIndex: "400",
+        marginTop: "50%",
+        marginLeft: "-120px",
+        pointerEvents: disabled ? "none" : "auto", // disable pointer events if disabled is true
+        opacity: disabled ? 0.5 : 1, // reduce opacity if disabled is true
+        visibility: visibility,
+
+      }}
+      id="arrow_2"
+      className="arrow-wrapper"
+      onClick={onClick}
+
+    >
+      <div className="arrow arrow--left">
+        <span>Prev</span>
+      </div>
+    </div>
+  );
+}
+
+export {ArrowWrapperLeft};
+
+function ArrowWrapperRight({ disabled, onClick,visibility }) {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        zIndex: "400",
+        marginTop: "195px",
+        marginLeft: "400px",
+        pointerEvents: disabled ? "none" : "auto", // disable pointer events if disabled is true
+        opacity: disabled ? 0.5 : 1, // reduce opacity if disabled is true
+        visibility: visibility,
+
+
+      }}
+      id="arrow_2"
+      className="arrow-wrapper"
+      onClick={onClick}
+      
+      
+     
+
+
+    >
+      <div className="arrow arrow--right">
+        <span>Next</span>
+      </div>
+    </div>
+  );
+}
+
+export {ArrowWrapperRight};
+
+
+
+
+
+
+
+
 
 const Register = () => {
     //State taa el captcha keni verified wala le 
@@ -133,10 +208,20 @@ const Register = () => {
         {message && <div className="alert">{message}</div>}
       {loading && <Loader />} 
 
+
+      
+
+
+
+
        {/* form start    */}
         <form  className ="register" onSubmit={submitHandler}>
        <div align ="center" style={{ marginBottom: "20px",marginTop: "-20px"}}> <h1>Sign In</h1> </div>
-               
+      {/* les boutons mtaa previous w next */}
+
+       <ArrowWrapperLeft onClick={handlePrevStep} disabled={step === 1} visibility ={step===2 ? "hidden" : "visible"}/>
+       <ArrowWrapperRight onClick={handleNextStep}  disabled={step === 2 || ( !isCaptchaVerified) } visibility ={step===2 ? "hidden" : "visible"}/>
+
 
 
        
@@ -288,17 +373,8 @@ const Register = () => {
 
 
 
- {/* les boutons mtaa previous w next */}
 
-       
-                   <div>
-         <button type="button" onClick={handlePrevStep} disabled={step === 1}>
-          Previous Step
-        </button>
-        <button type="button" onClick={handleNextStep}  disabled={step === 2 || ( !isCaptchaVerified) }>
-          {step === 5 ? "Submit" : "Next Step"}
-        </button>
-                  </div> 
+      
 
         </form> 
          {/* fin form */}
