@@ -22,7 +22,7 @@ import ReactHtmlParser from 'react-html-parser';
                     <thead>
                       <tr>
                         <th>Project</th>
-                        <th>Client</th>
+                        <th>Client</th>   
                         <th>Users</th>
                         <th>Status</th>
                         <th>Actions</th>
