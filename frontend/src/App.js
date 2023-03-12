@@ -17,7 +17,8 @@ function App() {
     <Route path="/register" element={<Register/>} />     
 
     <Route path="/dashboard" element={<Dashboard/>} />
-  
+    <Route path="/verify-email" element={<VerifyEmail/>} />
+
 
     </Routes>
     </Router>
