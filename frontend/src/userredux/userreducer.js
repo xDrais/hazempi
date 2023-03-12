@@ -1,5 +1,5 @@
 /* eslint-disable no-duplicate-case */
-import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL } from "./userconstant";
+import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL, APPROVE_USER_SUCCESS, APPROVE_USER_FAILURE, GET_USERS_SUCCESS } from "./userconstant";
 
  export const userLoginReducer=(state={},action)=>{
     // eslint-disable-next-line default-case
@@ -31,3 +31,21 @@ import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, U
 
     }
  }
+
+ export const userReducers = (state={}, action) => {
+    switch (action.type) {
+      case GET_USERS_SUCCESS:
+        return {  userInfo: action.payload };
+      case APPROVE_USER_SUCCESS:
+        const updatedUsers = state.userInfo.map((user) =>
+          user._id === action.payload.id ? { ...user, role: action.payload.role } : user
+        );
+        return { userInfo: updatedUsers };
+      default:
+        return state;
+    }
+  };
+
+  
+  
+  

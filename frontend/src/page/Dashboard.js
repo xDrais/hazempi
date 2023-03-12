@@ -7,34 +7,24 @@ import { Dropdown, DropdownButton } from 'react-bootstrap';
 import ReactHtmlParser from 'react-html-parser';
 import React, {useState,useEffect} from "react";
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUsers,approveUser } from "../userredux/useraction";
 
 
  function Dashboard  () {
 
-const [users, setUsers] = useState();
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.userDisplay.userInfo);
 
+  console.log(users);
   useEffect(() => {
-    async function getUsers() {
-      const response = await fetch('http://localhost:5000/api/user/getalluser', {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-        },
-      });
+    dispatch(getUsers());
+  }, [dispatch]);
 
-      const data = await response.json();
-
-      setUsers(data);
-
-      console.log(data);
-
-    }
-
-
-
-    getUsers();
-  }, []);
-
+  const handleApprove = (id, role) => {
+    dispatch(approveUser(id, role));
+  };
+ 
 
     return ( <>
 <div>    <div>{ReactHtmlParser(DashboardHTML)}   </div>
@@ -61,12 +51,13 @@ const [users, setUsers] = useState();
                         <th>Image</th>
                         <th>Role</th>
                         <th>Status</th>
+                        <th>Role Status</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody className="table-border-bottom-0">
                       
-                        {users && users.map((i) => {
+                        {Array.isArray(users) && users.map((i) => {
                           
                           return(
                               
@@ -84,18 +75,29 @@ const [users, setUsers] = useState();
                         {i.cin}
                         </td>
                         <td>
-                        <img src={i.imageUrl} alt="User Image" />
+                        <img src={`http://localhost:5000/${i.imageUrl}`} alt="User Image" />
                         </td>
                         <td>
                         <span className="badge bg-label-primary me-1">{i?.role?.name}</span>
                         </td>
                         <td ><span className={i.verify === true ? 'badge bg-label-success me-1' : 'badge bg-label-warning me-1'}>{i.verify ? 'Verifed': 'Not-Verifed'}</span>
                         <span className={i.bloque === true ? 'badge bg-label-warning me-1' :'badge bg-label-success me-1' }>{i.bloque ? 'Blocked': 'Not-Blocked'}</span></td>
+                        <td >    <span className={i.status === 'pending' ? 'badge bg-label-warning me-1' : 'badge bg-label-success me-1'}>{i.status === 'approved' ? 'approved' : 'pending'}</span></td>
 
                         <td>
-                          <DropdownButton  >
-                            <Dropdown.Item href="#/action-1"><i className="bx bx-edit-alt me-1"></i> Edit</Dropdown.Item>
-                            <Dropdown.Item href="#/action-2"><i className="bx bx-trash me-1"></i>Block</Dropdown.Item>
+                        <DropdownButton title="Actions">
+                        {i.status === "pending" && (
+                     <>
+                    {i?.role?.name === "userRole" || typeof i.role === "undefined" ? (
+                        <>
+                    <Dropdown.Item onClick={() => handleApprove(i._id, "sponsor")}><i className="bx bx-edit-alt me-1"></i> Approve Sponsor</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleApprove(i._id, "coach")}><i className="bx bx-edit-alt me-1"></i>Approve Coach</Dropdown.Item>
+                        </>
+                      ) : null}
+                   </>
+                       )}
+                      <Dropdown.Item href="#/action-1"> <i className="bx bx-edit-alt me-1"></i> Edit</Dropdown.Item>
+                      <Dropdown.Item href="#/action-2"> <i className="bx bx-trash me-1"></i>Block</Dropdown.Item>
                           </DropdownButton>
                         </td>
                         </tr>

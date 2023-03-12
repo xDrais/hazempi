@@ -22,6 +22,13 @@ const registerUser = asynHandler( async ( req , res )=> {
         dateOfBirth , 
         role ,
         phone,
+<<<<<<< Updated upstream
+=======
+        status,
+       
+
+
+>>>>>>> Stashed changes
     } = req.body
     const { entrepriseName,sector,descriptionSponsor} = req.body
     const { speciality,descriptionCoach,dateDebutExperience ,
@@ -59,11 +66,17 @@ const registerUser = asynHandler( async ( req , res )=> {
         cin ,
         dateOfBirth ,
         phone,
+<<<<<<< Updated upstream
         role,
         emailToken: otp
 
+=======
+        role ,
+        status: 'pending',
+>>>>>>> Stashed changes
         
     })
+    
     //Sponsor Creation
 
     if (entrepriseName && sector && descriptionSponsor ){
@@ -122,12 +135,33 @@ const registerUser = asynHandler( async ( req , res )=> {
             verfication : user.emailToken       
         })
     }
+    
     else{
         res.status(400)
         throw new Error('Invalid user data')
     }
-
+    res.send('Your request has been submitted for approval');
 })
+
+  const ApproveUser = asynHandler( async (req, res) => {
+const id = req.params.id;
+  const role = req.body.role;
+  try {
+    const user = await User.findById(id);
+    if (user && user.status === 'pending') {
+      user.role.name = role;
+      user.status = 'approved';
+      await user.save();
+      res.send(`User ${user.firstName} approved and set to role ${role}`);
+    } else {
+      res.status(404).send('User not found or already approved/rejected');
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+  });
+
 const  verifyEmail = asynHandler( async (req,res) => {
    const { id, emailToken } = req.body
    
@@ -359,6 +393,7 @@ module.exports = {
     forgetPass,
     updateUser,
     findUserById,
-    getAllUser
+    getAllUser,
+    ApproveUser
     
  }

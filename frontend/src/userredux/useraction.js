@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS ,USER_REGISTER_FAIL} from "./userconstant"
+import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS ,USER_REGISTER_FAIL, APPROVE_USER_SUCCESS, APPROVE_USER_FAILURE, GET_USERS_SUCCESS } from "./userconstant"
 import { useNavigate } from 'react-router-dom'
 
 export const login = (email,password) => async (dispatch)=>{
@@ -85,6 +85,7 @@ export const Logout = ()=>(dispatch) =>{
         type:USER_LOGOUT
     })}
 
+<<<<<<< Updated upstream
 export const baseUrl = "http://localhost:5000/api";
 
 export const postRequest = async (url, body) => {
@@ -130,3 +131,44 @@ export const getRequest = async (url) => {
 
   return data;
 };
+=======
+
+    export const getUsers = () => async (dispatch) => {
+        try {
+          const response = await fetch('http://localhost:5000/api/user/getalluser', {
+            method: 'GET',
+            headers: {
+              accept: 'application/json',
+            },
+          });
+      
+          const data = await response.json();
+      
+          dispatch({ type: GET_USERS_SUCCESS, payload: data });
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      
+      export const approveUser = (id, role) => async (dispatch) => {
+        try {
+          const response = await fetch(`http://localhost:5000/api/user/approve/${id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ role }),
+          });
+      
+          if (response.ok) {
+            console.log(`User ${id} approved with role ${role}`);
+            dispatch({ type: APPROVE_USER_SUCCESS, payload: { id, role } });
+          } else {
+            console.log(`Failed to approve user ${id}`);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      
+>>>>>>> Stashed changes
