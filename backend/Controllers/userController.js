@@ -128,6 +128,26 @@ const registerUser = asynHandler( async ( req , res )=> {
     }
 
 })
+
+const ApproveUser = asynHandler( async (req, res) => {
+    const id = req.params.id;
+      const role = req.body.role;
+      try {
+        const user = await User.findById(id);
+        if (user && user.status === 'pending') {
+          user.role.name = role;
+          user.status = 'approved';
+          await user.save();
+          res.send(`User ${user.firstName} approved and set to role ${role}`);
+        } else {
+          res.status(404).send('User not found or already approved/rejected');
+        }
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+      }
+      });
+
 const  verifyEmail = asynHandler( async (req,res) => {
    const { id, emailToken } = req.body
    
@@ -359,6 +379,7 @@ module.exports = {
     forgetPass,
     updateUser,
     findUserById,
-    getAllUser
+    getAllUser,
+    ApproveUser
     
  }

@@ -19,8 +19,9 @@ const UserSchema = new mongoose.Schema({
     verify: {type:Boolean, required:true, default: false},
     emailToken:{ type: String},
     role :RoleSchema,
-
-    
+    status: {
+        type: String,enum: ['pending', 'approved', 'rejected'],default: 'pending'
+      }
     
 
 
