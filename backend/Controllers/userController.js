@@ -7,9 +7,14 @@ const { generatorOTP ,mailTransport,generateToken } = require('./utils/mail.js')
 const verficationToken = require('../Models/token.js')
 const { isValidObjectId  } = require("mongoose")
 const validator = require("email-validator");
+const crypto= require("crypto");
+const jwt = require("jsonwebtoken");
 
-
-
+const createToken = (_id) => {
+    const jwtSecretKey = process.env.jwt_Secret;
+  
+    return jwt.sign({ _id }, jwtSecretKey, { expiresIn: "3d" });
+  };
 
 const registerUser = asynHandler( async ( req , res )=> {
     const {  firstName ,
@@ -46,7 +51,8 @@ const registerUser = asynHandler( async ( req , res )=> {
     const salt = await bcrypt.genSalt(10)
     const headPassword = await bcrypt.hash(password,salt)
 
-    const otp = generatorOTP()
+    // const otp = generatorOTP()
+
 
 
     //create user
@@ -61,6 +67,8 @@ const registerUser = asynHandler( async ( req , res )=> {
         dateOfBirth ,
         phone,
         role,
+        emailToken: crypto.randomBytes(64).toString("hex")
+
         
     })
     //Sponsor Creation
@@ -89,16 +97,24 @@ const registerUser = asynHandler( async ( req , res )=> {
             
     }
     
+    const token = createToken(user._id);
+/*
     const verfication = await verficationToken.create({
         owner : user._id,
         vtoken: otp
     })
+    */
     mailTransport().sendMail({
-        from:"devtestmailer101@gmail.com",
-        to: user.email,
-        subject: "Verfication Mail",
-        html: `<h1>${otp}</h1>`
+       from:"devtestmailer101@gmail.com",
+       to: user.email,
+       subject: "Account Verified ",
+       html: `<h1>Account Verified  ${user.name} ,
+       <a href = '${process.env.CLIENT_URL}/verify-email?emailToken=${user.emailToken}'> Verify your Email
+       </h1>` ,
     })
+    
+    res.json("Your Email is Send ")
+
 
 
     if(user){
@@ -111,7 +127,8 @@ const registerUser = asynHandler( async ( req , res )=> {
             imageUrl: user.imageUrl,
             cin: user.cin,
             dateOfBirth: user.dateOfBirth,
-            role : user.role,           
+            role : user.role,    
+            token : user.emailToken       
         })
     }
     else{
@@ -121,48 +138,34 @@ const registerUser = asynHandler( async ( req , res )=> {
 
 })
 const  verifyEmail = asynHandler( async (req,res) => {
-   const { id , otp } = req.body
-    if ( !id || !otp.trim()){
-        res.status(400)
-        throw new Error ("Invalid reequest")
-    }
-    if (!isValidObjectId(id)) {
+   try {
+    const emailToken =req.body.emailToken; 
 
-        res.status(404)
-        throw new Error (" Invalid User ")
-    }
-    const user = await User.findById(id)
-    if (!user) {
-        res.Error(404)
-        throw new Error(" User Not Found !!")
-    }
-    if (user.verify) {
-        res.status(404)
-        throw new Error(" User Already Verified !!")
-    }
-    const token = await verficationToken.findOne({owner: user._id})
+    if (!emailToken) return res.status(404).json("EmailToken not found...");
+    
+    const user = await User.findOne({emailToken});
 
-    if (!token) {
-        res.status(404)
-        throw  new Error(" Invalid Token !! ")
-    }
-    const isMatch = await bcrypt.compareSync(otp,token.vtoken)
-    if (!isMatch) {
-        res.status(404)
-        throw  new Error(" Invalid Token !! ") 
-    }
-    user.verify = true;
-    await verficationToken.findByIdAndDelete(token._id)
-    await user.save()
-    mailTransport().sendMail({
-        from:"devtestmailer101@gmail.com",
-        to: user.email,
-        subject: "Account Verified ",
-        html: `<h1>Account Verified</h1>`
-    })
-    res.json("Your Email is Verified ")
+    if (user) {
+      user.emailToken= null;
+      user.verify = true;
 
-})
+      await user.save(); 
+
+      const token = createToken(user._id);
+
+      res.status(200).json({
+        _id: user._id,
+        email: user.email,
+        token,
+        verify: user?.verify,
+      });
+
+    } else res.status(404).json("Email verification failed, invalid token!");
+  }catch(error){
+    console.log(error);
+    res.status(500).json(error,message);
+  }
+});
 
 const logIn = asynHandler( async (req,res)=>{
         const  { email , password } = req.body
