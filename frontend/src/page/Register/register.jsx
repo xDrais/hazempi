@@ -42,6 +42,13 @@ const Register = () => {
   const [sector, setSector] = useState("");
   const [descriptionSponsor, setDescriptionSponsor] = useState("");
   const [entrepriseName, setEntrepriseName] = useState("");
+  
+  
+  //box taa terms and conditions
+  function handleRadioChange() {
+    setIsChecked(!isChecked);
+  }
+  
   // Clear the input field when the user interacts with it
 
   function handleInputFocus(e) {
@@ -68,6 +75,8 @@ const Register = () => {
       setIsCaptchaVerified(false);
     }
   };
+  const [isChecked, setIsChecked] = useState(false);
+
   //Controle de saisie + Simple user
   const submitHandler = (e) => {
     e.preventDefault();
@@ -351,15 +360,18 @@ const Register = () => {
 
           {step === 5 && (
             <>
-              <Button style={{ marginTop: "5px" }} type="submit">
+            <div className="tacbox">
+  <input id="checkbox" type="checkbox" onChange={handleRadioChange} />
+  <label htmlFor="checkbox">        I agree to these <a href="#">Terms and Conditions</a>.</label>
+</div>
+              <Button style={{ marginTop: "5px" }} type="submit" disabled={!isChecked}>
                 Sign In
               </Button>
               <Row className="py-3">
                 <Col>
-                  Have an account?{""} <Link to="/login">Register</Link>
+                  Have an account?{""} <Link to="/login">Login</Link>
                 </Col>
               </Row>
-              Terms and Services
             </>
           )}
         </form>

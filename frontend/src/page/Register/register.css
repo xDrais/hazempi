@@ -121,3 +121,14 @@ z-index: 3;
   cursor: pointer;
 }
 
+.tacbox {
+  display:block;
+  max-width: 1000px;
+  color :rgba(8, 7, 16, 0.6)
+}
+
+.tacbox > input {
+  height: 2em;
+  width: 2em;
+  vertical-align: middle;
+}
