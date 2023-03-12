@@ -16,6 +16,7 @@ const { protectSimpleUser,validator,isAdmin }= require('../Middelware/userMiddel
 
 router.post('/register',registerUser)
 router.post('/verify-email',verifyEmail)
+router.post('/verify-email/:token',verifyEmail)
 router.post('/login',logIn)
 router.post('/forget-password',forgetPass)
 router.post('/reset-password',validator,reset)

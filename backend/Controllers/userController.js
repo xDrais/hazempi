@@ -7,7 +7,8 @@ const { generatorOTP ,mailTransport,generateToken } = require('./utils/mail.js')
 const verficationToken = require('../Models/token.js')
 const { isValidObjectId  } = require("mongoose")
 const validator = require("email-validator");
-
+const crypto= require("crypto");
+const jwt = require("jsonwebtoken");
 
 
 
@@ -46,6 +47,7 @@ const registerUser = asynHandler( async ( req , res )=> {
     const otp = generatorOTP()
 
 
+
     //create user
 
     const user = await User.create({
@@ -58,6 +60,8 @@ const registerUser = asynHandler( async ( req , res )=> {
         dateOfBirth ,
         phone,
         role,
+        emailToken: otp
+
         
     })
     //Sponsor Creation
@@ -86,16 +90,22 @@ const registerUser = asynHandler( async ( req , res )=> {
             
     }
     
+    //const token = createToken(user._id);
+
     const verfication = await verficationToken.create({
         owner : user._id,
         vtoken: otp
     })
+    
     mailTransport().sendMail({
-        from:"devtestmailer101@gmail.com",
-        to: user.email,
-        subject: "Verfication Mail",
-        html: `<h1>${otp}</h1>`
+       from:"devtestmailer101@gmail.com",
+       to: user.email,
+       subject: "Account Verified ",
+       html: `<h1>Account Verified  ${user.name} ,
+       <a href = '${process.env.CLIENT_URL}/verify-email?emailToken=${user.emailToken}'> Verify your Email
+       </h1>` ,
     })
+
 
 
     if(user){
@@ -108,7 +118,8 @@ const registerUser = asynHandler( async ( req , res )=> {
             imageUrl: user.imageUrl,
             cin: user.cin,
             dateOfBirth: user.dateOfBirth,
-            role : user.role,           
+            role : user.role,    
+            verfication : user.emailToken       
         })
     }
     else{
@@ -118,46 +129,47 @@ const registerUser = asynHandler( async ( req , res )=> {
 
 })
 const  verifyEmail = asynHandler( async (req,res) => {
-   const { id , otp } = req.body
-    if ( !id || !otp.trim()){
-        res.status(400)
-        throw new Error ("Invalid reequest")
-    }
-    if (!isValidObjectId(id)) {
+   const { id, emailToken } = req.body
+   
+   if ( !id || !emailToken.trim()){
+       res.status(400)
+       throw new Error ("Invalid reequest")
+   }
+   if (!isValidObjectId(id)) {
 
-        res.status(404)
-        throw new Error (" Invalid User ")
-    }
-    const user = await User.findById(id)
-    if (!user) {
-        res.Error(404)
-        throw new Error(" User Not Found !!")
-    }
-    if (user.verify) {
-        res.status(404)
-        throw new Error(" User Already Verified !!")
-    }
-    const token = await verficationToken.findOne({owner: user._id})
+       res.status(404)
+       throw new Error (" Invalid User ")
+   }
+   const user = await User.findById(id)
+   if (!user) {
+       res.Error(404)
+       throw new Error(" User Not Found !!")
+   }
+   if (user.verify) {
+       res.status(404)
+       throw new Error(" User Already Verified !!")
+   }
+   const token = await verficationToken.findOne({owner: user._id})
 
-    if (!token) {
-        res.status(404)
-        throw  new Error(" Invalid Token !! ")
-    }
-    const isMatch = await bcrypt.compareSync(otp,token.vtoken)
-    if (!isMatch) {
-        res.status(404)
-        throw  new Error(" Invalid Token !! ") 
-    }
-    user.verify = true;
-    await verficationToken.findByIdAndDelete(token._id)
-    await user.save()
-    mailTransport().sendMail({
-        from:"devtestmailer101@gmail.com",
-        to: user.email,
-        subject: "Account Verified ",
-        html: `<h1>Account Verified</h1>`
-    })
-    res.json("Your Email is Verified ")
+   if (!token) {
+       res.status(404)
+       throw  new Error(" Invalid Token !! ")
+   }
+   const isMatch = await bcrypt.compareSync(emailToken,token.vtoken)
+   if (!isMatch) {
+       res.status(404)
+       throw  new Error(" Invalid Token !! ") 
+   }
+   user.verify = true;
+   await verficationToken.findByIdAndDelete(token._id)
+   await user.save()
+   mailTransport().sendMail({
+       from:"devtestmailer101@gmail.com",
+       to: user.email,
+       subject: "Account Verified ",
+       html: `<h1>Account Verified</h1>`
+   })
+   res.json("Your Email is Verified ")
 
 })
 
