@@ -15,6 +15,7 @@ app.use(morgan('dev'))
 
 app.use(express.urlencoded({extended : false}))
 app.use('/api/user',require('./routes/userRoute.js'))
+app.use('/api/upload', require('./routes/uploadRoute'));
 
 // npm run dev
 app.listen(port , ()=> console.log(`SERVER CONNECTED ${port}`))

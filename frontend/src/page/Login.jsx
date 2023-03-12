@@ -29,8 +29,7 @@ const Login = () => {
     <>      
         <div className='hero-container'>
         <video src={video} autoPlay loop muted />
-        <br />   <br />   <br />   <br />  
-        <br />   <br />   <br />   <br />  
+        
 
       {error && <Message variant='danger'>{error}</Message>}
       {loading && <Loader />}

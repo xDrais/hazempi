@@ -50,7 +50,7 @@ function Navbarr () {
                                <Link to="/presignup" style={{marginLeft: '700px'}}className="nav_links">
 
 SIGNUP                          </Link>
-<Nav className='nav_links' style={{marginLeft: "1210px",marginTop: "-79px"}} >
+
            
             {userInfo?(
                     <NavDropdown   title={userInfo.lastName + " " + userInfo.firstName} id="username">
@@ -60,13 +60,11 @@ SIGNUP                          </Link>
                         <NavDropdown.Item onClick={logoutHandler} >Logout</NavDropdown.Item>
                     </NavDropdown>
             ): 
-            <LinkContainer style={{color: "white"}} to='/'>
-            <Nav.Link >
-             Sign in
-            </Nav.Link>
-            </LinkContainer>}
+            <Link to={"/login"}>
+                signin
+                </Link>         
+            }
             
-          </Nav>
 
                           
 

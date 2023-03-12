@@ -156,6 +156,7 @@ const Register = () => {
         <video src={video} autoPlay loop muted />
         {/* el message taa el controle de saisie w el loader   */}
         {message && <div className="alert">{message}</div>}
+
         {loading && <Loader />}
 
         {/* form start    */}

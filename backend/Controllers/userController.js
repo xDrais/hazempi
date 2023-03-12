@@ -21,9 +21,6 @@ const registerUser = asynHandler( async ( req , res )=> {
         dateOfBirth , 
         role ,
         phone,
-       
-
-
     } = req.body
     const { entrepriseName,sector,descriptionSponsor} = req.body
     const { speciality,descriptionCoach,dateDebutExperience ,
@@ -32,7 +29,7 @@ const registerUser = asynHandler( async ( req , res )=> {
         certification} = req.body
 
     if (!firstName || !lastName ||  !validator.validate(email) ||  !password || !imageUrl ||  !cin  || !dateOfBirth || !phone ){
-            res.status(400)
+            res.json({"message":"Please add  all fields"}).status(400)
             throw new Error('Please add  all fields')
     }
     //verifier user exits by email
