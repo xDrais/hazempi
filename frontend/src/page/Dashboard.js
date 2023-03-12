@@ -7,24 +7,34 @@ import { Dropdown, DropdownButton } from 'react-bootstrap';
 import ReactHtmlParser from 'react-html-parser';
 import React, {useState,useEffect} from "react";
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUsers,approveUser } from "../userredux/useraction";
 
 
  function Dashboard  () {
 
-  const dispatch = useDispatch();
-  const users = useSelector((state) => state.userDisplay.userInfo);
+const [users, setUsers] = useState();
 
-  console.log(users);
   useEffect(() => {
-    dispatch(getUsers());
-  }, [dispatch]);
+    async function getUsers() {
+      const response = await fetch('http://localhost:5000/api/user/getalluser', {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+        },
+      });
 
-  const handleApprove = (id, role) => {
-    dispatch(approveUser(id, role));
-  };
- 
+      const data = await response.json();
+
+      setUsers(data);
+
+      console.log(data);
+
+    }
+
+
+
+    getUsers();
+  }, []);
+
 
     return ( <>
 <div>    <div>{ReactHtmlParser(DashboardHTML)}   </div>
@@ -51,13 +61,12 @@ import { getUsers,approveUser } from "../userredux/useraction";
                         <th>Image</th>
                         <th>Role</th>
                         <th>Status</th>
-                        <th>Role Status</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody className="table-border-bottom-0">
                       
-                        {Array.isArray(users) && users.map((i) => {
+                        {users && users.map((i) => {
                           
                           return(
                               
@@ -75,29 +84,18 @@ import { getUsers,approveUser } from "../userredux/useraction";
                         {i.cin}
                         </td>
                         <td>
-                        <img src={`http://localhost:5000/${i.imageUrl}`} alt="User Image" />
+                        <img src={i.imageUrl} alt="User Image" />
                         </td>
                         <td>
                         <span className="badge bg-label-primary me-1">{i?.role?.name}</span>
                         </td>
                         <td ><span className={i.verify === true ? 'badge bg-label-success me-1' : 'badge bg-label-warning me-1'}>{i.verify ? 'Verifed': 'Not-Verifed'}</span>
                         <span className={i.bloque === true ? 'badge bg-label-warning me-1' :'badge bg-label-success me-1' }>{i.bloque ? 'Blocked': 'Not-Blocked'}</span></td>
-                        <td >    <span className={i.status === 'pending' ? 'badge bg-label-warning me-1' : 'badge bg-label-success me-1'}>{i.status === 'approved' ? 'approved' : 'pending'}</span></td>
 
                         <td>
-                        <DropdownButton title="Actions">
-                        {i.status === "pending" && (
-                     <>
-                    {i?.role?.name === "userRole" || typeof i.role === "undefined" ? (
-                        <>
-                    <Dropdown.Item onClick={() => handleApprove(i._id, "sponsor")}><i className="bx bx-edit-alt me-1"></i> Approve Sponsor</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleApprove(i._id, "coach")}><i className="bx bx-edit-alt me-1"></i>Approve Coach</Dropdown.Item>
-                        </>
-                      ) : null}
-                   </>
-                       )}
-                      <Dropdown.Item href="#/action-1"> <i className="bx bx-edit-alt me-1"></i> Edit</Dropdown.Item>
-                      <Dropdown.Item href="#/action-2"> <i className="bx bx-trash me-1"></i>Block</Dropdown.Item>
+                          <DropdownButton  >
+                            <Dropdown.Item href="#/action-1"><i className="bx bx-edit-alt me-1"></i> Edit</Dropdown.Item>
+                            <Dropdown.Item href="#/action-2"><i className="bx bx-trash me-1"></i>Block</Dropdown.Item>
                           </DropdownButton>
                         </td>
                         </tr>

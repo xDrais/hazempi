@@ -2,7 +2,7 @@ const mongoose = require ('mongoose')
 
 const RoleSchema = new mongoose.Schema({
 
-    name : {type : String ,required : true , default : "userRole"}
+    name : {type : String , required : true , default : "userRole"}
 })
 
 const UserSchema = new mongoose.Schema({
@@ -19,15 +19,7 @@ const UserSchema = new mongoose.Schema({
     verify: {type:Boolean, required:true, default: false},
     emailToken:{ type: String},
     role :RoleSchema,
-<<<<<<< Updated upstream
 
-=======
-    status: {
-        type: String,
-        enum: ['pending', 'approved', 'rejected'],
-        default: 'pending'
-      }
->>>>>>> Stashed changes
     
     
 
