@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema({
     role :RoleSchema,
     status: {
         type: String,enum: ['pending', 'approved', 'rejected'],default: 'pending'
-      }
+    },
     
 
 
