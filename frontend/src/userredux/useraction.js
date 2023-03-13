@@ -136,7 +136,7 @@ export const getUsers = () => async (dispatch) => {
     const response = await fetch('http://localhost:5000/api/user/getalluser', {
       method: 'GET',
       headers: {
-        accept: 'application/json',
+        accept: 'multipart/form-data',
       },
     });
 

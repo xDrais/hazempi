@@ -22,7 +22,7 @@ const { protectSimpleUser,validator,isAdmin }= require('../Middelware/userMiddel
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-      cb(null, path.join(__dirname, '../../upload')); // use absolute path for uploaded files
+      cb(null, path.join(__dirname, '../../frontend/public/images')); // use absolute path for uploaded files
   },
     filename: function(req, file, cb) {
       cb(null, uuid4()+ '-' + Date.now() + path.extname(file.originalname)); // specify the file name

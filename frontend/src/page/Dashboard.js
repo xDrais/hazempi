@@ -75,7 +75,7 @@ import { getUsers,approveUser } from "../userredux/useraction";
                         {i.cin}
                         </td>
                         <td>
-                        <img src={`http://localhost:5000/${i.imageUrl}`} alt="User Image" />
+                        <img style={{width:"200px",height:"auto"}} src={`${process.env.PUBLIC_URL}/images/${i.imageUrl}`} alt="My Image" />
                         </td>
                         <td>
                         <span className="badge bg-label-primary me-1">{i?.role?.name}</span>
