@@ -7,20 +7,22 @@ const { generatorOTP ,mailTransport,generateToken } = require('./utils/mail.js')
 const verficationToken = require('../Models/token.js')
 const { isValidObjectId  } = require("mongoose")
 const validator = require("email-validator");
-
-
+const crypto= require("crypto");
+const jwt = require("jsonwebtoken");
+const {storage } = require ('../routes/userRoute')
 
 const registerUser = asynHandler( async ( req , res )=> {
     const {  firstName ,
         lastName , 
         email , 
         password , 
-        imageUrl , 
         cin  ,
         dateOfBirth , 
         role ,
         phone,
     } = req.body
+    const  imageUrl =req.file.filename 
+
     const { entrepriseName,sector,descriptionSponsor} = req.body
     const { speciality,descriptionCoach,dateDebutExperience ,
         dateFinExperience,

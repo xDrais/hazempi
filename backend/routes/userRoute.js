@@ -1,3 +1,6 @@
+const path = require("path")
+const { v4 : uuid4 } = require('uuid');
+const multer = require('multer')
 const express = require('express')
 const router = express.Router()
 const {
@@ -15,6 +18,30 @@ const {
 
 const { protectSimpleUser,validator,isAdmin }= require('../Middelware/userMiddelware.js')
 
+
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+      cb(null, path.join(__dirname, '../../upload')); // use absolute path for uploaded files
+  },
+    filename: function(req, file, cb) {
+      cb(null, uuid4()+ '-' + Date.now() + path.extname(file.originalname)); // specify the file name
+    }
+  });
+  
+  const fileFilter = (req,file,cb) =>{
+    const allowedFileTypes = ['image/jpeg' , 'image/jpg' , 'image/png'];
+    if(allowedFileTypes.includes(file.mimetype))
+    {
+        cb(null,true);
+    } else {
+        cb(null, false);
+    }
+  }
+  // Create a new Multer upload instance
+  let upload = multer({ storage, fileFilter});
+
+router.post('/register',upload.single('imageUrl') ,registerUser)
 router.post('/register',registerUser)
 router.post('/verify-email',verifyEmail)
 //router.post('/verify-email/:token',verifyEmail)

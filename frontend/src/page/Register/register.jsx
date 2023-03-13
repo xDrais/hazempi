@@ -160,7 +160,7 @@ const Register = () => {
         {loading && <Loader />}
 
         {/* form start    */}
-        <form className="register" onSubmit={submitHandler}>
+        <form className="register" onSubmit={submitHandler} encType='multipart/form-data'>
           <div
             align="center"
             style={{ marginBottom: "20px", marginTop: "-20px" }}
@@ -184,7 +184,7 @@ const Register = () => {
           {/* step lowla mtaa el form eli fiha el info taa simple user */}
           {step === 1 && (
             <>
-              {" "}
+              
               <input
                 id="firstName"
                 type="text"
@@ -248,14 +248,14 @@ const Register = () => {
               <input
                 id="imageUrl"
                 type="file"
-                placeholder="imageUrl"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
+                name="imageUrl"
+                 accept=".png, .jpg, .jpeg"
+                    onChange={(e) => setImageUrl(e.target.files[0])}
               ></input>
               <ReCAPTCHA
                 sitekey="6Ldzy-UkAAAAAOF98pseL_XgounD7zAY-IT1kms1"
                 onChange={handleCaptcha}
-              />{" "}
+              />
             </>
           )}
 

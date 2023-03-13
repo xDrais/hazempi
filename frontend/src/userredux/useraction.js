@@ -47,7 +47,7 @@ export const register = (firstName,lastName,cin,phone,dateOfBirth,imageUrl,email
         })
         const config = {
             headers:{
-                'Content-Type' : 'application/json'
+                'Content-Type' : 'multipart/form-data'
             }
         }
 
