@@ -19,7 +19,7 @@ const registerUser = asynHandler( async ( req , res )=> {
         cin  ,
         dateOfBirth , 
         role ,
-        phone,
+        phone, 
     } = req.body
     const  imageUrl =req.file.filename 
 
@@ -36,14 +36,13 @@ const registerUser = asynHandler( async ( req , res )=> {
     //verifier user exits by email
     const userExists  =  await User.findOne({email})
     if(userExists){
-        res.status(400)
-        throw new Error('User already exists')
+        res.status(401).send({ message: 'User with this E-mail adress already exists' });
+        throw new Error('User with this E-mail adress already exists')
     }
     
     //bcryptjs password cryptage
     const salt = await bcrypt.genSalt(10)
     const headPassword = await bcrypt.hash(password,salt)
-
     const otp = generatorOTP()
 
 
@@ -60,8 +59,7 @@ const registerUser = asynHandler( async ( req , res )=> {
         dateOfBirth ,
         phone,
         role,
-        emailToken: otp,
-
+        emailToken: otp
 
         
     })

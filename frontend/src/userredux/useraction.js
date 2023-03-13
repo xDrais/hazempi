@@ -43,7 +43,8 @@ export const login = (email,password) => async (dispatch)=>{
     }
 }
 export const register = (firstName,lastName,cin,phone,dateOfBirth,imageUrl,email,password,speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste,certification,entrepriseName,sector,descriptionSponsor) => async (dispatch)=>{
-    try {
+  let messageSuccess ;  
+  try {
         dispatch({
             type:USER_REGISTER_REQUEST
         })
@@ -59,10 +60,10 @@ export const register = (firstName,lastName,cin,phone,dateOfBirth,imageUrl,email
             config
           );
 
-        dispatch({
+       if( dispatch({
             type : USER_REGISTER_SUCCESS,
             payload : data
-        })
+        })) { return messageSuccess === "We sent you a verification e-mail please check it "}
         dispatch ({
             type : USER_LOGIN_SUCCESS,
             payload : data
@@ -70,15 +71,21 @@ export const register = (firstName,lastName,cin,phone,dateOfBirth,imageUrl,email
         localStorage.setItem('userInfo', JSON.stringify(data))
 
     } catch(error){
-        dispatch ({
-            type : USER_REGISTER_FAIL,
-            payload : 
-                error.response && error.response.data.message
-                ? error.response.data.data.message
-                : error.message,
-        })
-
-    }
+      if (error.response && error.response.data.message === 'User with this E-mail adress already exists') {
+          dispatch({
+              type: USER_REGISTER_FAIL,
+              payload: error.response.data.message
+          });
+      } else {
+          dispatch({
+              type: USER_REGISTER_FAIL,
+              payload: error.response && error.response.data.message
+                  ? error.response.data.data.message
+                  : error.message
+          });
+      }
+      console.log(error.response.data.message);
+  }
 }
 
 export const Logout = ()=>(dispatch) =>{
@@ -138,7 +145,7 @@ export const getUsers = () => async (dispatch) => {
     const response = await fetch('http://localhost:5000/api/user/getalluser', {
       method: 'GET',
       headers: {
-        accept: 'application/json',
+        accept: 'multipart/form-data',
       },
     });
 
