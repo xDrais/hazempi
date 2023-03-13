@@ -90,19 +90,16 @@ const registerUser = asynHandler( async ( req , res )=> {
     
     //const token = createToken(user._id);
 
-    const verfication = await verficationToken.create({
-        owner : user._id,
-        vtoken: otp
-    })
+    
     
     mailTransport().sendMail({
-       from:"devtestmailer101@gmail.com",
-       to: user.email,
-       subject: "Account Verified ",
-       html: `<h1>Account Verified  ${user.name} ,
-       <a href = '${process.env.CLIENT_URL}/verify-email?emailToken=${user.emailToken}'> Verify your Email
-       </h1>` ,
-    })
+      from:"devtestmailer101@gmail.com",
+      to: user.email,
+      subject: "Account Verified ",
+      html: `<h1>Account Verified  ${user.lastName} ,
+      <a href = '${process.env.CLIENT_URL}/verify-email?emailToken=${user.emailToken}'> Verify your Email
+      </h1>` ,
+     })
 
 
 
@@ -147,8 +144,15 @@ const ApproveUser = asynHandler( async (req, res) => {
       });
 
 const  verifyEmail = asynHandler( async (req,res) => {
-  const emailToken = req.params.emailToken; 
-  if (!emailToken.trim()) {
+    const emailToken =req.body.emailToken; 
+
+    console.log("req.params.emailToken:", req.params.emailToken);
+ // const emailToken = req.params.token; 
+
+  console.log("emailToken is undefined:", !emailToken);
+
+  if (!emailToken || !emailToken.trim()) {
+    console.log("Invalid emailToken:", emailToken);
     res.status(400);
     throw new Error("Invalid request");
   }
@@ -170,13 +174,9 @@ const  verifyEmail = asynHandler( async (req,res) => {
   }
   if (user) {
   user.emailToken= null;
-  user.verify = true;
+  user.updateOne({ verified: true })
 
   await user.save(); 
-  /*
-  const token = await verficationToken.findOne({owner: user._id})
-  await verficationToken.findByIdAndDelete(token._id)
-  */
   res.status(200).json({
     _id: user._id,
     email: user.email,
@@ -191,6 +191,9 @@ const  verifyEmail = asynHandler( async (req,res) => {
   })
   res.json("Your Email is Verified ")
   }
+
+  
+  res.redirect(`${process.env.CLIENT_URL}/login`);
 })
 const logIn = asynHandler( async (req,res)=>{
         const  { email , password } = req.body
