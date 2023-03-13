@@ -1,5 +1,7 @@
 /* eslint-disable no-duplicate-case */
-import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL, GET_USERS_SUCCESS, APPROVE_USER_SUCCESS } from "./userconstant";
+import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, 
+    USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL, GET_USERS_SUCCESS,
+     APPROVE_USER_SUCCESS, BLOCK_USER, UNBLOCK_USER } from "./userconstant";
 
  export const userLoginReducer=(state={},action)=>{
     // eslint-disable-next-line default-case
@@ -41,6 +43,33 @@ import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, U
           user._id === action.payload.id ? { ...user, role: action.payload.role } : user
         );
         return { userInfo: updatedUsers };
+      default:
+        return state;
+    }
+  };
+
+  export const userBlockReducer = (state = { users: [] }, action) => {
+    switch (action.type) {
+      case BLOCK_USER:
+        return {
+          ...state,
+          users: state.users.map((user) =>
+            user._id === action.payload._id ? { ...user, bloque: true } : user
+          ),
+        };
+      default:
+        return state;
+    }
+  };
+  export const userUnblockReducer = (state = { users: [] }, action) => {
+    switch (action.type) {
+      case UNBLOCK_USER:
+        return {
+          ...state,
+          users: state.users.map((user) =>
+            user._id === action.payload._id ? { ...user, bloque: true } : user
+          ),
+        };
       default:
         return state;
     }

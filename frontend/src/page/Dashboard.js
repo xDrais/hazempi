@@ -8,22 +8,37 @@ import ReactHtmlParser from 'react-html-parser';
 import React, {useState,useEffect} from "react";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUsers,approveUser } from "../userredux/useraction";
+import { getUsers,approveUser, blockUser, unblockUser } from "../userredux/useraction";
+
 
 
  function Dashboard  () {
+  const [refresh, setRefresh] = useState(false); // state variable for refreshing the page
 
   const dispatch = useDispatch();
   const users = useSelector((state) => state.userDisplay.userInfo);
 
   console.log(users);
-  useEffect(() => {
-    dispatch(getUsers());
-  }, [dispatch]);
+ useEffect(() => {
+  dispatch(getUsers());
+  const interval = setInterval(() => {
+    setRefresh((prev) => !prev); // toggle the value of refresh every time the interval elapses
+  }, 2000); // interval time in milliseconds
+  return () => clearInterval(interval); // clear the interval on component unmount
+}, [dispatch, refresh]);
+
 
   const handleApprove = (id, role) => {
     dispatch(approveUser(id, role));
   };
+  const handleBlockUser = (id, blocked) => {
+    if (blocked) {
+      dispatch(unblockUser(id));
+    } else {
+      dispatch(blockUser(id));
+    }
+  };
+
  
 
     return ( <>
@@ -97,8 +112,32 @@ import { getUsers,approveUser } from "../userredux/useraction";
                    </>
                        )}
                       <Dropdown.Item href="#/action-1"> <i className="bx bx-edit-alt me-1"></i> Edit</Dropdown.Item>
-                      <Dropdown.Item href="#/action-2"> <i className="bx bx-trash me-1"></i>Block</Dropdown.Item>
-                          </DropdownButton>
+                       <Dropdown.Item href="" onClick={() => {
+                            if (i.bloque) {
+                              if (window.confirm('Are you sure you want to unblock this user?')) {
+                                handleBlockUser(i._id, true);
+                              }
+                            } else if (window.confirm('Are you sure you want to block this user?')) {
+                              handleBlockUser(i._id, false);
+                            }
+                          }}>
+                            {i.bloque ? (
+                              <>
+                                <i className="bx bx-check me-1"></i>Unblock
+                              </>
+                            ) : (
+                              <>
+                                <i className="bx bx-trash me-1"></i>Block
+                              </>
+                            )}
+                          </Dropdown.Item>
+
+
+
+
+
+                       
+                    </DropdownButton>
                         </td>
                         </tr>
                           )
