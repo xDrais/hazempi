@@ -19,7 +19,7 @@ const registerUser = asynHandler( async ( req , res )=> {
         cin  ,
         dateOfBirth , 
         role ,
-        phone,
+        phone, 
     } = req.body
     const  imageUrl =req.file.filename 
 
@@ -58,8 +58,8 @@ const registerUser = asynHandler( async ( req , res )=> {
         cin ,
         dateOfBirth ,
         phone,
-        role,    
-        emailToken: otp
+        role: {name: "userRole"},
+                emailToken: otp
 
         
     })
