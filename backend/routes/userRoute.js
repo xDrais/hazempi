@@ -42,7 +42,8 @@ const storage = multer.diskStorage({
   let upload = multer({ storage, fileFilter});
 
 router.post('/register',upload.single('imageUrl') ,registerUser)
-router.post('/verify-email',verifyEmail)
+router.post('/register',registerUser)
+//router.post('/verify-email',verifyEmail)
 router.post('/verify-email/:token',verifyEmail)
 router.post('/login',logIn)
 router.post('/forget-password',forgetPass)

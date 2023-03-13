@@ -10,6 +10,7 @@ const validator = require("email-validator");
 const crypto= require("crypto");
 const jwt = require("jsonwebtoken");
 const {storage } = require ('../routes/userRoute')
+
 const registerUser = asynHandler( async ( req , res )=> {
     const {  firstName ,
         lastName , 
@@ -148,50 +149,51 @@ const ApproveUser = asynHandler( async (req, res) => {
       });
 
 const  verifyEmail = asynHandler( async (req,res) => {
-   const { id, emailToken } = req.body
-   
-   if ( !id || !emailToken.trim()){
-       res.status(400)
-       throw new Error ("Invalid reequest")
-   }
-   if (!isValidObjectId(id)) {
+  const emailToken = req.params.emailToken; 
+  if (!emailToken.trim()) {
+    res.status(400);
+    throw new Error("Invalid request");
+  }
 
-       res.status(404)
-       throw new Error (" Invalid User ")
-   }
-   const user = await User.findById(id)
-   if (!user) {
-       res.Error(404)
-       throw new Error(" User Not Found !!")
-   }
-   if (user.verify) {
-       res.status(404)
-       throw new Error(" User Already Verified !!")
-   }
-   const token = await verficationToken.findOne({owner: user._id})
+  const user = await User.findOne({ emailToken });
+  if (!user) {
+    res.status(404);
+    throw new Error("User Not Found!!");
+  }
 
-   if (!token) {
-       res.status(404)
-       throw  new Error(" Invalid Token !! ")
-   }
-   const isMatch = await bcrypt.compareSync(emailToken,token.vtoken)
-   if (!isMatch) {
-       res.status(404)
-       throw  new Error(" Invalid Token !! ") 
-   }
-   user.verify = true;
-   await verficationToken.findByIdAndDelete(token._id)
-   await user.save()
-   mailTransport().sendMail({
-       from:"devtestmailer101@gmail.com",
-       to: user.email,
-       subject: "Account Verified ",
-       html: `<h1>Account Verified</h1>`
-   })
-   res.json("Your Email is Verified ")
+  if (user.verify) {
+    res.status(400); 
+    throw new Error("User Already Verified!!");
+  }
 
+  if (!emailToken) {
+      res.status(404)
+      throw  new Error(" Invalid Token !! ")
+  }
+  if (user) {
+  user.emailToken= null;
+  user.verify = true;
+
+  await user.save(); 
+  /*
+  const token = await verficationToken.findOne({owner: user._id})
+  await verficationToken.findByIdAndDelete(token._id)
+  */
+  res.status(200).json({
+    _id: user._id,
+    email: user.email,
+    verify: user?.verify,
+  });
+
+  mailTransport().sendMail({
+      from:"devtestmailer101@gmail.com",
+      to: user.email,
+      subject: "Account Verified ",
+      html: `<h1>Account Verified</h1>`
+  })
+  res.json("Your Email is Verified ")
+  }
 })
-
 const logIn = asynHandler( async (req,res)=>{
         const  { email , password } = req.body
         
