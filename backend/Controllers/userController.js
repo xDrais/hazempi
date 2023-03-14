@@ -29,7 +29,7 @@ const registerUser = asynHandler( async ( req , res )=> {
         titrePoste,
         certification} = req.body
 
-    if (!firstName || !lastName ||  !validator.validate(email) ||  !password || !imageUrl ||  !cin  || !dateOfBirth || !phone ){
+    if (!firstName || !lastName ||  !validator.validate(email) ||  !password  || !imageUrl || !cin  || !dateOfBirth || !phone ){
             res.json({"message":"Please add  all fields"}).status(400)
             throw new Error('Please add  all fields')
     }
@@ -54,12 +54,12 @@ const registerUser = asynHandler( async ( req , res )=> {
         lastName ,
         email , 
         password: headPassword  , 
-        imageUrl ,
+        imageUrl,
         cin ,
         dateOfBirth ,
         phone,
-        role,    
-        emailToken: otp
+        role: {name: "userRole"},
+                emailToken: otp
 
         
     })
@@ -143,7 +143,7 @@ const ApproveUser = asynHandler( async (req, res) => {
         res.status(500).send('Server error');
       }
       });
-
+/*
 const  verifyEmail = asynHandler( async (req,res) => {
     const emailToken =req.body.emailToken; 
 
@@ -196,6 +196,29 @@ const  verifyEmail = asynHandler( async (req,res) => {
   
   res.redirect(`${process.env.CLIENT_URL}/login`);
 })
+*/
+
+const verifyEmail = asynHandler (async (req, res) =>{
+    try {
+            const token = req.query.emailToken
+            const user = await User.findOne({emailToken : token})
+            if(user) {
+                user.emailToken = null 
+                user.verify = true
+                await user.save()
+                res.redirect('http://localhost:3000/login')
+            }
+            else {
+                res.redirect('http://localhost:3000/register')
+                console.log('email is not verified')
+            }
+    }
+    catch(err){
+        console.log(err)
+
+    }
+}
+) 
 const logIn = asynHandler( async (req,res)=>{
         const  { email , password } = req.body
         
@@ -277,11 +300,35 @@ const reset = asynHandler(async ( req,res)=>{
 
 //admin
 const bloque = asynHandler( async(req,res)  =>{
+  const  { id } =req.body
+  const user = await User.findById(id)
+  if (user.bloque==false){
+
+       user.bloque=true
+       await user.save()
+       res.json("User blocked")
+       console.log("user is blocked ")
+  }
+  else {
+   res.Error(404)
+   throw new Error(" User already blocked !!")
+  }
+})
+//admin
+const Unbloque = asynHandler( async(req,res)  =>{
    const  { id } =req.body
    const user = await User.findById(id)
-   user.bloque=true
-   await user.save()
-   res.json("User bloqued")
+   if (user.bloque==true){
+
+        user.bloque=false
+        await user.save()
+        res.json("User Unbloqued")
+        console.log("user is Unblocked ")
+   }
+   else {
+    res.Error(404)
+    throw new Error(" User already Unblocked !!")
+   }
 })
 // Give Role admin
 const makeAdmin = asynHandler( async(req,res)  =>{
@@ -383,6 +430,7 @@ module.exports = {
     updateUser,
     findUserById,
     getAllUser,
-    ApproveUser
+    ApproveUser,
+    Unbloque
     
  }
