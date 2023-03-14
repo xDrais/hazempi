@@ -220,7 +220,7 @@ const Register = () => {
 
           {loading && <Loader />}
         </section>
-
+            
 
         
         {/* form start    */}
