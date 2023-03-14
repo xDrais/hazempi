@@ -1,5 +1,7 @@
 import axios from 'axios'
-import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS ,USER_REGISTER_FAIL, APPROVE_USER_SUCCESS, GET_USERS_SUCCESS} from "./userconstant"
+import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,USER_LOGOUT, USER_REGISTER_REQUEST, 
+  USER_REGISTER_SUCCESS ,USER_REGISTER_FAIL, APPROVE_USER_SUCCESS, GET_USERS_SUCCESS,
+BLOCK_USER, UNBLOCK_USER} from "./userconstant"
 import { useNavigate } from 'react-router-dom'
 
 export const login = (email,password) => async (dispatch)=>{
@@ -41,13 +43,14 @@ export const login = (email,password) => async (dispatch)=>{
     }
 }
 export const register = (firstName,lastName,cin,phone,dateOfBirth,imageUrl,email,password,speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste,certification,entrepriseName,sector,descriptionSponsor) => async (dispatch)=>{
-    try {
+  let messageSuccess ;  
+  try {
         dispatch({
             type:USER_REGISTER_REQUEST
         })
         const config = {
             headers:{
-                'Content-Type' : 'application/json'
+                'Content-Type' : 'multipart/form-data'
             }
         }
 
@@ -57,10 +60,10 @@ export const register = (firstName,lastName,cin,phone,dateOfBirth,imageUrl,email
             config
           );
 
-        dispatch({
+       if( dispatch({
             type : USER_REGISTER_SUCCESS,
             payload : data
-        })
+        })) 
         dispatch ({
             type : USER_LOGIN_SUCCESS,
             payload : data
@@ -68,15 +71,21 @@ export const register = (firstName,lastName,cin,phone,dateOfBirth,imageUrl,email
         localStorage.setItem('userInfo', JSON.stringify(data))
 
     } catch(error){
-        dispatch ({
-            type : USER_REGISTER_FAIL,
-            payload : 
-                error.response && error.response.data.message
-                ? error.response.data.data.message
-                : error.message,
-        })
-
-    }
+      if (error.response && error.response.data.message === 'User with this E-mail adress already exists') {
+          dispatch({
+              type: USER_REGISTER_FAIL,
+              payload: error.response.data.message
+          });
+      } else {
+          dispatch({
+              type: USER_REGISTER_FAIL,
+              payload: error.response && error.response.data.message
+                  ? error.response.data.data.message
+                  : error.message
+          });
+      }
+      console.log(error.response.data.message);
+  }
 }
 
 export const Logout = ()=>(dispatch) =>{
@@ -136,13 +145,43 @@ export const getUsers = () => async (dispatch) => {
     const response = await fetch('http://localhost:5000/api/user/getalluser', {
       method: 'GET',
       headers: {
-        accept: 'application/json',
+        accept: 'multipart/form-data',
       },
     });
 
     const data = await response.json();
 
     dispatch({ type: GET_USERS_SUCCESS, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const blockUser = (id) => async (dispatch) => {
+  try {
+    const response = await fetch('http://localhost:5000/api/user/block', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id }),
+    });
+    const data = await response.json();
+    dispatch({ type: UNBLOCK_USER, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const unblockUser = (id) => async (dispatch) => {
+  try {
+    const response = await fetch('http://localhost:5000/api/user/unblock', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id }),
+    });
+    const data = await response.json();
+    dispatch({ type: BLOCK_USER, payload: data });
   } catch (error) {
     console.log(error);
   }

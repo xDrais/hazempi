@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,14 +10,19 @@ import SpecialButton from "../../Components/Button/button";
 import Loader from "../../Components/Loader";
 import { register } from "../../userredux/useraction";
 import ReCAPTCHA from "react-google-recaptcha";
+
 import {
   ArrowWrapperLeft,
   ArrowWrapperRight,
 } from "../../Components/Arrows/Arrows";
 
 const Register = () => {
+
   //State taa el captcha keni verified wala le
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+  //speach recognition
+  const { transcript, resetTranscript,startListening } = useSpeechRecognition();
+  const [activeField, setActiveField] = useState('firstName');
 
   //steps taa el form
   const [step, setStep] = useState(1);
@@ -42,13 +48,23 @@ const Register = () => {
   const [sector, setSector] = useState("");
   const [descriptionSponsor, setDescriptionSponsor] = useState("");
   const [entrepriseName, setEntrepriseName] = useState("");
-  
-  
+
+  //validateurs simple user
+  const [validFirstName, setValidFirstName] = useState(false);
+  const [validLastName, setValidLastName] = useState(false);
+  const [validCin, setValidCin] = useState(false);
+  const [validPhone, setValidPhone] = useState(false);
+  const [validDateOfBirth, setValidDateOfBirth] = useState(false);
+  const [validImageUrl, setValidImageUrl] = useState(false);
+  const [validEmail, setValidEmail] = useState(false);
+  const [validConfirmPassword, setValidConfirmPassword] = useState(false);
+  const [validPassword, setValidPassword] = useState(false);
+
   //box taa terms and conditions
   function handleRadioChange() {
     setIsChecked(!isChecked);
   }
-  
+
   // Clear the input field when the user interacts with it
 
   function handleInputFocus(e) {
@@ -57,15 +73,21 @@ const Register = () => {
 
   //Controle de saisie taa el user
   const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
+  const CIN_REGEX = /^[0-1][0-9]{7}$/;
+  const PHONE_REGEX = /^[2-9][0-9]{7}$/;
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-  const DATE_REGEX =/^(?:19|20)\d{2}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])$/;
-
+  const DATE_REGEX =
+    /^(?:19|20)\d{2}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])$/;
+  const IMAGE_REGEX = /\.(png|jpe?g)$/i;
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const dispatch = useDispatch();
   const userRegister = useSelector((state) => state.userRegister);
   const { loading, error, userInfo } = userRegister;
 
   //hedhi bch taamelek el redirection
   const navigate = useNavigate();
+
+  const messageSuccess = "";
 
   //Fonction etat el captcha
   const handleCaptcha = (value) => {
@@ -77,35 +99,9 @@ const Register = () => {
   };
   const [isChecked, setIsChecked] = useState(false);
 
-  //Controle de saisie + Simple user
+  // Creating the user
   const submitHandler = (e) => {
     e.preventDefault();
-    const FnameControl = USER_REGEX.test(firstName);
-    const LnameControl = USER_REGEX.test(lastName);
-    const PwdControl = PWD_REGEX.test(password);
-    const AgeControl = DATE_REGEX.test(dateOfBirth);
-    if (!PwdControl) {
-      setMessage(
-        "Password needs to contain at least 1 UpperCase , 1 LOWERCASE ,1 number , 1 one character"
-      );
-      return;
-    } else if (!FnameControl) {
-      setMessage("First name Cannot be empty or contain numbers");
-      return;
-    } else if (!LnameControl) {
-      setMessage("Last name Cannot be empty or contain numbers");
-      return;
-    } else if (!AgeControl) {
-      const ageInMilliseconds = Date.now() - dateOfBirth.getTime();
-      const ageInYears = ageInMilliseconds / 1000 / 60 / 60 / 24 / 365;
-
-      if (ageInYears < 18) {
-        setMessage("You need to be at least 18 years old ");
-        return;
-      }
-      if (AgeControl && LnameControl && FnameControl && PwdControl) return true;
-      else return false;
-    }
     dispatch(
       register(
         firstName,
@@ -135,8 +131,7 @@ const Register = () => {
       setStep(1);
     } else if (step === 3) {
       setStep(1);
-      if (step === 5)
-      setStep(1);
+      if (step === 5) setStep(1);
     } else setStep((prevStep) => prevStep - 1);
   };
   //Fonction Onclick taa el next step
@@ -149,27 +144,106 @@ const Register = () => {
     } else setStep((prevStep) => prevStep + 1);
   };
 
+  {
+    /* use effects taa controle de saisie */
+  }
+
+  useEffect(() => {
+    const result = USER_REGEX.test(firstName);
+    console.log(result);
+    console.log(firstName);
+    setValidFirstName(result);
+  }, [firstName]);
+
+  useEffect(() => {
+    const result = USER_REGEX.test(lastName);
+    console.log(result);
+    console.log(lastName);
+    setValidLastName(result);
+  }, [lastName]);
+
+  useEffect(() => {
+    const result = EMAIL_REGEX.test(email);
+    console.log(result);
+    console.log(email);
+    setValidEmail(result);
+  }, [email]);
+
+  useEffect(() => {
+    const result = PWD_REGEX.test(password);
+    console.log(result);
+    console.log(password);
+    setValidPassword(result);
+  }, [password]);
+
+  useEffect(() => {
+    const result = CIN_REGEX.test(cin);
+    console.log(result);
+    console.log(cin);
+    setValidCin(result);
+  }, [cin]);
+  useEffect(() => {
+    const result = PHONE_REGEX.test(phone);
+    console.log(result);
+    console.log(phone);
+    setValidPhone(result);
+  }, [phone]);
+
+  useEffect(() => {
+    const result = IMAGE_REGEX.test(imageUrl.name);
+    console.log(result);
+    console.log(imageUrl.name);
+    setValidImageUrl(result);
+  }, [imageUrl]);
+  useEffect(() => {
+    if (dateOfBirth) {
+      const inputDate = new Date(dateOfBirth);
+      const today = new Date();
+      const diffInMilliseconds = today.getTime() - inputDate.getTime();
+      const age = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24 * 365));
+      if (age >= 18) {
+        setValidDateOfBirth(true);
+      } else {
+        setValidDateOfBirth(false);
+      }
+    }
+  }, [dateOfBirth]);
+  
   return (
     <>
       {/* el video taa el background */}
       <div className="hero-container">
         <video src={video} autoPlay loop muted />
         {/* el message taa el controle de saisie w el loader   */}
-        {message && <div className="alert">{message}</div>}
+        <br /> <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <section>
+          {messageSuccess && <div className="alert">{messageSuccess}</div>}
+          {error && <div className="alert">{error}</div>}
 
-        {loading && <Loader />}
+          {loading && <Loader />}
+        </section>
 
+
+        
         {/* form start    */}
-        <form className="register" onSubmit={submitHandler}>
+        <form
+          className="register"
+          onSubmit={submitHandler}
+          encType="multipart/form-data"
+        >
           <div
             align="center"
             style={{ marginBottom: "20px", marginTop: "-20px" }}
           >
-            {" "}
-            <h1>Sign In</h1>{" "}
+           
           </div>
           {/* les boutons mtaa previous w next */}
-
+         
           <ArrowWrapperLeft
             onClick={handlePrevStep}
             disabled={step === 1}
@@ -177,61 +251,119 @@ const Register = () => {
           />
           <ArrowWrapperRight
             onClick={handleNextStep}
-            disabled={step === 5 || !isCaptchaVerified}
+            disabled={
+              step === 5 ||
+              !validCin ||
+              !validEmail ||
+              !validFirstName ||
+              !validLastName ||
+              !validPhone ||
+              !validPassword
+            }
             visibility={step === 2 ? "hidden" : "visible"}
           />
 
           {/* step lowla mtaa el form eli fiha el info taa simple user */}
           {step === 1 && (
             <>
-              {" "}
+             {" "}
+
+             
+            <h1 style={{marginTop: "-50px"}}>Register</h1>{" "}
               <input
                 id="firstName"
                 type="text"
                 placeholder="First Name"
                 value={firstName}
+                required
                 onChange={(e) => setFirstName(e.target.value)}
               ></input>
+
+              <p
+                id="notefirstname"
+                className={firstName && !validFirstName ? "none" : "hide"}
+              >
+                First Name is at least 3 letters and cannot contain special
+                characters or numbers
+              </p>
               <input
                 id="lastName"
+                required
                 type="text"
                 placeholder="Last Name"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
               ></input>
+              <p
+                id="notelastname"
+                className={lastName && !validLastName ? "none" : "hide"}
+              >
+                Last Name is at least 3 letters and cannot contain special
+                characters or numbers
+              </p>
               <input
                 id="email"
+                required
                 type="email"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               ></input>
+              <p
+                id="noteemail"
+                className={email && !validEmail ? "none" : "hide"}
+              >
+                Enter a valid e-mail adress{" "}
+              </p>
+
               <input
                 id="password"
                 type="password"
                 placeholder="Password"
+                required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               ></input>
+              <p
+                id="notepwd"
+                className={password && !validPassword ? "none" : "hide"}
+              >
+                Password needs to contain at least 1 UpperCase letter , 1
+                LowerCase letter , 1 Special character, 1 Number and at least 8{" "}
+              </p>
+
               <input
                 id="cin"
                 type="text"
                 placeholder="Cin"
+                required
                 value={cin}
                 onChange={(e) => setCin(e.target.value)}
               ></input>
+              <p id="noteCIN" className={cin && !validCin ? "none" : "hide"}>
+                Cin begins with 0 or 1 and is 8 digits long{" "}
+              </p>
+
               <input
                 id="phone"
                 type="phone"
                 placeholder="phone number"
+                required
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
               ></input>
+              <p
+                id="noteephone"
+                className={phone && !validPhone ? "none" : "hide"}
+              >
+                Phone contains 8 digits{" "}
+              </p>
               {dateOfBirth ? (
                 <input
                   id="dateOfBirth"
                   type="date"
                   value={dateOfBirth}
+                  required
                   onFocus={handleInputFocus}
                   onChange={(event) => setDateOfBirth(event.target.value)}
                 />
@@ -239,23 +371,34 @@ const Register = () => {
                 <input
                   id="dateOfBirth"
                   type="text"
+                  required
                   value=""
                   placeholder="Date of Birth"
                   onFocus={handleInputFocus}
                   onChange={(event) => setDateOfBirth(event.target.value)}
                 />
               )}
+
+              <p
+                id="noteedate"
+                className={dateOfBirth && !validDateOfBirth ? "none" : "hide"}
+              >
+                You need to be at least 18 years old{" "}
+              </p>
               <input
                 id="imageUrl"
                 type="file"
-                placeholder="imageUrl"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
+                name="imageUrl"
+                accept=".png, .jpg, .jpeg"
+                onChange={(e) => setImageUrl(e.target.files[0])}
               ></input>
-              <ReCAPTCHA
-                sitekey="6Ldzy-UkAAAAAOF98pseL_XgounD7zAY-IT1kms1"
-                onChange={handleCaptcha}
-              />{" "}
+
+              <p
+                id="noteimag"
+                className={imageUrl && !validImageUrl ? "none" : "hide"}
+              >
+                Enter Valid image type : png , jpg or jpeg{" "}
+              </p>
             </>
           )}
 
@@ -361,12 +504,27 @@ const Register = () => {
 
           {step === 5 && (
             <>
-            <div className="tacbox">
-  <input id="checkbox" type="checkbox" onChange={handleRadioChange} />
-  <label htmlFor="checkbox">        I agree to these <a href="#">Terms and Conditions</a>.</label>
-</div>
-              <Button style={{ marginTop: "5px" }} type="submit" disabled={!isChecked}>
-                Sign In
+              <ReCAPTCHA
+                sitekey="6Ldzy-UkAAAAAOF98pseL_XgounD7zAY-IT1kms1"
+                onChange={handleCaptcha}
+              />
+              <div className="tacbox">
+                <input
+                  id="checkbox"
+                  type="checkbox"
+                  onChange={handleRadioChange}
+                />
+                <label htmlFor="checkbox">
+                  {" "}
+                  I agree to these <a href="#">Terms and Conditions</a>.
+                </label>
+              </div>
+              <Button
+                style={{ marginTop: "5px" }}
+                type="submit"
+                disabled={!isChecked}
+              >
+                Register
               </Button>
               <Row className="py-3">
                 <Col>
@@ -376,6 +534,7 @@ const Register = () => {
             </>
           )}
         </form>
+
         {/* fin form */}
       </div>{" "}
       {/* fin video background */}

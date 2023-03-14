@@ -6,20 +6,13 @@ import { Dropdown, DropdownButton } from 'react-bootstrap';
 import ReactHtmlParser from 'react-html-parser';
 import React, {useState,useEffect} from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { getUsers,approveUser } from "../userredux/useraction";
+import { getUsers,approveUser , blockUser, unblockUser } from "../userredux/useraction";
 import GetSponsor from './GetSponsor ';
 import { Route  , Link, NavLink, Navigate, useNavigate} from 'react-router-dom';
 
 
-
-
-
-
-
  function Dashboard  () {
-
-
-
+  const [refresh, setRefresh] = useState(false);
   const dispatch = useDispatch();
   const users = useSelector((state) => state.userDisplay.userInfo);
 
@@ -27,12 +20,23 @@ let navigate =useNavigate()
   console.log(users);
   useEffect(() => {
     dispatch(getUsers());
-  }, [dispatch]);
-
+    const interval = setInterval(() => {
+      setRefresh((prev) => !prev); // toggle the value of refresh every time the interval elapses
+    }, 2000); // interval time in milliseconds
+    return () => clearInterval(interval); // clear the interval on component unmount
+  }, [dispatch ,refresh]);
 
   const handleApprove = (id, role) => {
     dispatch(approveUser(id, role));
   };
+  const handleBlockUser = (id, blocked) => {
+    if (blocked) {
+      dispatch(unblockUser(id));
+    } else {
+      dispatch(blockUser(id));
+    }
+  };
+
  
  const detailRole=(role , id )=>{
   let path =`/${role}/${id}`
@@ -89,7 +93,7 @@ let navigate =useNavigate()
                         {i.cin}
                         </td>
                         <td>
-                        <img src={`http://localhost:5000/${i.imageUrl}`} alt="User Image" />
+                        <img style={{width:"200px",height:"auto"}} src={`${process.env.PUBLIC_URL}/images/${i.imageUrl}`} alt="My Image" />
                         </td>
                         <td>
                         <span className="badge bg-label-primary me-1">{i?.role?.name}</span>
@@ -111,10 +115,27 @@ let navigate =useNavigate()
                    </>
                        )}
                       <Dropdown.Item href="#/action-1"> <i className="bx bx-edit-alt me-1"></i> Edit</Dropdown.Item>
-                      <Dropdown.Item href="#/action-2"> <i className="bx bx-trash me-1"></i>Block</Dropdown.Item>
-                      <Dropdown.Item onClick={() => detailRole(i?.role?.name, i._id)}><i className="bx bx-edit-alt me-1"></i>details</Dropdown.Item>
-
-                                 
+                      <Dropdown.Item href="" onClick={() => {
+                            if (i.bloque) {
+                              if (window.confirm('Are you sure you want to unblock this user?')) {
+                                handleBlockUser(i._id, true);
+                              }
+                            } else if (window.confirm('Are you sure you want to block this user?')) {
+                              handleBlockUser(i._id, false);
+                            }
+                          }}>
+                            {i.bloque ? (
+                              <>
+                                <i className="bx bx-check me-1"></i>Unblock
+                              </>
+                            ) : (
+                              <>
+                                <i className="bx bx-trash me-1"></i>Block
+                              </>
+                            )}
+                          </Dropdown.Item>   
+                          <Dropdown.Item onClick={() => detailRole(i?.role?.name, i._id)}><i className="bx bx-edit-alt me-1"></i>details</Dropdown.Item>
+                       
                           </DropdownButton>
                         </td>
                         
