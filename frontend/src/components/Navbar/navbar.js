@@ -15,10 +15,6 @@ import { useDispatch , useSelector } from 'react-redux';
 import { Logout } from '../../userredux/useraction';
 import SpeechRecognition, {useSpeechRecognition} from "react-speech-recognition"
 
-<<<<<<< HEAD
-=======
-
->>>>>>> parent of 02c1301 (google sign in)
 function Navbarr () {
   const dispatch = useDispatch()
   const userLogin =useSelector(state =>state.userLogin)
