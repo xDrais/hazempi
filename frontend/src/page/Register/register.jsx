@@ -43,7 +43,6 @@ const Register = () => {
   const [dateDebutExperience, setDateDebutExperience] = useState("");
   const [dateFinExperience, setDateFinExperience] = useState("");
   const [titrePoste, setTitrePoste] = useState("");
-  const [certification, setCertification] = useState("");
   //states taa Sponsor
   const [sector, setSector] = useState("");
   const [descriptionSponsor, setDescriptionSponsor] = useState("");
@@ -117,7 +116,6 @@ const Register = () => {
         dateDebutExperience,
         dateFinExperience,
         titrePoste,
-        certification,
         sector,
         descriptionSponsor,
         entrepriseName
@@ -215,13 +213,8 @@ const Register = () => {
       <div className="hero-container">
         <video src={video} autoPlay loop muted />
         {/* el message taa el controle de saisie w el loader   */}
-        <br /> <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <section>
+       
+        <section className="messagealert">
           {messageSuccess && <div className="alert">{messageSuccess}</div>}
           {error && <div className="alert">{error}</div>}
 
@@ -475,13 +468,6 @@ const Register = () => {
                 onChange={(e) => setTitrePoste(e.target.value)}
               ></input>
 
-              <input
-                id="certification"
-                type="file"
-                placeholder="Certification"
-                value={certification}
-                onChange={(e) => setCertification(e.target.value)}
-              ></input>
 
               <input
                 id="dateDebutExperience"

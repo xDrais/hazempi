@@ -42,8 +42,7 @@ export const login = (email,password) => async (dispatch)=>{
 
     }
 }
-export const register = (firstName,lastName,cin,phone,dateOfBirth,imageUrl,email,password,speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste,certification,entrepriseName,sector,descriptionSponsor) => async (dispatch)=>{
-  let messageSuccess ;  
+export const register = (firstName,lastName,cin,phone,dateOfBirth,imageUrl,email,password,speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste,entrepriseName,sector,descriptionSponsor) => async (dispatch)=>{
   try {
         dispatch({
             type:USER_REGISTER_REQUEST
@@ -56,7 +55,7 @@ export const register = (firstName,lastName,cin,phone,dateOfBirth,imageUrl,email
 
         const { data } = await axios.post(
             'http://localhost:5000/api/user/register',
-            {firstName,lastName,cin,phone,dateOfBirth,imageUrl, email, password,speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste,certification,entrepriseName,sector,descriptionSponsor },
+            {firstName,lastName,cin,phone,dateOfBirth,imageUrl, email, password,speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste,entrepriseName,sector,descriptionSponsor },
             config
           );
 
