@@ -13,6 +13,8 @@ const {
     findUserById,
     getAllUser,
     ApproveUser,
+    GetCoach,
+    GetSponsor,
     bloque,
     Unbloque
 
@@ -55,6 +57,8 @@ router.post('/reset-password',validator,reset)
 router.put('/updateUser/:id',protectSimpleUser,updateUser)
 router.get('/getuser/:id',protectSimpleUser,findUserById)
 router.get('/getalluser',getAllUser)
+router.get('/coach/:userId',GetCoach)
+router.get('/sponsor/:userId',GetSponsor)
 router.put('/approve/:id',ApproveUser)
 
 

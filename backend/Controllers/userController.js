@@ -407,7 +407,7 @@ const findUserById = asynHandler(async(req,res)=>{
 
 const getAllUser = asynHandler(async(req,res)=>{
     
-    const user = await User.find( {}).select('-password')
+    const user = await User.find({}).select('-password')
     if (!user) {
         res.Error(404)
         throw new Error(" User Not Found !!")
@@ -415,6 +415,33 @@ const getAllUser = asynHandler(async(req,res)=>{
     res.json(user)
 
 })
+
+ const GetSponsor = asynHandler(  async (req, res) => {
+    try {
+      const sponsor = await Sponsor.findOne({ user: req.params.userId }).populate('user');
+      if (!sponsor) {
+        return res.status(404).json({ message: 'Sponsor not found' });
+      }
+      res.json({ sponsor });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+ const GetCoach = asynHandler( async(req,res)  =>{
+    try {
+        const coach = await Coach.findOne({ user: req.params.userId }).populate('user');
+        if (!coach) {
+          return res.status(404).json({ message: 'Coach not found' });
+        }
+        res.json({ coach });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+      }
+ })
+
 module.exports = { 
     registerUser,
     verifyEmail,
@@ -429,6 +456,8 @@ module.exports = {
     findUserById,
     getAllUser,
     ApproveUser,
+    GetSponsor,
+    GetCoach,
     Unbloque
     
  }
