@@ -3,7 +3,7 @@ import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,
      USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, 
      USER_REGISTER_FAIL, GET_USERS_SUCCESS, APPROVE_USER_SUCCESS, 
      FORGET_PASSWORD_REQUEST, FORGET_PASSWORD_SUCCESS, FORGET_PASSWORD_FAIL, 
-     RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAIL } from "./userconstant";
+     RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAIL, BLOCK_USER, UNBLOCK_USER } from "./userconstant";
 
  export const userLoginReducer=(state={},action)=>{
     // eslint-disable-next-line default-case
@@ -77,3 +77,30 @@ export const resetPassword=(state={},action)=>{
 
     }
 }
+
+export const userBlockReducer = (state = { users: [] }, action) => {
+    switch (action.type) {
+      case BLOCK_USER:
+        return {
+          ...state,
+          users: state.users.map((user) =>
+            user._id === action.payload._id ? { ...user, bloque: true } : user
+          ),
+        };
+      default:
+        return state;
+    }
+  };
+  export const userUnblockReducer = (state = { users: [] }, action) => {
+    switch (action.type) {
+      case UNBLOCK_USER:
+        return {
+          ...state,
+          users: state.users.map((user) =>
+            user._id === action.payload._id ? { ...user, bloque: true } : user
+          ),
+        };
+      default:
+        return state;
+    }
+  };

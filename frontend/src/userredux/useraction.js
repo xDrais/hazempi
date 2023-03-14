@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS ,USER_REGISTER_FAIL, APPROVE_USER_SUCCESS, GET_USERS_SUCCESS, FORGET_PASSWORD_REQUEST, FORGET_PASSWORD_SUCCESS, FORGET_PASSWORD_FAIL, RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAIL} from "./userconstant"
+import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS ,USER_REGISTER_FAIL, APPROVE_USER_SUCCESS, GET_USERS_SUCCESS, FORGET_PASSWORD_REQUEST, FORGET_PASSWORD_SUCCESS, FORGET_PASSWORD_FAIL, RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAIL, BLOCK_USER, UNBLOCK_USER} from "./userconstant"
 import { useNavigate } from 'react-router-dom'
 
 export const login = (email,password) => async (dispatch)=>{
@@ -247,3 +247,34 @@ export const resetPassword = (password,id,token) => async (dispatch)=>{
 
   }
 }
+
+export const blockUser = (id) => async (dispatch) => {
+  try {
+    const response = await fetch('http://localhost:5000/api/user/block', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id }),
+    });
+    const data = await response.json();
+    dispatch({ type: UNBLOCK_USER, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const unblockUser = (id) => async (dispatch) => {
+  try {
+    const response = await fetch('http://localhost:5000/api/user/unblock', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id }),
+    });
+    const data = await response.json();
+    dispatch({ type: BLOCK_USER, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -45,7 +45,7 @@ const GetCoach = () => {
         <Header/>
         <div className="content-wrapper">
           <div className="container-xxl flex-grow-1 container-p-y">
-          <h4 className="fw-bold py-3 mb-4"><span className="text-muted fw-light"></span> Deatais Sponsor</h4>
+          <h4 className="fw-bold py-3 mb-4"><span className="text-muted fw-light"></span> Details Coach</h4>
           <div className="card">
          
                   <h5 className="card-header">Details</h5>
