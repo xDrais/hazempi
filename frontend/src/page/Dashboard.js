@@ -2,29 +2,42 @@ import NavBar from "../Components/Dashboard/NavBar";
 import Header from "../Components/Dashboard/Header";
 import Footer from "../Components/Dashboard/Footer";
 import { DashboardHTML } from "../Components/dashboard";
-import {Link} from 'react-router-dom'
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import ReactHtmlParser from 'react-html-parser';
 import React, {useState,useEffect} from "react";
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUsers,approveUser } from "../userredux/useraction";
+import GetSponsor from './GetSponsor ';
+import { Route  , Link, NavLink, Navigate, useNavigate} from 'react-router-dom';
+
+
+
+
+
 
 
  function Dashboard  () {
 
+
+
   const dispatch = useDispatch();
   const users = useSelector((state) => state.userDisplay.userInfo);
 
+let navigate =useNavigate()
   console.log(users);
   useEffect(() => {
     dispatch(getUsers());
   }, [dispatch]);
 
+
   const handleApprove = (id, role) => {
     dispatch(approveUser(id, role));
   };
  
+ const detailRole=(role , id )=>{
+  let path =`/${role}/${id}`
+        navigate(path)
+ };
 
     return ( <>
 <div>    <div>{ReactHtmlParser(DashboardHTML)}   </div>
@@ -55,6 +68,7 @@ import { getUsers,approveUser } from "../userredux/useraction";
                         <th>Actions</th>
                       </tr>
                     </thead>
+                    
                     <tbody className="table-border-bottom-0">
                       
                         {Array.isArray(users) && users.map((i) => {
@@ -98,8 +112,12 @@ import { getUsers,approveUser } from "../userredux/useraction";
                        )}
                       <Dropdown.Item href="#/action-1"> <i className="bx bx-edit-alt me-1"></i> Edit</Dropdown.Item>
                       <Dropdown.Item href="#/action-2"> <i className="bx bx-trash me-1"></i>Block</Dropdown.Item>
+                      <Dropdown.Item onClick={() => detailRole(i?.role?.name, i._id)}><i className="bx bx-edit-alt me-1"></i>details</Dropdown.Item>
+
+                                 
                           </DropdownButton>
                         </td>
+                        
                         </tr>
                           )
                         })}                     
