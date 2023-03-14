@@ -58,8 +58,8 @@ const registerUser = asynHandler( async ( req , res )=> {
         cin ,
         dateOfBirth ,
         phone,
-        role: {name: "userRole"},
-                emailToken: otp
+        role,    
+        emailToken: otp
 
         
     })

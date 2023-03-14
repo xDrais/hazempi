@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,14 +10,19 @@ import SpecialButton from "../../Components/Button/button";
 import Loader from "../../Components/Loader";
 import { register } from "../../userredux/useraction";
 import ReCAPTCHA from "react-google-recaptcha";
+
 import {
   ArrowWrapperLeft,
   ArrowWrapperRight,
 } from "../../Components/Arrows/Arrows";
 
 const Register = () => {
+
   //State taa el captcha keni verified wala le
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+  //speach recognition
+  const { transcript, resetTranscript,startListening } = useSpeechRecognition();
+  const [activeField, setActiveField] = useState('firstName');
 
   //steps taa el form
   const [step, setStep] = useState(1);
@@ -202,6 +208,7 @@ const Register = () => {
       }
     }
   }, [dateOfBirth]);
+  
   return (
     <>
       {/* el video taa el background */}
@@ -220,6 +227,9 @@ const Register = () => {
 
           {loading && <Loader />}
         </section>
+
+
+        
         {/* form start    */}
         <form
           className="register"
@@ -230,11 +240,10 @@ const Register = () => {
             align="center"
             style={{ marginBottom: "20px", marginTop: "-20px" }}
           >
-            {" "}
-            <h1>Sign In</h1>{" "}
+           
           </div>
           {/* les boutons mtaa previous w next */}
-
+         
           <ArrowWrapperLeft
             onClick={handlePrevStep}
             disabled={step === 1}
@@ -244,7 +253,6 @@ const Register = () => {
             onClick={handleNextStep}
             disabled={
               step === 5 ||
-              !isCaptchaVerified ||
               !validCin ||
               !validEmail ||
               !validFirstName ||
@@ -258,6 +266,10 @@ const Register = () => {
           {/* step lowla mtaa el form eli fiha el info taa simple user */}
           {step === 1 && (
             <>
+             {" "}
+
+             
+            <h1 style={{marginTop: "-50px"}}>Register</h1>{" "}
               <input
                 id="firstName"
                 type="text"
@@ -387,10 +399,6 @@ const Register = () => {
               >
                 Enter Valid image type : png , jpg or jpeg{" "}
               </p>
-              <ReCAPTCHA
-                sitekey="6Ldzy-UkAAAAAOF98pseL_XgounD7zAY-IT1kms1"
-                onChange={handleCaptcha}
-              />
             </>
           )}
 
@@ -496,6 +504,10 @@ const Register = () => {
 
           {step === 5 && (
             <>
+              <ReCAPTCHA
+                sitekey="6Ldzy-UkAAAAAOF98pseL_XgounD7zAY-IT1kms1"
+                onChange={handleCaptcha}
+              />
               <div className="tacbox">
                 <input
                   id="checkbox"
@@ -512,7 +524,7 @@ const Register = () => {
                 type="submit"
                 disabled={!isChecked}
               >
-                Sign In
+                Register
               </Button>
               <Row className="py-3">
                 <Col>
@@ -522,6 +534,7 @@ const Register = () => {
             </>
           )}
         </form>
+
         {/* fin form */}
       </div>{" "}
       {/* fin video background */}

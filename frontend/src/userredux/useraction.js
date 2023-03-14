@@ -61,7 +61,7 @@ export const register = (firstName,lastName,cin,phone,dateOfBirth,imageUrl,email
        if( dispatch({
             type : USER_REGISTER_SUCCESS,
             payload : data
-        })) { return messageSuccess === "We sent you a verification e-mail please check it "}
+        })) 
         dispatch ({
             type : USER_LOGIN_SUCCESS,
             payload : data
