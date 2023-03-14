@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUsers,approveUser , blockUser, unblockUser } from "../userredux/useraction";
 import GetSponsor from './GetSponsor ';
 import { Route  , Link, NavLink, Navigate, useNavigate} from 'react-router-dom';
+import Swal from 'sweetalert2';
+
 
 
  function Dashboard  () {
@@ -106,10 +108,45 @@ let navigate =useNavigate()
                         <DropdownButton title="Actions">
                         {i.status === "pending" && (
                      <>
-                    {i?.role?.name === "userRole" || typeof i.role === "undefined" ? (
+                    {i?.role?.name === "userRole"  ? (
                         <>
-                    <Dropdown.Item onClick={() => handleApprove(i._id, "sponsor")}><i className="bx bx-edit-alt me-1"></i> Approve Sponsor</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleApprove(i._id, "coach")}><i className="bx bx-edit-alt me-1"></i>Approve Coach</Dropdown.Item>
+                      <Dropdown.Item onClick={() => {
+                        Swal.fire({
+                          title: 'Do you want to Approve this User as Sponsor?',
+                          showDenyButton: true,
+                          showCancelButton: true,
+                          confirmButtonText: 'Save',
+                          denyButtonText: `Don't save`,
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            handleApprove(i._id, "sponsor");
+                            Swal.fire('Approved!', '', 'success');
+                          } else if (result.isDenied) {
+                            Swal.fire('User is not Approved', '', 'info');
+                          }
+                        });
+                      }}>
+                        <i className="bx bx-edit-alt me-1"></i> Approve Sponsor
+                      </Dropdown.Item>
+
+                      <Dropdown.Item onClick={() => {
+                        Swal.fire({
+                          title: 'Do you want to Approve this User as Coach?',
+                          showDenyButton: true,
+                          showCancelButton: true,
+                          confirmButtonText: 'Save',
+                          denyButtonText: `Don't save`,
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            handleApprove(i._id, "coach");
+                            Swal.fire('Approved!', '', 'success');
+                          } else if (result.isDenied) {
+                            Swal.fire('User is not Approved', '', 'info');
+                          }
+                        });
+                      }}>
+                        <i className="bx bx-edit-alt me-1"></i>Approve Coach
+                      </Dropdown.Item>
                         </>
                       ) : null}
                    </>
@@ -133,9 +170,10 @@ let navigate =useNavigate()
                                 <i className="bx bx-trash me-1"></i>Block
                               </>
                             )}
-                          </Dropdown.Item>   
+                          </Dropdown.Item>  
+                          {i?.role?.name === "sponsor" || i?.role?.name === "coach" ? (
                           <Dropdown.Item onClick={() => detailRole(i?.role?.name, i._id)}><i className="bx bx-edit-alt me-1"></i>details</Dropdown.Item>
-                       
+                          ) : null}
                           </DropdownButton>
                         </td>
                         

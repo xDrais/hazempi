@@ -6,7 +6,6 @@ const CoachSchema = new mongoose.Schema({
     descriptionCoach : {type : String , required : true },
     dateDebutExperience : {type : Date , required : false },
     dateFinExperience : {type : Date , required : false},
-    titrePoste : {type : String , required :false },
-    certification : { type: String , required : false}
+    titrePoste : {type : String , required :false }
 })
 module.exports = mongoose.model('Coach', CoachSchema)

@@ -1,6 +1,15 @@
 import { Link } from "react-router-dom";
+import { useParams } from 'react-router-dom';
+
+
+
 function NavBar  ()  {
-    return (
+  const pathname = window.location.pathname;
+
+  const { id } = useParams();
+  
+      return (
+      
     
         <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
         <div className="app-brand demo">
@@ -70,34 +79,39 @@ function NavBar  ()  {
 
     <ul className="menu-inner py-1">
           {/* <!-- Dashboard --> */}
-          <li className="menu-item active">
-            <Link to="index.html" className="menu-link">
+          <li className="menu-item">
+            <Link to="/dashboard" className="menu-link">
               <i className="menu-icon tf-icons bx bx-home-circle"></i>
               <div data-i18n="Analytics">Dashboard</div>
             </Link>
           </li>
 
-          {/* <!-- Admin --> */}
-        <li className="menu-item">
-            <Link to="javascript:void(0);" className="menu-link menu-toggle">
-              <i className="menu-icon tf-icons bx bx-layout"></i>
-              <div data-i18n="Layouts">Admin</div>
-            </Link>
+        
+          <li className="menu-item active">
+  {pathname === "/dashboard" && (
+    <Link to="/dashboard" className="menu-link active">
+      <i className="menu-icon tf-icons bx bx-user-circle"></i>
+      <div data-i18n="Analytics">Admin</div>
+    </Link>
+  )}
+  {pathname === `/sponsor/${id}` && (
+    <Link to={`/sponsor/${id}`} className="menu-link active">
+      <i className="menu-icon tf-icons bx bx-user-circle"></i>
+      <div data-i18n="Analytics">Sponsor</div>
+    </Link>
+  )}
+  {pathname === `/coach/${id}` && (
+    <Link to={`/coach/${id}`} className="menu-link active">
+      <i className="menu-icon tf-icons bx bx-user-circle"></i>
+      <div data-i18n="Analytics">Coach</div>
+    </Link>
+  )}
+</li>
 
-            <ul className="menu-sub">
-              <li className="menu-item">
-                <Link to="layouts-without-menu.html" className="menu-link">
-                  <div data-i18n="Without menu">Account List</div>
-                </Link>
-              </li>
-              <li className="menu-item">
-                <Link to="layouts-without-menu.html" className="menu-link">
-                  <div data-i18n="Without menu">Account List</div>
-                </Link>
-              </li>
 
-            </ul>
-        </li>
+
+
+        
     </ul>
       </aside>
       );
