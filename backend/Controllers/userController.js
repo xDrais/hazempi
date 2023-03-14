@@ -7,46 +7,44 @@ const { generatorOTP ,mailTransport,generateToken } = require('./utils/mail.js')
 const verficationToken = require('../Models/token.js')
 const { isValidObjectId  } = require("mongoose")
 const validator = require("email-validator");
-
-
-
+const crypto= require("crypto");
+const jwt = require("jsonwebtoken");
+const {storage } = require ('../routes/userRoute')
 
 const registerUser = asynHandler( async ( req , res )=> {
     const {  firstName ,
         lastName , 
         email , 
         password , 
-        imageUrl , 
         cin  ,
         dateOfBirth , 
         role ,
-        phone,
-       
-
-
+        phone, 
     } = req.body
+    const  imageUrl =req.file.filename 
+
     const { entrepriseName,sector,descriptionSponsor} = req.body
     const { speciality,descriptionCoach,dateDebutExperience ,
         dateFinExperience,
         titrePoste,
         certification} = req.body
 
-    if (!firstName || !lastName ||  !validator.validate(email) ||  !password || !imageUrl ||  !cin  || !dateOfBirth || !phone ){
-            res.status(400)
+    if (!firstName || !lastName ||  !validator.validate(email) ||  !password  || !imageUrl || !cin  || !dateOfBirth || !phone ){
+            res.json({"message":"Please add  all fields"}).status(400)
             throw new Error('Please add  all fields')
     }
     //verifier user exits by email
     const userExists  =  await User.findOne({email})
     if(userExists){
-        res.status(400)
-        throw new Error('User already exists')
+        res.status(401).send({ message: 'User with this E-mail adress already exists' });
+        throw new Error('User with this E-mail adress already exists')
     }
     
     //bcryptjs password cryptage
     const salt = await bcrypt.genSalt(10)
     const headPassword = await bcrypt.hash(password,salt)
-
     const otp = generatorOTP()
+
 
 
     //create user
@@ -56,11 +54,13 @@ const registerUser = asynHandler( async ( req , res )=> {
         lastName ,
         email , 
         password: headPassword  , 
-        imageUrl ,
+        imageUrl,
         cin ,
         dateOfBirth ,
         phone,
-        role,
+        role: {name: "userRole"},
+                emailToken: otp
+
         
     })
     //Sponsor Creation
@@ -89,16 +89,19 @@ const registerUser = asynHandler( async ( req , res )=> {
             
     }
     
-    const verfication = await verficationToken.create({
-        owner : user._id,
-        vtoken: otp
-    })
+    //const token = createToken(user._id);
+
+    
+    
     mailTransport().sendMail({
-        from:"devtestmailer101@gmail.com",
-        to: user.email,
-        subject: "Verfication Mail",
-        html: `<h1>${otp}</h1>`
-    })
+      from:"devtestmailer101@gmail.com",
+      to: user.email,
+      subject: "Account Verified ",
+      html: `<h1>Account Verified  ${user.lastName} ,
+      <a href = '${process.env.CLIENT_URL}/verify-email?emailToken=${user.emailToken}'> Verify your Email
+      </h1>` ,
+     })
+
 
 
     if(user){
@@ -111,7 +114,8 @@ const registerUser = asynHandler( async ( req , res )=> {
             imageUrl: user.imageUrl,
             cin: user.cin,
             dateOfBirth: user.dateOfBirth,
-            role : user.role,           
+            role : user.role,    
+            verfication : user.emailToken       
         })
     }
     else{
@@ -120,50 +124,101 @@ const registerUser = asynHandler( async ( req , res )=> {
     }
 
 })
+
+const ApproveUser = asynHandler( async (req, res) => {
+    const id = req.params.id;
+      const role = req.body.role;
+      try {
+        const user = await User.findById(id);
+        if (user && user.status === 'pending') {
+          user.role.name = role;
+          user.status = 'approved';
+          await user.save();
+          res.send(`User ${user.firstName} approved and set to role ${role}`);
+        } else {
+          res.status(404).send('User not found or already approved/rejected');
+        }
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+      }
+      });
+/*
 const  verifyEmail = asynHandler( async (req,res) => {
-   const { id , otp } = req.body
-    if ( !id || !otp.trim()){
-        res.status(400)
-        throw new Error ("Invalid reequest")
-    }
-    if (!isValidObjectId(id)) {
+    const emailToken =req.body.emailToken; 
 
-        res.status(404)
-        throw new Error (" Invalid User ")
-    }
-    const user = await User.findById(id)
-    if (!user) {
-        res.Error(404)
-        throw new Error(" User Not Found !!")
-    }
-    if (user.verify) {
-        res.status(404)
-        throw new Error(" User Already Verified !!")
-    }
-    const token = await verficationToken.findOne({owner: user._id})
+    console.log("req.params.emailToken:", req.params.emailToken);
+ // const emailToken = req.params.token; 
 
-    if (!token) {
-        res.status(404)
-        throw  new Error(" Invalid Token !! ")
-    }
-    const isMatch = await bcrypt.compareSync(otp,token.vtoken)
-    if (!isMatch) {
-        res.status(404)
-        throw  new Error(" Invalid Token !! ") 
-    }
-    user.verify = true;
-    await verficationToken.findByIdAndDelete(token._id)
-    await user.save()
-    mailTransport().sendMail({
-        from:"devtestmailer101@gmail.com",
-        to: user.email,
-        subject: "Account Verified ",
-        html: `<h1>Account Verified</h1>`
-    })
-    res.json("Your Email is Verified ")
+  console.log("emailToken is undefined:", !emailToken);
 
+  if (!emailToken || !emailToken.trim()) {
+    console.log("Invalid emailToken:", emailToken);
+    res.status(400);
+    throw new Error("Invalid request");
+  }
+
+  const user = await User.findOne({ emailToken });
+  if (!user) {
+    res.status(404);
+    throw new Error("User Not Found!!");
+  }
+
+  if (user.verify) {
+    res.status(400); 
+    throw new Error("User Already Verified!!");
+  }
+
+  if (!emailToken) {
+      res.status(404)
+      throw  new Error(" Invalid Token !! ")
+  }
+  if (user) {
+  user.emailToken= null;
+  user.updateOne({ verified: true })
+
+  await user.save(); 
+  res.status(200).json({
+    _id: user._id,
+    email: user.email,
+    verify: user?.verify,
+  });
+
+  mailTransport().sendMail({
+      from:"devtestmailer101@gmail.com",
+      to: user.email,
+      subject: "Account Verified ",
+      html: `<h1>Account Verified</h1>`
+  })
+  res.json("Your Email is Verified ")
+  }
+
+  
+  res.redirect(`${process.env.CLIENT_URL}/login`);
 })
+*/
 
+const verifyEmail = asynHandler (async (req, res) =>{
+    try {
+            const token = req.query.emailToken
+            const user = await User.findOne({emailToken : token})
+            if(user) {
+                user.emailToken = null 
+                user.verify = true
+                await user.save()
+                res.redirect('http://localhost:3000/login')
+            }
+            else {
+                res.redirect('http://localhost:3000/register')
+                console.log('email is not verified')
+            }
+    }
+    catch(err){
+        console.log(err)
+
+    }
+}
+) 
 const logIn = asynHandler( async (req,res)=>{
         const  { email , password } = req.body
         
@@ -245,11 +300,35 @@ const reset = asynHandler(async ( req,res)=>{
 
 //admin
 const bloque = asynHandler( async(req,res)  =>{
+  const  { id } =req.body
+  const user = await User.findById(id)
+  if (user.bloque==false){
+
+       user.bloque=true
+       await user.save()
+       res.json("User blocked")
+       console.log("user is blocked ")
+  }
+  else {
+   res.Error(404)
+   throw new Error(" User already blocked !!")
+  }
+})
+//admin
+const Unbloque = asynHandler( async(req,res)  =>{
    const  { id } =req.body
    const user = await User.findById(id)
-   user.bloque=true
-   await user.save()
-   res.json("User bloqued")
+   if (user.bloque==true){
+
+        user.bloque=false
+        await user.save()
+        res.json("User Unbloqued")
+        console.log("user is Unblocked ")
+   }
+   else {
+    res.Error(404)
+    throw new Error(" User already Unblocked !!")
+   }
 })
 // Give Role admin
 const makeAdmin = asynHandler( async(req,res)  =>{
@@ -327,6 +406,44 @@ const findUserById = asynHandler(async(req,res)=>{
     res.json(user)
 
 })
+
+const getAllUser = asynHandler(async(req,res)=>{
+    
+    const user = await User.find({}).select('-password')
+    if (!user) {
+        res.Error(404)
+        throw new Error(" User Not Found !!")
+    }
+    res.json(user)
+
+})
+
+ const GetSponsor = asynHandler(  async (req, res) => {
+    try {
+      const sponsor = await Sponsor.findOne({ user: req.params.userId }).populate('user');
+      if (!sponsor) {
+        return res.status(404).json({ message: 'Sponsor not found' });
+      }
+      res.json({ sponsor });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+ const GetCoach = asynHandler( async(req,res)  =>{
+    try {
+        const coach = await Coach.findOne({ user: req.params.userId }).populate('user');
+        if (!coach) {
+          return res.status(404).json({ message: 'Coach not found' });
+        }
+        res.json({ coach });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+      }
+ })
+
 module.exports = { 
     registerUser,
     verifyEmail,
@@ -338,6 +455,11 @@ module.exports = {
     reset,
     forgetPass,
     updateUser,
-    findUserById
+    findUserById,
+    getAllUser,
+    ApproveUser,
+    GetSponsor,
+    GetCoach,
+    Unbloque
     
  }

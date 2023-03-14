@@ -8,11 +8,5 @@ const CoachSchema = new mongoose.Schema({
     dateFinExperience : {type : Date , required : false},
     titrePoste : {type : String , required :false },
     certification : { type: String , required : false}
-
-
-
-
-
-
 })
 module.exports = mongoose.model('Coach', CoachSchema)

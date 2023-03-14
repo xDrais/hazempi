@@ -6,6 +6,9 @@
 
   }
 }
+.signinicon{
+  margin-top: 20px;
+}
 .NavbarItems{
     
     display: flex;
@@ -16,6 +19,13 @@
     letter-spacing: 1px;
     left: 100%;
     z-index:2;
+
+}
+#username {
+  color: #e0d4cc;
+}
+.o{
+  margin-right: -200px;
 
 }
 .navlinkmargin{

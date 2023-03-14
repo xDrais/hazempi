@@ -1,17 +1,56 @@
-
- import {BrowserRouter,Routes,Route} from "react-router-dom";
 import NavBar from "../Components/Dashboard/NavBar";
+import Header from "../Components/Dashboard/Header";
+import Footer from "../Components/Dashboard/Footer";
 import { DashboardHTML } from "../Components/dashboard";
+import { Dropdown, DropdownButton } from 'react-bootstrap';
 import ReactHtmlParser from 'react-html-parser';
+import React, {useState,useEffect} from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { getUsers,approveUser , blockUser, unblockUser } from "../userredux/useraction";
+import GetSponsor from './GetSponsor ';
+import { Route  , Link, NavLink, Navigate, useNavigate} from 'react-router-dom';
 
 
  function Dashboard  () {
+  const [refresh, setRefresh] = useState(false);
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.userDisplay.userInfo);
+
+let navigate =useNavigate()
+  console.log(users);
+  useEffect(() => {
+    dispatch(getUsers());
+    const interval = setInterval(() => {
+      setRefresh((prev) => !prev); // toggle the value of refresh every time the interval elapses
+    }, 2000); // interval time in milliseconds
+    return () => clearInterval(interval); // clear the interval on component unmount
+  }, [dispatch ,refresh]);
+
+  const handleApprove = (id, role) => {
+    dispatch(approveUser(id, role));
+  };
+  const handleBlockUser = (id, blocked) => {
+    if (blocked) {
+      dispatch(unblockUser(id));
+    } else {
+      dispatch(blockUser(id));
+    }
+  };
+
+ 
+ const detailRole=(role , id )=>{
+  let path =`/${role}/${id}`
+        navigate(path)
+ };
+
     return ( <>
 <div>    <div>{ReactHtmlParser(DashboardHTML)}   </div>
 </div>;        <div className="layout-wrapper layout-content-navbar">
       <div className="layout-container">
           <NavBar />
-        
+          <div className="layout-page">
+      <Header/>
+      <div className="content-wrapper">
         <div className="container-xxl flex-grow-1 container-p-y">
         <h4 className="fw-bold py-3 mb-4"><span className="text-muted fw-light"></span> List Account</h4>
         <div className="card">
@@ -21,69 +60,100 @@ import ReactHtmlParser from 'react-html-parser';
                   <table className="table table-striped">
                     <thead>
                       <tr>
-                        <th>Project</th>
-                        <th>Client</th>
-                        <th>Users</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>CIN</th>
+                        <th>Image</th>
+                        <th>Role</th>
                         <th>Status</th>
+                        <th>Role Status</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
+                    
                     <tbody className="table-border-bottom-0">
-                      <tr>
-                        <td><i className="fab fa-angular fa-lg text-danger me-3"></i> <strong>Angular Project</strong></td>
-                        <td>Albert Cook</td>
+                      
+                        {Array.isArray(users) && users.map((i) => {
+                          
+                          return(
+                              
+                            <tr key={i.id}>
+                            
+                          <td><i className="fab fa-angular fa-lg text-danger me-3"></i>{i.firstName}</td>
+                          <td> {i.lastName}</td> 
                         <td>
-                          <ul className="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                            <li
-                              data-bs-toggle="tooltip"
-                              data-popup="tooltip-custom"
-                              data-bs-placement="top"
-                              className="avatar avatar-xs pull-up"
-                              title="Lilian Fuller"
-                            >
-                              <img src="../assets/img/avatars/5.png" alt="Avatar" className="rounded-circle" />
-                            </li>
-                            <li
-                              data-bs-toggle="tooltip"
-                              data-popup="tooltip-custom"
-                              data-bs-placement="top"
-                              className="avatar avatar-xs pull-up"
-                              title="Sophia Wilkerson"
-                            >
-                              <img src="../assets/img/avatars/6.png" alt="Avatar" className="rounded-circle" />
-                            </li>
-                            <li
-                              data-bs-toggle="tooltip"
-                              data-popup="tooltip-custom"
-                              data-bs-placement="top"
-                              className="avatar avatar-xs pull-up"
-                              title="Christina Parker"
-                            >
-                              <img src="../assets/img/avatars/7.png" alt="Avatar" className="rounded-circle" />
-                            </li>
-                          </ul>
+                        {i.email}
                         </td>
-                        <td><span className="badge bg-label-primary me-1">Active</span></td>
                         <td>
-                          <div className="dropdown">
-                            <button type="button" className="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                              <i className="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div className="dropdown-menu">
-                              <a className="dropdown-item" href="javascript:void(0);">
-                                <i className="bx bx-edit-alt me-1"></i> Edit</a>
-                              <a className="dropdown-item" href="javascript:void(0);">
-                                <i className="bx bx-trash me-1"></i> Delete</a>
-                            </div>
-                          </div>
+                        {i.phone}
                         </td>
-                      </tr>
+                        <td>
+                        {i.cin}
+                        </td>
+                        <td>
+                        <img style={{width:"200px",height:"auto"}} src={`${process.env.PUBLIC_URL}/images/${i.imageUrl}`} alt="My Image" />
+                        </td>
+                        <td>
+                        <span className="badge bg-label-primary me-1">{i?.role?.name}</span>
+                        </td>
+                        <td ><span className={i.verify === true ? 'badge bg-label-success me-1' : 'badge bg-label-warning me-1'}>{i.verify ? 'Verifed': 'Not-Verifed'}</span>
+                        <span className={i.bloque === true ? 'badge bg-label-warning me-1' :'badge bg-label-success me-1' }>{i.bloque ? 'Blocked': 'Not-Blocked'}</span></td>
+                        <td >    <span className={i.status === 'pending' ? 'badge bg-label-warning me-1' : 'badge bg-label-success me-1'}>{i.status === 'approved' ? 'approved' : 'pending'}</span></td>
+
+                        <td>
+                        <DropdownButton title="Actions">
+                        {i.status === "pending" && (
+                     <>
+                    {i?.role?.name === "userRole" || typeof i.role === "undefined" ? (
+                        <>
+                    <Dropdown.Item onClick={() => handleApprove(i._id, "sponsor")}><i className="bx bx-edit-alt me-1"></i> Approve Sponsor</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleApprove(i._id, "coach")}><i className="bx bx-edit-alt me-1"></i>Approve Coach</Dropdown.Item>
+                        </>
+                      ) : null}
+                   </>
+                       )}
+                      <Dropdown.Item href="#/action-1"> <i className="bx bx-edit-alt me-1"></i> Edit</Dropdown.Item>
+                      <Dropdown.Item href="" onClick={() => {
+                            if (i.bloque) {
+                              if (window.confirm('Are you sure you want to unblock this user?')) {
+                                handleBlockUser(i._id, true);
+                              }
+                            } else if (window.confirm('Are you sure you want to block this user?')) {
+                              handleBlockUser(i._id, false);
+                            }
+                          }}>
+                            {i.bloque ? (
+                              <>
+                                <i className="bx bx-check me-1"></i>Unblock
+                              </>
+                            ) : (
+                              <>
+                                <i className="bx bx-trash me-1"></i>Block
+                              </>
+                            )}
+                          </Dropdown.Item>   
+                          <Dropdown.Item onClick={() => detailRole(i?.role?.name, i._id)}><i className="bx bx-edit-alt me-1"></i>details</Dropdown.Item>
+                       
+                          </DropdownButton>
+                        </td>
+                        
+                        </tr>
+                          )
+                        })}                     
                     </tbody>
                   </table>
+                 
                 </div>
-              </div>
-        </div> </div> </div>
-
+              </div> 
+                
+        </div>
+        <Footer/>  
+         </div> </div>
+        
+        </div> </div>
+      
         
 </>
      );

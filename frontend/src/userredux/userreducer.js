@@ -1,5 +1,7 @@
 /* eslint-disable no-duplicate-case */
-import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL } from "./userconstant";
+import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, 
+    USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL, GET_USERS_SUCCESS,
+     APPROVE_USER_SUCCESS, BLOCK_USER, UNBLOCK_USER } from "./userconstant";
 
  export const userLoginReducer=(state={},action)=>{
     // eslint-disable-next-line default-case
@@ -7,9 +9,9 @@ import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, U
         case USER_LOGIN_REQUEST : 
             return {loading : true}
         case USER_LOGIN_SUCCESS : 
-            return {loading : false , userInfo : action.paylaod}
+            return {loading : false , userInfo : action.payload}
         case USER_LOGIN_FAIL :
-            return {loading : false , error: action.paylaod }        
+            return {loading : false , error: action.payload }        
         case USER_LOGOUT:
             return {}
         default:
@@ -23,11 +25,52 @@ import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, U
         case USER_REGISTER_REQUEST : 
             return {loading : true}
         case USER_REGISTER_SUCCESS : 
-            return {loading : false , userInfo : action.paylaod}
+            return {loading : false , userInfo : action.payload}
         case USER_REGISTER_FAIL :
-            return {loading : false , error: action.paylaod }        
+            return {loading : false , error: action.payload }        
         default:
             return state    
 
     }
  }
+
+ export const userReducers = (state={}, action) => {
+    switch (action.type) {
+      case GET_USERS_SUCCESS:
+        return {  userInfo: action.payload };
+      case APPROVE_USER_SUCCESS:
+        const updatedUsers = state.userInfo.map((user) =>
+          user._id === action.payload.id ? { ...user, role: action.payload.role } : user
+        );
+        return { userInfo: updatedUsers };
+      default:
+        return state;
+    }
+  };
+
+  export const userBlockReducer = (state = { users: [] }, action) => {
+    switch (action.type) {
+      case BLOCK_USER:
+        return {
+          ...state,
+          users: state.users.map((user) =>
+            user._id === action.payload._id ? { ...user, bloque: true } : user
+          ),
+        };
+      default:
+        return state;
+    }
+  };
+  export const userUnblockReducer = (state = { users: [] }, action) => {
+    switch (action.type) {
+      case UNBLOCK_USER:
+        return {
+          ...state,
+          users: state.users.map((user) =>
+            user._id === action.payload._id ? { ...user, bloque: true } : user
+          ),
+        };
+      default:
+        return state;
+    }
+  };
