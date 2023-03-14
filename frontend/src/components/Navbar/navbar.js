@@ -11,7 +11,12 @@ import { useDispatch , useSelector } from 'react-redux';
 import { Logout } from '../../userredux/useraction';
 
 
-function Navbarr () {
+function Navbarr (userDetails) {
+    const user =userDetails.user;
+    const logoutF =()=>{
+        window.open('http://localhost:5000/auth/logout',
+        "_self")
+    }
   const dispatch = useDispatch()
   const userLogin =useSelector(state =>state.userLogin)
   const {userInfo} =userLogin

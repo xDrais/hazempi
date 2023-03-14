@@ -7,6 +7,8 @@ const verficationToken = require('../Models/token.js')
 
 
 
+
+
 const protectSimpleUser = asynHandler(async (req,res,next)=>{
         let token 
         if (req.headers.authorization &&
