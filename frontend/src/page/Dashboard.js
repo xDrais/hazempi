@@ -2,29 +2,31 @@ import NavBar from "../Components/Dashboard/NavBar";
 import Header from "../Components/Dashboard/Header";
 import Footer from "../Components/Dashboard/Footer";
 import { DashboardHTML } from "../Components/dashboard";
+import {Link} from 'react-router-dom'
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import ReactHtmlParser from 'react-html-parser';
 import React, {useState,useEffect} from "react";
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUsers,approveUser , blockUser, unblockUser } from "../userredux/useraction";
-import GetSponsor from './GetSponsor ';
-import { Route  , Link, NavLink, Navigate, useNavigate} from 'react-router-dom';
+import { getUsers,approveUser, blockUser, unblockUser } from "../userredux/useraction";
+
 
 
  function Dashboard  () {
-  const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState(false); // state variable for refreshing the page
+
   const dispatch = useDispatch();
   const users = useSelector((state) => state.userDisplay.userInfo);
 
-let navigate =useNavigate()
   console.log(users);
-  useEffect(() => {
-    dispatch(getUsers());
-    const interval = setInterval(() => {
-      setRefresh((prev) => !prev); // toggle the value of refresh every time the interval elapses
-    }, 2000); // interval time in milliseconds
-    return () => clearInterval(interval); // clear the interval on component unmount
-  }, [dispatch ,refresh]);
+ useEffect(() => {
+  dispatch(getUsers());
+  const interval = setInterval(() => {
+    setRefresh((prev) => !prev); // toggle the value of refresh every time the interval elapses
+  }, 2000); // interval time in milliseconds
+  return () => clearInterval(interval); // clear the interval on component unmount
+}, [dispatch, refresh]);
+
 
   const handleApprove = (id, role) => {
     dispatch(approveUser(id, role));
@@ -38,10 +40,6 @@ let navigate =useNavigate()
   };
 
  
- const detailRole=(role , id )=>{
-  let path =`/${role}/${id}`
-        navigate(path)
- };
 
     return ( <>
 <div>    <div>{ReactHtmlParser(DashboardHTML)}   </div>
@@ -72,7 +70,6 @@ let navigate =useNavigate()
                         <th>Actions</th>
                       </tr>
                     </thead>
-                    
                     <tbody className="table-border-bottom-0">
                       
                         {Array.isArray(users) && users.map((i) => {
@@ -115,7 +112,7 @@ let navigate =useNavigate()
                    </>
                        )}
                       <Dropdown.Item href="#/action-1"> <i className="bx bx-edit-alt me-1"></i> Edit</Dropdown.Item>
-                      <Dropdown.Item href="" onClick={() => {
+                       <Dropdown.Item href="" onClick={() => {
                             if (i.bloque) {
                               if (window.confirm('Are you sure you want to unblock this user?')) {
                                 handleBlockUser(i._id, true);
@@ -133,12 +130,15 @@ let navigate =useNavigate()
                                 <i className="bx bx-trash me-1"></i>Block
                               </>
                             )}
-                          </Dropdown.Item>   
-                          <Dropdown.Item onClick={() => detailRole(i?.role?.name, i._id)}><i className="bx bx-edit-alt me-1"></i>details</Dropdown.Item>
+                          </Dropdown.Item>
+
+
+
+
+
                        
-                          </DropdownButton>
+                    </DropdownButton>
                         </td>
-                        
                         </tr>
                           )
                         })}                     

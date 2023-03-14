@@ -99,29 +99,3 @@ z-index: 3;
   cursor: pointer;
 }
 
-
-
-
-.google-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  background-color: #fff;
-  color: #737373;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 6px 12px;
-  border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.google-button:hover {
-  background-color: #f1f1f1;
-}
-
-.google-button img {
-  margin-right: 8px;
-}
