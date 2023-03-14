@@ -26,7 +26,8 @@ const registerUser = asynHandler( async ( req , res )=> {
     const { entrepriseName,sector,descriptionSponsor} = req.body
     const { speciality,descriptionCoach,dateDebutExperience ,
         dateFinExperience,
-        titrePoste} = req.body
+        titrePoste,
+        certification} = req.body
 
     if (!firstName || !lastName ||  !validator.validate(email) ||  !password  || !imageUrl || !cin  || !dateOfBirth || !phone ){
             res.json({"message":"Please add  all fields"}).status(400)
@@ -75,7 +76,7 @@ const registerUser = asynHandler( async ( req , res )=> {
     }
         //Coach Creation
 
-    if (speciality &&  descriptionCoach && dateDebutExperience &&  dateFinExperience && titrePoste){
+    if (speciality &&  descriptionCoach && dateDebutExperience &&  dateFinExperience && titrePoste && certification){
         const coach = await Coach.create({
             user:user._id,
             speciality:speciality,
@@ -83,6 +84,7 @@ const registerUser = asynHandler( async ( req , res )=> {
             dateDebutExperience: dateDebutExperience,
             dateFinExperience : dateFinExperience,
             titrePoste: titrePoste,
+            certification : certification 
         })
             
     }
