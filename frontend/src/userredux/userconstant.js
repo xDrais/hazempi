@@ -7,5 +7,14 @@ export const USER_REGISTER_FAIL = 'USER_REGISTER_FAIL'
 export const USER_REGISTER_SUCCESS = 'USER_REGISTER_SUCCESS'
 export const APPROVE_USER_SUCCESS = 'APPROVE_USER_SUCCESS'
 export const GET_USERS_SUCCESS = 'GET_USERS_SUCCESS'
-export const BLOCK_USER = 'BLOCK_USER';
-export const UNBLOCK_USER = 'BLOCK_USER';
+
+
+
+// ===================================================
+export const FORGET_PASSWORD_REQUEST='FORGET_PASSWORD'
+export const FORGET_PASSWORD_FAIL = 'FORGET_PASSWORD_FAIL'
+export const FORGET_PASSWORD_SUCCESS = 'FORGET_PASSWORD_SUCCESS'
+// ===================================================
+export const RESET_PASSWORD_REQUEST='RESET_PASSWORD'
+export const RESET_PASSWORD_FAIL = 'RESET_PASSWORD_FAIL'
+export const RESET_PASSWORD_SUCCESS = 'RESET_PASSWORD_SUCCESS'

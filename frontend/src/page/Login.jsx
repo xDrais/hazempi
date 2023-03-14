@@ -35,16 +35,14 @@ const Login = () => {
       {loading && <Loader />}
 
         <form className="login" onSubmit={submitHandler}>
-        <center>  <h1 className="sign">Sign In</h1> </center>
+        <center>  
+          <h1 className="sign">Sign In</h1> </center>
 
                 <label htmlFor="email">
                     Email Address
                 </label>
                 <input id="email" type="email" placeholder="Email" value={email} onChange={(e)=> setEmail(e.target.value)}>
                 </input>
-           
-
-            
                 <label htmlFor="password">
                     Password
                 </label>               
@@ -59,6 +57,7 @@ const Login = () => {
                 <Col>
                         New Customer?{''} <Link to={redirect ? `register?redirect=${redirect}`:'/register'}  >Register</Link>
                 </Col>
+                <Link to="/forget-password"  >Forget Password</Link>
             </Row>
         </form>
          </div>
