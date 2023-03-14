@@ -12,11 +12,7 @@ const {
     updateUser,
     findUserById,
     getAllUser,
-    ApproveUser,
-    GetCoach,
-    GetSponsor,
-    bloque,
-    Unbloque
+    ApproveUser
 
 } = require('../Controllers/userController.js')
 
@@ -48,8 +44,6 @@ const storage = multer.diskStorage({
 router.post('/register',upload.single('imageUrl') ,registerUser)
 router.post('/register',registerUser)
 router.post('/verify-email',verifyEmail)
-router.post('/block',bloque)
-router.post('/unblock',Unbloque)
 //router.post('/verify-email/:token',verifyEmail)
 router.post('/login',logIn)
 router.post('/forget-password',forgetPass)
@@ -57,8 +51,6 @@ router.post('/reset-password',validator,reset)
 router.put('/updateUser/:id',protectSimpleUser,updateUser)
 router.get('/getuser/:id',protectSimpleUser,findUserById)
 router.get('/getalluser',getAllUser)
-router.get('/coach/:userId',GetCoach)
-router.get('/sponsor/:userId',GetSponsor)
 router.put('/approve/:id',ApproveUser)
 
 

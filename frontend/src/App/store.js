@@ -1,14 +1,17 @@
 import { createStore, combineReducers , applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension';
-import {userLoginReducer, userReducers, userRegisterReducer} from '../userredux/userreducer'
+import {userLoginReducer, userReducers, userRegisterReducer,
+  forgetPassword,resetPassword} from '../userredux/userreducer'
 //el store houwa objet bch ykounou fih des données partagées bin el components lkol
 
 const reducer = combineReducers({
     //reducers
     userLogin : userLoginReducer,
     userRegister : userRegisterReducer,
-    userDisplay : userReducers
+    userDisplay : userReducers,
+    forgetPassword: forgetPassword,
+    resetpass: resetPassword,
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null 

@@ -10,6 +10,8 @@ const validator = require("email-validator");
 const crypto= require("crypto");
 const jwt = require("jsonwebtoken");
 const {storage } = require ('../routes/userRoute')
+const fs = require('fs')
+const handlebars = require('handlebars');
 
 const registerUser = asynHandler( async ( req , res )=> {
     const {  firstName ,
@@ -23,14 +25,11 @@ const registerUser = asynHandler( async ( req , res )=> {
     } = req.body
     const  imageUrl =req.file.filename 
 
-    const { entrepriseName,sector,descriptionSponsor} = req.body
-    const { speciality,descriptionCoach,dateDebutExperience ,
-        dateFinExperience,
-        titrePoste,
-        } = req.body
+    const { entrepriseName,sector,descriptionSponsor,file} = req.body
 
-    if (!firstName || !lastName ||  !validator.validate(email) ||  !password  || !imageUrl || !cin  || !dateOfBirth || !phone ){
-            res.json({"message":"Please add  all fields"}).status(400)
+
+    if (!firstName || !lastName  ){
+        res.json({"message":"Please add  all fields"}).status(400)
             throw new Error('Please add  all fields')
     }
     //verifier user exits by email
@@ -54,7 +53,7 @@ const registerUser = asynHandler( async ( req , res )=> {
         lastName ,
         email , 
         password: headPassword  , 
-        imageUrl,
+        imageUrl ,
         cin ,
         dateOfBirth ,
         phone,
@@ -64,31 +63,40 @@ const registerUser = asynHandler( async ( req , res )=> {
         
     })
     //Sponsor Creation
-
+    console.log(file)
+    const fil=file
     if (entrepriseName && sector && descriptionSponsor ){
         const sponsor = await Sponsor.create({
             user:user._id,
             entrepriseName:entrepriseName,
             sector:sector,
-            descriptionSponsor:descriptionSponsor
+            descriptionSponsor:descriptionSponsor,
+            file:fil
+           
         })
             
     }
+    
+    const { speciality,descriptionCoach,dateDebutExperience ,
+        dateFinExperience,
+        titrePoste
+        
+    } = req.body
         //Coach Creation
 
-    if (speciality &&  descriptionCoach && dateDebutExperience &&  dateFinExperience && titrePoste ){
-        const coach = await Coach.create({
+        if (speciality  ){
+            const coach = await Coach.create({
             user:user._id,
             speciality:speciality,
             descriptionCoach:descriptionCoach,
             dateDebutExperience: dateDebutExperience,
             dateFinExperience : dateFinExperience,
             titrePoste: titrePoste,
-           
+            file:fil
         })
             
     }
-    
+
     //const token = createToken(user._id);
 
     
@@ -143,7 +151,7 @@ const ApproveUser = asynHandler( async (req, res) => {
         res.status(500).send('Server error');
       }
       });
-/*
+
 const  verifyEmail = asynHandler( async (req,res) => {
     const emailToken =req.body.emailToken; 
 
@@ -196,29 +204,6 @@ const  verifyEmail = asynHandler( async (req,res) => {
   
   res.redirect(`${process.env.CLIENT_URL}/login`);
 })
-*/
-
-const verifyEmail = asynHandler (async (req, res) =>{
-    try {
-            const token = req.query.emailToken
-            const user = await User.findOne({emailToken : token})
-            if(user) {
-                user.emailToken = null 
-                user.verify = true
-                await user.save()
-                res.redirect('http://localhost:3000/login')
-            }
-            else {
-                res.redirect('http://localhost:3000/register')
-                console.log('email is not verified')
-            }
-    }
-    catch(err){
-        console.log(err)
-
-    }
-}
-) 
 const logIn = asynHandler( async (req,res)=>{
         const  { email , password } = req.body
         
@@ -249,15 +234,13 @@ const logIn = asynHandler( async (req,res)=>{
 
 const forgetPass = asynHandler(async (req,res)=>{
     const  { email } = req.body
-if (!email){
-    res.status(401)
-    res.json('Invalid email')
+if (!email ){
+    res.status(404).json({"message":'Invalid email'})
   }
     const user = await User.findOne({ email: email })
     console.log(user)
     if(!user){
-        res.status(400)
-        throw new Error("Invalid User")
+        res.status(404).json({"message":"Invalid User"})
     }
     const otp = generatorOTP()
     console.log(otp)
@@ -266,19 +249,29 @@ if (!email){
         vtoken: otp
     })
     console.log("mail")
+    fs.readFile('backend\\utils\\content.html', {encoding: 'utf-8'}, function (err, html) {
+        if (err) {
+          console.log(err);
+        } else {
+            var template = handlebars.compile(html);
+            var replacements = {
+                name: user.lastName+" "+user.firstName,
+                action_url: `http://localhost:3000/reset-password?id=${user._id}&token=${otp}`,
+            };
+            var htmlToSend = template(replacements);
     mailTransport().sendMail({
         from:"devtestmailer101@gmail.com",
         to: user.email,
         subject: "Rest Password Mail",
-        html: `<a href="http://localhost:5000/api/user/reset-password?id=${user._id}&token=${otp}"> http://localhost:5000/api/user/reset-password?id=${user._id}&token=${otp}</a>`
-    })
+        html: htmlToSend
+    })}})
    return res.json("done")
 })
 const reset = asynHandler(async ( req,res)=>{
     const { password } =req.body
     const user = await User.findById(req.user._id)
     if (!user) {
-        res.Error(404)
+        res.status(404).json({"message":"User Not Found !!"})
         throw new Error(" User Not Found !!")
     }
     const salt = await bcrypt.genSalt(10)
@@ -287,12 +280,21 @@ const reset = asynHandler(async ( req,res)=>{
     user.password = headPassword
     await verficationToken.deleteOne({ owner : user._id })
     await user.save()
+    fs.readFile('backend\\utils\\index.html', {encoding: 'utf-8'}, function (err, html) {
+        if (err) {
+          console.log(err);
+        } else {
+            var template = handlebars.compile(html);
+            var replacements = {
+                action_url: `http://localhost:3000/login`,
+            };
+            var htmlToSend = template(replacements);
     mailTransport().sendMail({
         from: 'hazemmega55@gmail.com',
         to: user.email,
         subject: 'password changed',
-        html: `<h1>password changed</h1>`
-      })
+        html: htmlToSend
+      })}})
      res.json(" Password Updated ")
 
 
@@ -300,36 +302,36 @@ const reset = asynHandler(async ( req,res)=>{
 
 //admin
 const bloque = asynHandler( async(req,res)  =>{
-  const  { id } =req.body
-  const user = await User.findById(id)
-  if (user.bloque==false){
-
-       user.bloque=true
-       await user.save()
-       res.json("User blocked")
-       console.log("user is blocked ")
-  }
-  else {
-   res.Error(404)
-   throw new Error(" User already blocked !!")
-  }
-})
-//admin
+    const  { id } =req.body
+    const user = await User.findById(id)
+    if (user.bloque==false){
+  
+         user.bloque=true
+         await user.save()
+         res.json("User blocked")
+         console.log("user is blocked ")
+    }
+    else {
+     res.Error(404)
+     throw new Error(" User already blocked !!")
+    }
+  })
+  
 const Unbloque = asynHandler( async(req,res)  =>{
-   const  { id } =req.body
-   const user = await User.findById(id)
-   if (user.bloque==true){
-
-        user.bloque=false
-        await user.save()
-        res.json("User Unbloqued")
-        console.log("user is Unblocked ")
-   }
-   else {
-    res.Error(404)
-    throw new Error(" User already Unblocked !!")
-   }
-})
+    const  { id } =req.body
+    const user = await User.findById(id)
+    if (user.bloque==true){
+ 
+         user.bloque=false
+         await user.save()
+         res.json("User Unbloqued")
+         console.log("user is Unblocked ")
+    }
+    else {
+     res.Error(404)
+     throw new Error(" User already Unblocked !!")
+    }
+ })
 // Give Role admin
 const makeAdmin = asynHandler( async(req,res)  =>{
     const  { id } =req.body
@@ -409,7 +411,7 @@ const findUserById = asynHandler(async(req,res)=>{
 
 const getAllUser = asynHandler(async(req,res)=>{
     
-    const user = await User.find({}).select('-password')
+    const user = await User.find( {}).select('-password')
     if (!user) {
         res.Error(404)
         throw new Error(" User Not Found !!")
@@ -418,7 +420,7 @@ const getAllUser = asynHandler(async(req,res)=>{
 
 })
 
- const GetSponsor = asynHandler(  async (req, res) => {
+const GetSponsor = asynHandler(  async (req, res) => {
     try {
       const sponsor = await Sponsor.findOne({ user: req.params.userId }).populate('user');
       if (!sponsor) {

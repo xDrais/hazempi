@@ -89,7 +89,7 @@ function Navbarr () {
                            
                                <Link to="/register" style={{marginLeft: '600px'}} className="nav_links">
 
-SIGNUP                          </Link>
+REGISTER                         </Link>
 
            
        {userInfo?(
@@ -97,14 +97,14 @@ SIGNUP                          </Link>
                     <NavDropdown   title={userInfo.lastName + " " + userInfo.firstName } id="username">
                       
                         <LinkContainer  to='/profile'>
-                            <NavDropdown.Item >Profile</NavDropdown.Item>
+                            <NavDropdown.Item >PROFILE</NavDropdown.Item>
                         </LinkContainer>
-                        <NavDropdown.Item onClick={logoutHandler} >Logout</NavDropdown.Item>
+                        <NavDropdown.Item onClick={logoutHandler} >LOGOUT</NavDropdown.Item>
                     </NavDropdown>  </div>
             
             )  : 
             <Link className="nav_links" to={"/login"}>
-                signin
+                SIGNIN
                 </Link>         
             }  
 
@@ -113,7 +113,7 @@ SIGNUP                          </Link>
                             
                               <a className="nav_links">    
                               <FontAwesomeIcon icon={faMicrophone}  onClick={SpeechRecognition.startListening} size="lg" />
-                              <a className="nav_links" id="transcript"> transcript : {transcript}</a>
+                              <a className="nav_links smalltext" id="transcript"> {transcript}</a>
 </a>
                             </li>
             </ul>

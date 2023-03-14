@@ -8,8 +8,6 @@ const fileSchema = new mongoose.Schema({
     size : {type :Number, required : true }
 })
 const UploadFileSchema = new mongoose.Schema({
-    file:[fileSchema],
-    
-    
+    file:[fileSchema],  
 })
 module.exports = mongoose.model('UploadFile', UploadFileSchema)

@@ -1,28 +1,23 @@
 import React, { useEffect, useState } from "react";
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import video from "../../Components/HeroSection/pottery2.mp4";
 import "../../Components/HeroSection/HeroSection.css";
 import "./register.css";
+import UploadfFile from "../UploadfFile";
 import SpecialButton from "../../Components/Button/button";
 import Loader from "../../Components/Loader";
 import { register } from "../../userredux/useraction";
 import ReCAPTCHA from "react-google-recaptcha";
-
 import {
   ArrowWrapperLeft,
   ArrowWrapperRight,
 } from "../../Components/Arrows/Arrows";
 
 const Register = () => {
-
   //State taa el captcha keni verified wala le
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
-  //speach recognition
-  const { transcript, resetTranscript,startListening } = useSpeechRecognition();
-  const [activeField, setActiveField] = useState('firstName');
 
   //steps taa el form
   const [step, setStep] = useState(1);
@@ -44,6 +39,8 @@ const Register = () => {
   const [dateFinExperience, setDateFinExperience] = useState("");
   const [titrePoste, setTitrePoste] = useState("");
   const [certification, setCertification] = useState("");
+  const [file, setFile] = useState("");
+  const [fil, setFi] = useState(file);
   //states taa Sponsor
   const [sector, setSector] = useState("");
   const [descriptionSponsor, setDescriptionSponsor] = useState("");
@@ -117,10 +114,12 @@ const Register = () => {
         dateDebutExperience,
         dateFinExperience,
         titrePoste,
-        certification,
         sector,
         descriptionSponsor,
-        entrepriseName
+        entrepriseName,
+        file,
+        fil
+        
       )
     );
   };
@@ -208,7 +207,6 @@ const Register = () => {
       }
     }
   }, [dateOfBirth]);
-  
   return (
     <>
       {/* el video taa el background */}
@@ -227,9 +225,6 @@ const Register = () => {
 
           {loading && <Loader />}
         </section>
-
-
-        
         {/* form start    */}
         <form
           className="register"
@@ -240,10 +235,11 @@ const Register = () => {
             align="center"
             style={{ marginBottom: "20px", marginTop: "-20px" }}
           >
-           
+            {" "}
+            <h1>Sign In</h1>{" "}
           </div>
           {/* les boutons mtaa previous w next */}
-         
+
           <ArrowWrapperLeft
             onClick={handlePrevStep}
             disabled={step === 1}
@@ -266,10 +262,6 @@ const Register = () => {
           {/* step lowla mtaa el form eli fiha el info taa simple user */}
           {step === 1 && (
             <>
-             {" "}
-
-             
-            <h1 style={{marginTop: "-50px"}}>Register</h1>{" "}
               <input
                 id="firstName"
                 type="text"
@@ -399,6 +391,7 @@ const Register = () => {
               >
                 Enter Valid image type : png , jpg or jpeg{" "}
               </p>
+             
             </>
           )}
 
@@ -422,7 +415,7 @@ const Register = () => {
 
           {step === 3 && (
             <>
-              <input
+               <input
                 id="sector"
                 type="text"
                 placeholder="Sector"
@@ -444,7 +437,12 @@ const Register = () => {
                 placeholder="Entreprise Name"
                 value={entrepriseName}
                 onChange={(e) => setEntrepriseName(e.target.value)}
-              ></input>
+              ></input> 
+              <UploadfFile setFile={setFile} setFi={setFi}></UploadfFile>
+              {console.log(file)}
+
+
+              
             </>
           )}
           {/* step 4 mtaa be9i el form for Coach */}
@@ -475,13 +473,7 @@ const Register = () => {
                 onChange={(e) => setTitrePoste(e.target.value)}
               ></input>
 
-              <input
-                id="certification"
-                type="file"
-                placeholder="Certification"
-                value={certification}
-                onChange={(e) => setCertification(e.target.value)}
-              ></input>
+              
 
               <input
                 id="dateDebutExperience"
@@ -497,6 +489,8 @@ const Register = () => {
                 value={dateFinExperience}
                 onChange={(e) => setDateFinExperience(e.target.value)}
               ></input>
+              <UploadfFile setFile={setFile} setFi={setFi}  ></UploadfFile>
+              {console.log(file)}
             </>
           )}
 
@@ -504,7 +498,9 @@ const Register = () => {
 
           {step === 5 && (
             <>
-              <ReCAPTCHA
+
+
+                <ReCAPTCHA
                 sitekey="6Ldzy-UkAAAAAOF98pseL_XgounD7zAY-IT1kms1"
                 onChange={handleCaptcha}
               />
@@ -514,27 +510,29 @@ const Register = () => {
                   type="checkbox"
                   onChange={handleRadioChange}
                 />
+
                 <label htmlFor="checkbox">
                   {" "}
                   I agree to these <a href="#">Terms and Conditions</a>.
                 </label>
               </div>
+
               <Button
                 style={{ marginTop: "5px" }}
                 type="submit"
-                disabled={!isChecked}
+                disabled={!isChecked || !isCaptchaVerified                }
               >
-                Register
+                Sign In
               </Button>
               <Row className="py-3">
                 <Col>
                   Have an account?{""} <Link to="/login">Login</Link>
                 </Col>
               </Row>
+
             </>
           )}
         </form>
-
         {/* fin form */}
       </div>{" "}
       {/* fin video background */}
