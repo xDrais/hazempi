@@ -63,14 +63,12 @@ function App() {
       ):(<Routes>
         <Route path="/login" element={<Login/>} />
     <Route path="/register" element={<Register/>} />     
-   
-    <Route path="/forget-password" element={<ForgetPassword/>} />
-    <Route path="/reset-password" element={<ResetPassword/>} />
-    <Route path="/profile" element={<Profile/>} />
-    <Route path="/" element={<Home/>} />
-    <Route exact  path="/sponsor/:id" element={<GetSponsor/>} />
-    <Route exact  path="/coach/:id" element={<GetCoach/>} />
-    <Route path="/verify-email/:emailToken" element={<Login/>} />
+    <Route path="/forget-password" element={ <> <Navbarr /><ForgetPassword/> </> } />
+    <Route path="/reset-password" element={<> <Navbarr /> <ResetPassword/></>} />
+    <Route path="/profile" element={<> <Navbarr /> <Profile/> </>} />
+    <Route path="/" element={<><Navbarr /><Home/></>} />
+    
+    <Route path="/verify-email/:emailToken" element={<><Navbarr /> <Login/> </>} />
         </Routes>)}
     </Router>
     
