@@ -7,10 +7,17 @@ export const USER_REGISTER_FAIL = 'USER_REGISTER_FAIL'
 export const USER_REGISTER_SUCCESS = 'USER_REGISTER_SUCCESS'
 export const APPROVE_USER_SUCCESS = 'APPROVE_USER_SUCCESS'
 export const GET_USERS_SUCCESS = 'GET_USERS_SUCCESS'
-export const BLOCK_USER = 'BLOCK_USER';
-export const UNBLOCK_USER = 'BLOCK_USER';
+// ===================================================
 
+export const USER_BLOCK_SUCCESS = 'USER_BLOCK_SUCCESS'
+// ===================================================
 
+export const UNBLOCK_USER = 'UNBLOCK_USER';
+
+// ====================================================
+export const USER_VERIFY_SUCCESS = 'VERIFY_USER_SUCCESS';
+export const USER_VERIFY_REQUEST = 'VERIFY_USER_REQUEST';
+export const USER_VERIFY_FAIL = 'VERIFY_USER_FAIL';
 
 // ===================================================
 export const FORGET_PASSWORD_REQUEST='FORGET_PASSWORD'

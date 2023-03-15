@@ -106,7 +106,7 @@ const registerUser = asynHandler( async ( req , res )=> {
       to: user.email,
       subject: "Account Verified ",
       html: `<h1>Account Verified  ${user.lastName} ,
-      <a href = '${process.env.CLIENT_URL}/verify-email?emailToken=${user.emailToken}'> Verify your Email
+      <a href = '${process.env.CLIENT_URL}/verify-email/${user.emailToken}'> Verify your Email
       </h1>` ,
      })
 
@@ -153,10 +153,9 @@ const ApproveUser = asynHandler( async (req, res) => {
       });
 
 const  verifyEmail = asynHandler( async (req,res) => {
-    const emailToken =req.body.emailToken; 
+   // const emailToken =req.body.emailToken; 
 
-    console.log("req.params.emailToken:", req.params.emailToken);
- // const emailToken = req.params.token; 
+  const emailToken = req.params.token; 
 
   console.log("emailToken is undefined:", !emailToken);
 
@@ -183,7 +182,7 @@ const  verifyEmail = asynHandler( async (req,res) => {
   }
   if (user) {
   user.emailToken= null;
-  user.updateOne({ verified: true })
+  user.verify=true;
 
   await user.save(); 
   res.status(200).json({
@@ -196,7 +195,7 @@ const  verifyEmail = asynHandler( async (req,res) => {
       from:"devtestmailer101@gmail.com",
       to: user.email,
       subject: "Account Verified ",
-      html: `<h1>Account Verified</h1>`
+      html: `<h1>Your Account Is Verified</h1>`
   })
   res.json("Your Email is Verified ")
   }

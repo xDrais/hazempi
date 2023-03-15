@@ -153,24 +153,63 @@ let navigate =useNavigate()
                        )}
                       <Dropdown.Item href="#/action-1"> <i className="bx bx-edit-alt me-1"></i> Edit</Dropdown.Item>
                       <Dropdown.Item href="" onClick={() => {
-                            if (i.bloque) {
-                              if (window.confirm('Are you sure you want to unblock this user?')) {
-                                handleBlockUser(i._id, true);
+                              if (i.bloque) {
+                                  Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "You won't be able to revert this!",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Yes, UnBlock it!'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        handleBlockUser(i._id, true);
+                                        Swal.fire(
+                                          'Unblocked!',
+                                          'The user has been unblocked.',
+                                          'success'
+                                        )
+                                    }
+                                });
+                                  
+                              } else {
+                                  Swal.fire({
+                                      title: 'Are you sure?',
+                                      text: "You won't be able to revert this!",
+                                      icon: 'warning',
+                                      showCancelButton: true,
+                                      confirmButtonColor: '#3085d6',
+                                      cancelButtonColor: '#d33',
+                                      confirmButtonText: 'Yes, Block it!'
+                                  }).then((result) => {
+                                      if (result.isConfirmed) {
+                                          handleBlockUser(i._id, false);
+                                          Swal.fire(
+                                            'Blocked!',
+                                            'The user has been blocked.',
+                                            'success'
+                                          )
+                                      }
+                                  });
                               }
-                            } else if (window.confirm('Are you sure you want to block this user?')) {
-                              handleBlockUser(i._id, false);
-                            }
                           }}>
                             {i.bloque ? (
-                              <>
-                                <i className="bx bx-check me-1"></i>Unblock
-                              </>
+                                <>
+                                    <i className="bx bx-check me-1"></i>Unblock
+                                </>
                             ) : (
-                              <>
-                                <i className="bx bx-trash me-1"></i>Block
-                              </>
+                                <>
+                                    <i className="bx bx-trash me-1"></i>Block
+                                </>
                             )}
-                          </Dropdown.Item>  
+                        </Dropdown.Item>
+
+
+
+
+
+ 
                           {i?.role?.name === "sponsor" || i?.role?.name === "coach" ? (
                           <Dropdown.Item onClick={() => detailRole(i?.role?.name, i._id)}><i className="bx bx-edit-alt me-1"></i>details</Dropdown.Item>
                           ) : null}

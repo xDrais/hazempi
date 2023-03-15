@@ -27,6 +27,7 @@ function App() {
     <Route path="/" element={<Home/>} />
     <Route exact  path="/sponsor/:id" element={<GetSponsor/>} />
     <Route exact  path="/coach/:id" element={<GetCoach/>} />
+    <Route path="/verify-email/:emailToken" element={<Login/>} />
 
 
 

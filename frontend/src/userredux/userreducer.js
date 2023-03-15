@@ -3,7 +3,7 @@ import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,
      USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, 
      USER_REGISTER_FAIL, GET_USERS_SUCCESS, APPROVE_USER_SUCCESS, 
      FORGET_PASSWORD_REQUEST, FORGET_PASSWORD_SUCCESS, FORGET_PASSWORD_FAIL, 
-     RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAIL, BLOCK_USER, UNBLOCK_USER } from "./userconstant";
+     RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAIL, UNBLOCK_USER, USER_BLOCK_SUCCESS } from "./userconstant";
 
  export const userLoginReducer=(state={},action)=>{
     // eslint-disable-next-line default-case
@@ -80,7 +80,7 @@ export const resetPassword=(state={},action)=>{
 
 export const userBlockReducer = (state = { users: [] }, action) => {
     switch (action.type) {
-      case BLOCK_USER:
+      case USER_BLOCK_SUCCESS:
         return {
           ...state,
           users: state.users.map((user) =>
@@ -104,3 +104,18 @@ export const userBlockReducer = (state = { users: [] }, action) => {
         return state;
     }
   };
+
+  export const userVerifyReducer=(state={},action)=>{
+    // eslint-disable-next-line default-case
+    switch (action.type) {
+        case USER_REGISTER_REQUEST : 
+            return {loading : true}
+        case USER_REGISTER_SUCCESS : 
+            return {loading : false , userInfo : action.payload}
+        case USER_LOGIN_FAIL :
+            return {loading : false , error: action.payload }        
+        default:
+            return state    
+
+    }
+ }
