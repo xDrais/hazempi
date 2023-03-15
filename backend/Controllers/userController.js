@@ -133,8 +133,7 @@ const registerUser = asynHandler( async ( req , res )=> {
             cin: user.cin,
             dateOfBirth: user.dateOfBirth,
             role : user.role,    
-            verfication : user.emailToken       
-        })
+            verfication : user.emailToken         })
     }
     else{
         res.status(400)

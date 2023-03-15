@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import video from "../../Components/HeroSection/pottery2.mp4";
 import "../../Components/HeroSection/HeroSection.css";
 import "./register.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBuilding,faChalkboardUser} from '@fortawesome/free-solid-svg-icons';
 import UploadfFile from "../UploadfFile";
 import SpecialButton from "../../Components/Button/button";
 import Loader from "../../Components/Loader";
@@ -30,7 +32,6 @@ const Register = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [email, setEmail] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState(null);
   const [password, setPassword] = useState("");
   //states taa Coach
   const [speciality, setSpeciality] = useState("");
@@ -38,7 +39,6 @@ const Register = () => {
   const [dateDebutExperience, setDateDebutExperience] = useState("");
   const [dateFinExperience, setDateFinExperience] = useState("");
   const [titrePoste, setTitrePoste] = useState("");
-  const [certification, setCertification] = useState("");
   const [file, setFile] = useState("");
   const [fil, setFi] = useState(file);
   //states taa Sponsor
@@ -54,9 +54,12 @@ const Register = () => {
   const [validDateOfBirth, setValidDateOfBirth] = useState(false);
   const [validImageUrl, setValidImageUrl] = useState(false);
   const [validEmail, setValidEmail] = useState(false);
-  const [validConfirmPassword, setValidConfirmPassword] = useState(false);
   const [validPassword, setValidPassword] = useState(false);
 
+//Validators taa sponsor
+  const [validSector, setValidSector] = useState("");
+  const [validDateDebutExperience, setValidDateDebutExperience] = useState(false);
+  const [validDateFinExperience, setValidDateFinExperience] = useState(false);
   //box taa terms and conditions
   function handleRadioChange() {
     setIsChecked(!isChecked);
@@ -71,6 +74,7 @@ const Register = () => {
   //Controle de saisie taa el user
   const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
   const CIN_REGEX = /^[0-1][0-9]{7}$/;
+
   const PHONE_REGEX = /^[2-9][0-9]{7}$/;
   const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
   const DATE_REGEX =
@@ -79,12 +83,10 @@ const Register = () => {
   const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const dispatch = useDispatch();
   const userRegister = useSelector((state) => state.userRegister);
-  const { loading, error, userInfo } = userRegister;
+  const { loading, error, userInfo,messageSuccess } = userRegister;
 
   //hedhi bch taamelek el redirection
   const navigate = useNavigate();
-
-  const messageSuccess = "";
 
   //Fonction etat el captcha
   const handleCaptcha = (value) => {
@@ -207,21 +209,28 @@ const Register = () => {
       }
     }
   }, [dateOfBirth]);
+  useEffect(() => {
+    if (dateDebutExperience && dateFinExperience) {
+      const debutExperience = new Date(dateDebutExperience);
+      const finExperience = new Date(dateFinExperience);
+      if (debutExperience < finExperience) {
+        console.log("true")
+        setValidDateDebutExperience(true);
+        setValidDateFinExperience(true);
+
+      }
+    }
+  }, [dateDebutExperience, dateFinExperience]);
   return (
     <>
       {/* el video taa el background */}
       <div className="hero-container">
         <video src={video} autoPlay loop muted />
         {/* el message taa el controle de saisie w el loader   */}
-        <br /> <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <section>
-          {messageSuccess && <div className="alert">{messageSuccess}</div>}
+       
+        <section className="marginTops">
           {error && <div className="alert">{error}</div>}
+          {messageSuccess && <div className="alertgreen">{messageSuccess}</div>}
 
           {loading && <Loader />}
         </section>
@@ -235,8 +244,7 @@ const Register = () => {
             align="center"
             style={{ marginBottom: "20px", marginTop: "-20px" }}
           >
-            {" "}
-            <h1>Sign In</h1>{" "}
+          
           </div>
           {/* les boutons mtaa previous w next */}
 
@@ -262,6 +270,8 @@ const Register = () => {
           {/* step lowla mtaa el form eli fiha el info taa simple user */}
           {step === 1 && (
             <>
+             
+            <h1>Sign In</h1>
               <input
                 id="firstName"
                 type="text"
@@ -414,7 +424,9 @@ const Register = () => {
           {/* step 3 mtaa be9i el form for sponsor */}
 
           {step === 3 && (
-            <>
+            <> 
+
+                    <FontAwesomeIcon className="fontcenter" icon={faBuilding} size="3x" />
                <input
                 id="sector"
                 type="text"
@@ -430,6 +442,7 @@ const Register = () => {
                 value={descriptionSponsor}
                 onChange={(e) => setDescriptionSponsor(e.target.value)}
               ></input>
+          <h1 className="h111">Drop Your Company Name & Certification</h1>
 
               <input
                 id="EntrepriseName"
@@ -441,14 +454,17 @@ const Register = () => {
               <UploadfFile setFile={setFile} setFi={setFi}></UploadfFile>
               {console.log(file)}
 
-
+            
               
             </>
           )}
           {/* step 4 mtaa be9i el form for Coach */}
 
           {step === 4 && (
-            <>
+            <> 
+
+                                <FontAwesomeIcon className="fontcenter" icon={faChalkboardUser} size="3x" />
+
               <input
                 id="speciality"
                 type="text"
@@ -464,31 +480,62 @@ const Register = () => {
                 value={descriptionCoach}
                 onChange={(e) => setDescriptionCoach(e.target.value)}
               ></input>
-
+  <h1 className="h111">Your most Recent Job Experience</h1>
               <input
                 id="titrePoste"
                 type="text"
-                placeholder="Titre Poste"
+                placeholder="Job Title"
                 value={titrePoste}
                 onChange={(e) => setTitrePoste(e.target.value)}
               ></input>
 
-              
-
-              <input
+{dateDebutExperience ? (
+                <input
                 id="dateDebutExperience"
-                type="date"
-                placeholder="Date Debut Ex"
-                value={dateDebutExperience}
-                onChange={(e) => setDateDebutExperience(e.target.value)}
-              ></input>
-              <input
+                  type="date"
+                  value={dateDebutExperience}
+                  required
+                  onFocus={handleInputFocus}
+                  onChange={(event) => setDateDebutExperience(event.target.value)}
+                />
+              ) : (
+                <input
+                id="dateDebutExperience"
+                  type="text"
+                  required
+                  value=""
+                  placeholder="Experience Begins"
+                  onFocus={handleInputFocus}
+                  onChange={(event) => setDateDebutExperience(event.target.value)}
+                />
+              )}
+
+{dateFinExperience ? (
+                <input
                 id="dateFinExperience"
-                type="date"
-                placeholder="Date Fin Ex"
-                value={dateFinExperience}
-                onChange={(e) => setDateFinExperience(e.target.value)}
-              ></input>
+                  type="date"
+                  value={dateFinExperience}
+                  required
+                  onFocus={handleInputFocus}
+                  onChange={(event) => setDateFinExperience(event.target.value)}
+                />
+              ) : (
+                <input
+                id="dateFinExperience"
+                  type="text"
+                  required
+                  value=""
+                  placeholder="Experience Begins"
+                  onFocus={handleInputFocus}
+                  onChange={(event) => setDateFinExperience(event.target.value)}
+                />
+              )}
+               <p
+                id="notedateFinExperience"
+                className={dateFinExperience && dateDebutExperience && !validDateFinExperience && !validDateDebutExperience ? "none" : "hide"}
+              >
+                Date beginning needs to be older than finish
+              </p>
               <UploadfFile setFile={setFile} setFi={setFi}  ></UploadfFile>
               {console.log(file)}
             </>
