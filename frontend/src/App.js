@@ -1,6 +1,6 @@
 import { lazy,Suspense  } from 'react';
 import Login from './page/Login'
-import {BrowserRouter as Router,Route,Routes} from 'react-router-dom';
+import {BrowserRouter as Router,Route,Routes,useNavigate} from 'react-router-dom';
 import Register from './page/Register/register';
 import Dashboard from './page/Dashboard';
 import GetSponsor from './page/GetSponsor ';
@@ -9,12 +9,16 @@ import Navbarr from './Components/Navbar/navbar';
 import Loader from './Components/Loader';
 import Home from './page/Home/home';
 import  { useEffect, useState } from "react";
+import { useDispatch , useSelector , } from "react-redux";
 import axios from "axios";
 const ForgetPassword =lazy(() => import('./page/ForgetPassword'));
 const ResetPassword = lazy(()=>import('./page/ResetPassword'))
 const Profile = lazy(()=>import('./page/Profile'))
 
 function App() {
+  const userLogin = useSelector(state => state.userLogin)
+    const {userInfo} =userLogin
+    const isAdmin = localStorage.getItem('adminRole') === 'true';
 
   const [user, setUser] = useState(null);
 
@@ -39,7 +43,9 @@ function App() {
     <Suspense fallback={<Loader />}>
     <Router>
      <Navbarr /> 
+     {isAdmin ? (
     <Routes> 
+    
     <Route path="/login" element={<Login/>} />
     <Route path="/register" element={<Register/>} />     
     <Route path="/dashboard" element={<Dashboard/>} />
@@ -54,8 +60,24 @@ function App() {
 
 
     </Routes>
+    
+      
+      ):(<Routes>
+        <Route path="/login" element={<Login/>} />
+    <Route path="/register" element={<Register/>} />     
+   
+    <Route path="/forget-password" element={<ForgetPassword/>} />
+    <Route path="/reset-password" element={<ResetPassword/>} />
+    <Route path="/profile" element={<Profile/>} />
+    <Route path="/" element={<Home/>} />
+    <Route exact  path="/sponsor/:id" element={<GetSponsor/>} />
+    <Route exact  path="/coach/:id" element={<GetCoach/>} />
+    <Route path="/verify-email/:emailToken" element={<Login/>} />
+        </Routes>)}
     </Router>
+    
     </Suspense>
+    
   );
 }
 

@@ -15,7 +15,8 @@ import ReactPaginate from 'react-paginate';
 
 
 
- function Dashboard  () {
+
+ function Dashboard  (props) {
   const [refresh, setRefresh] = useState(false);
   const dispatch = useDispatch();
   const users = useSelector((state) => state.userDisplay.userInfo);
@@ -32,9 +33,9 @@ import ReactPaginate from 'react-paginate';
   };
 
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 5;
+  const itemsPerPage = 3;
 
-
+  
   const offset = currentPage * itemsPerPage;
   let currentPageData = [];
   if (Array.isArray(users)) {
@@ -42,7 +43,8 @@ import ReactPaginate from 'react-paginate';
   }  
 //for the nagivation between pages Sponssor and Coach
 let navigate =useNavigate()
-
+const userLogin =useSelector(state =>state.userLogin)
+const {userInfo} =userLogin
   console.log(users);
   useEffect(() => {
     dispatch(getUsers());
@@ -64,7 +66,10 @@ let navigate =useNavigate()
     }
   };
 
+  
 
+  // If the user is not an admin, redirect to the homepage
+  
    // handle page change
    const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
@@ -74,7 +79,7 @@ let navigate =useNavigate()
   let path =`/${role}/${id}`
         navigate(path)
  };
-
+ 
 
     return ( <>
 <div>    <div>{ReactHtmlParser(DashboardHTML)}   </div>
@@ -433,7 +438,7 @@ let navigate =useNavigate()
         nextLabel={<span className="icon-next"></span>}
         breakLabel={<span className="break"></span>}
         pageLinkClassName={'page-link'}
-        pageCount={Math.ceil(users.length / itemsPerPage)}
+        pageCount={Math.ceil(users?.length / itemsPerPage)}
         onPageChange={handlePageClick}
         containerClassName={'pagination'}
         activeClassName={'active'}

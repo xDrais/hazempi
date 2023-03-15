@@ -6,17 +6,17 @@ const RoleSchema = new mongoose.Schema({
 })
 
 const UserSchema = new mongoose.Schema({
-    email : {type : String , required: true , unique: true},
-    lastName: {type: String, required: true},
-    firstName: {type:String, required:true},
-    cin: {type:Number, required:true },
-    password: {type:String, required:true},
-    phone: {type:String, required:true}, 
-    dateOfBirth: {type:Date, required:true},
+    email : {type : String , required:true, unique: true},
+    lastName: {type: String,},
+    firstName: {type:String,},
+    cin: {type:Number,},
+    password: {type:String,},
+    phone: {type:String,} ,
+    dateOfBirth: {type:Date,},
     imageUrl: {type:String},
-    createdAt: {type:Date, required:true, default: Date.now},
-    bloque: {type:Boolean, required:true, default: false},
-    verify: {type:Boolean, required:true, default: false},
+    createdAt: {type:Date, default: Date.now},
+    bloque: {type:Boolean, default: false},
+    verify: {type:Boolean, default: false},
     emailToken:{ type: String},
     role :RoleSchema,
     status: {

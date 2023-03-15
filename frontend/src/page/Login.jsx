@@ -1,7 +1,7 @@
 import React, {useState,useEffect} from "react";
-import {Link, redirect, useNavigate, useParams} from 'react-router-dom'
+import {Link, redirect, useNavigate, useParams,} from 'react-router-dom'
 import {Form , Button,Row,Col} from 'react-bootstrap'
-import { useDispatch , useSelector } from "react-redux";
+import { useDispatch , useSelector , } from "react-redux";
 import { login } from "../userredux/useraction";
 import video from "../Components/HeroSection/pottery2.mp4"
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -14,10 +14,11 @@ import "./login.css"
  import git from "../page/github.png"
  import { Alert } from "react-bootstrap";
 import FormContainer from "../Components/FormContainer";
+import { withRouter } from "react-router-dom";
 
-const Login = () => {
-
-
+const Login = (props) => {
+  
+  const navigate = useNavigate()
   const {emailToken}=useParams()
   console.log(emailToken)
     const [email , setEmail]=useState('')
@@ -25,6 +26,7 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const dispatch = useDispatch()
     const userLogin = useSelector(state => state.userLogin)
+    const {userInfo} =userLogin
     const {loading , error } = userLogin
 
     
@@ -34,9 +36,20 @@ const Login = () => {
 
     const submitHandler=(e)=>{
         e.preventDefault()
-        //Dispatch LOGIN
+
         dispatch(login(email, password))
 
+         
+        ;
+
+    }
+    const isAdmin = userInfo?.role?.name === "adminRole";
+    const isUser = userInfo?.role?.name === "userRole";
+    if (isAdmin) {
+      // redirect the admin to the dashboard page
+      navigate("/dashboard");
+    } else if (isUser) {
+      navigate("/");
     }
 
     const [validEmail, setValidEmail] = useState(false);
@@ -62,13 +75,16 @@ const Login = () => {
     const github = () => {
       window.open("http://localhost:5000/auth/github/callback", "_self");
     };
-
+// const isAdmin = userInfo?.role?.name === "adminRole";
+// if(isAdmin){
+//   navigate('/dashboard')
+// }
 
     const toggleShowPassword = () => {
       setShowPassword(!showPassword);
     };
     const messageSuccess = "";
- 
+    
     return (
       <>      
           <div className='hero-container'>
@@ -95,6 +111,7 @@ const Login = () => {
                 >
                   Enter a valid e-mail adress{" "}
                 </p>
+                
                   <label htmlFor="password">
                       Password
                   </label>               
@@ -106,13 +123,7 @@ const Login = () => {
                   </input> <div className="visibility-icon" onClick={toggleShowPassword}>
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </div>
-                  <p
-                  id="notepwd"
-                  className={password && !validPassword ? "none" : "hide"}
-                >
-                  Password needs to contain at least 1 UpperCase letter , 1
-                  LowerCase letter , 1 Special character, 1 Number and at least 8{" "}
-                </p>
+           
                   
               <Button type="submit" variant="primary"  >Sign In</Button> 
              <div className="google">
