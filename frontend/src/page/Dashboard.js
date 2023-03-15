@@ -10,6 +10,8 @@ import { getUsers,approveUser , blockUser, unblockUser } from "../userredux/user
 import GetSponsor from './GetSponsor ';
 import { Route  , Link, NavLink, Navigate, useNavigate} from 'react-router-dom';
 import Swal from 'sweetalert2';
+import ReactPaginate from 'react-paginate';
+
 
 
 
@@ -18,7 +20,18 @@ import Swal from 'sweetalert2';
   const dispatch = useDispatch();
   const users = useSelector((state) => state.userDisplay.userInfo);
 
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 5;
+
+
+  const offset = currentPage * itemsPerPage;
+  let currentPageData = [];
+  if (Array.isArray(users)) {
+    currentPageData = users.slice(offset, offset + itemsPerPage);
+  }  
+//for the nagivation between pages Sponssor and Coach
 let navigate =useNavigate()
+
   console.log(users);
   useEffect(() => {
     dispatch(getUsers());
@@ -39,6 +52,11 @@ let navigate =useNavigate()
     }
   };
 
+
+   // handle page change
+   const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
  
  const detailRole=(role , id )=>{
   let path =`/${role}/${id}`
@@ -77,7 +95,7 @@ let navigate =useNavigate()
                     
                     <tbody className="table-border-bottom-0">
                       
-                        {Array.isArray(users) && users.map((i) => {
+                        {currentPageData.map((i) => {
                           
                           return(
                               
@@ -221,7 +239,16 @@ let navigate =useNavigate()
                         })}                     
                     </tbody>
                   </table>
-                 
+                  <ReactPaginate
+        previousLabel={<span className="icon-prev"></span>}
+        nextLabel={<span className="icon-next"></span>}
+        breakLabel={<span className="break"></span>}
+        pageLinkClassName={'page-link'}
+        pageCount={Math.ceil(users.length / itemsPerPage)}
+        onPageChange={handlePageClick}
+        containerClassName={'pagination'}
+        activeClassName={'active'}
+      />
                 </div>
               </div> 
                 
