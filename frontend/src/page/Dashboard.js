@@ -82,7 +82,9 @@ const {userInfo} =userLogin
  
 
     return ( <>
-<div>    <div>{ReactHtmlParser(DashboardHTML)}   </div>
+    
+<div>    <div>
+  {ReactHtmlParser(DashboardHTML)}   </div>
 </div>;        <div className="layout-wrapper layout-content-navbar">
       <div className="layout-container">
           <NavBar />

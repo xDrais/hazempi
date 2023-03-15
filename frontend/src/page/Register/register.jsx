@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import video from "../../Components/HeroSection/pottery2.mp4";
 import "../../Components/HeroSection/HeroSection.css";
 import "./register.css";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuilding,faChalkboardUser} from '@fortawesome/free-solid-svg-icons';
 import UploadfFile from "../UploadfFile";
@@ -20,6 +21,8 @@ import {
 const Register = () => {
   //State taa el captcha keni verified wala le
   const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+  //3in icon 
+  const [showPassword, setShowPassword] = useState(false);
 
   //steps taa el form
   const [step, setStep] = useState(1);
@@ -72,11 +75,11 @@ const Register = () => {
   }
 
   //Controle de saisie taa el user
-  const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
+  const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{2,23}$/;
   const CIN_REGEX = /^[0-1][0-9]{7}$/;
 
   const PHONE_REGEX = /^[2-9][0-9]{7}$/;
-  const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+  const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,24}$/;
   const DATE_REGEX =
     /^(?:19|20)\d{2}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])$/;
   const IMAGE_REGEX = /\.(png|jpe?g)$/i;
@@ -84,7 +87,9 @@ const Register = () => {
   const dispatch = useDispatch();
   const userRegister = useSelector((state) => state.userRegister);
   const { loading, error, userInfo,messageSuccess } = userRegister;
-
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
   //hedhi bch taamelek el redirection
   const navigate = useNavigate();
 
@@ -134,7 +139,7 @@ const Register = () => {
       setStep(1);
       if (step === 5) setStep(1);
     } else setStep((prevStep) => prevStep - 1);
-  };
+  }
   //Fonction Onclick taa el next step
 
   const handleNextStep = () => {
@@ -208,16 +213,16 @@ const Register = () => {
         setValidDateOfBirth(false);
       }
     }
-  }, [dateOfBirth]);
-  useEffect(() => {
+  }, [dateOfBirth]);useEffect(() => {
     if (dateDebutExperience && dateFinExperience) {
       const debutExperience = new Date(dateDebutExperience);
       const finExperience = new Date(dateFinExperience);
       if (debutExperience < finExperience) {
-        console.log("true")
         setValidDateDebutExperience(true);
         setValidDateFinExperience(true);
-
+      } else {
+        setValidDateDebutExperience(false);
+        setValidDateFinExperience(false);
       }
     }
   }, [dateDebutExperience, dateFinExperience]);
@@ -320,18 +325,23 @@ const Register = () => {
 
               <input
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               ></input>
+
+<div className="visibility-icon" onClick={toggleShowPassword}>
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </div>
+            
               <p
                 id="notepwd"
                 className={password && !validPassword ? "none" : "hide"}
               >
                 Password needs to contain at least 1 UpperCase letter , 1
-                LowerCase letter , 1 Special character, 1 Number and at least 8{" "}
+                LowerCase letter, 1 Number and at least 8{" "}
               </p>
 
               <input
@@ -442,7 +452,7 @@ const Register = () => {
                 value={descriptionSponsor}
                 onChange={(e) => setDescriptionSponsor(e.target.value)}
               ></input>
-          <h1 className="h111">Drop Your Company Name & Certification</h1>
+          <h1 className="h111">Drop Your Company Name & Certification For REVIEW</h1>
 
               <input
                 id="EntrepriseName"
@@ -480,7 +490,7 @@ const Register = () => {
                 value={descriptionCoach}
                 onChange={(e) => setDescriptionCoach(e.target.value)}
               ></input>
-  <h1 className="h111">Your most Recent Job Experience</h1>
+  <h1 className="h111">Your most Recent Job Experience For Review</h1>
               <input
                 id="titrePoste"
                 type="text"

@@ -20,7 +20,7 @@ function ArrowWrapperLeft({ disabled, onClick,visibility }) {
   
       >
         <div className="arrow arrow--left">
-          <span>Prev</span>
+        <span style={{fontSize:"10px",width:"80px"}}>Prev</span>
         </div>
       </div>
     );
@@ -34,7 +34,7 @@ function ArrowWrapperLeft({ disabled, onClick,visibility }) {
         style={{
           position: "absolute",
           zIndex: "400",
-          marginTop: "195px",
+          marginTop: "195px ",
           marginLeft: "400px",
           pointerEvents: disabled ? "none" : "auto", // disable pointer events if disabled is true
           opacity: disabled ? 0.5 : 1, // reduce opacity if disabled is true
@@ -52,7 +52,7 @@ function ArrowWrapperLeft({ disabled, onClick,visibility }) {
   
       >
         <div className="arrow arrow--right">
-          <span>Next</span>
+          <span style={{fontSize:"10px",marginLeft:"-50px",width:"80px"}}>Next</span>
         </div>
       </div>
     );
