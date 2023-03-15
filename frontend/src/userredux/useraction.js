@@ -30,16 +30,14 @@ export const login = (email,password) => async (dispatch)=>{
 
 
     } catch(error){
-        dispatch({
-            type: USER_LOGIN_FAIL,
-            payload:
-              error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message,
-          })
+      if (error.response && error.response.data.message === 'Invalid Credentials !') {
+          dispatch({
+              type: USER_LOGIN_FAIL,
+              payload: error.response.data.message
+          });
 
     }
-}
+}}
 export const register = ({firstName,lastName,cin,phone,dateOfBirth,imageUrl,email,password,speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste,certification,entrepriseName,sector,descriptionSponsor,file,fil,messageL}) => async (dispatch)=>{
   try {
         dispatch({

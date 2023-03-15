@@ -234,8 +234,8 @@ const logIn = asynHandler( async (req,res)=>{
             })
             
         }else{
-            res.status(400)
-            throw new Error("Invalid Credentials")
+            res.status(400).json({message:'Invalid Credentials !'})
+            throw new Error('Invalid Credentials !')
         }
 })
 

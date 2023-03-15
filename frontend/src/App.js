@@ -8,11 +8,33 @@ import GetCoach from './page/GetCoach';
 import Navbarr from './Components/Navbar/navbar';
 import Loader from './Components/Loader';
 import Home from './page/Home/home';
+import  { useEffect, useState } from "react";
+import axios from "axios";
 const ForgetPassword =lazy(() => import('./page/ForgetPassword'));
 const ResetPassword = lazy(()=>import('./page/ResetPassword'))
 const Profile = lazy(()=>import('./page/Profile'))
 
 function App() {
+
+  const [user, setUser] = useState(null);
+
+	const getUser = async () => {
+		try {
+			const url = `http://localhost:5000/auth/login/success`;
+			const { data } = await axios.get(url, { withCredentials: true });
+      console.log(data.user)
+			setUser(data.user._json);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	useEffect(() => {
+		getUser();
+    console.log(getUser())
+	}, []);
+
+
   return (
     <Suspense fallback={<Loader />}>
     <Router>

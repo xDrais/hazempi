@@ -1,5 +1,5 @@
 .login {
-  height: 470px;
+  height: 600px;
   width: 400px;
   background-color: rgba(255, 255, 255, 0.03);
   position: absolute;
@@ -89,7 +89,7 @@ z-index: 3;
   outline: 2px solid #0001;
 }
 .login > button {
-  margin-top: 50px;
+  margin-top: 48px;
   width: 100%;
   background-color: #ffffff;
   color: #080710;
@@ -99,3 +99,42 @@ z-index: 3;
   cursor: pointer;
 }
 
+.sig{
+  display: flex;
+  justify-content: center;
+  margin-top: 13px;
+}
+.google{
+  margin-top: 16px ;
+  display: flex;
+  justify-content: space-around;
+}
+
+.alert{
+  color: white;
+  margin: 0px;
+  background-color: rgba(126, 28, 28, 0.409);
+  border-radius: 10px;
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(220, 27, 27, 0.868);
+  box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+  padding-bottom: 40px ;
+  width: auto;
+  height: 50px;
+  position: absolute;
+  z-index: 3;
+  text-align: center;
+  justify-content: center;
+  }
+  .hide {
+    display: none;
+  }
+
+
+  .visibility-icon {
+    padding: 0.5rem;
+    color: #aaa;
+    cursor: pointer;
+  }
+
+  
