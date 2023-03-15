@@ -455,6 +455,23 @@ const GetSponsor = asynHandler(  async (req, res) => {
       }
  })
 
+ const Search = asynHandler( async (req, res) => {
+    const key = req.params.key;
+    
+    const userResults = await User.find({
+      $or: [
+        { firstName: { $regex:  new RegExp(key, 'i')  } },
+        { lastName: { $regex:  new RegExp(key, 'i')  } },
+        { email: { $regex:  new RegExp(key, 'i')  } },
+        { phone: { $regex:  new RegExp(key, 'i')  } },
+      ],
+    });
+    
+    const results = userResults;
+    
+    res.send(results);
+  });
+  
 module.exports = { 
     registerUser,
     verifyEmail,
@@ -471,6 +488,7 @@ module.exports = {
     ApproveUser,
     GetSponsor,
     GetCoach,
-    Unbloque
+    Unbloque,
+    Search
     
  }
