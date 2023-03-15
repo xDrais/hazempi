@@ -1,5 +1,5 @@
 import React, {useState,useEffect} from "react";
-import {Link, redirect, useNavigate} from 'react-router-dom'
+import {Link, redirect, useNavigate, useParams} from 'react-router-dom'
 import {Form , Button,Row,Col} from 'react-bootstrap'
 import { useDispatch , useSelector } from "react-redux";
 import { login } from "../userredux/useraction";
@@ -8,15 +8,24 @@ import "./login.css"
  //import log from '../page/login.css'
  import Message from "../Components/Message";
  import Loader from "../Components/Loader.js";
+ import {verifyEmail} from "../userredux/useraction"
+
  import { Alert } from "react-bootstrap";
 import FormContainer from "../Components/FormContainer";
 
 const Login = () => {
+  const {emailToken}=useParams()
+  console.log(emailToken)
     const [email , setEmail]=useState('')
     const [password , setPassword] = useState('')
     const dispatch = useDispatch()
     const userLogin = useSelector(state => state.userLogin)
     const {loading , error } = userLogin
+
+    
+    useEffect(()=>{
+        dispatch(verifyEmail(emailToken))
+    },[dispatch,emailToken])
 
     const submitHandler=(e)=>{
         e.preventDefault()
