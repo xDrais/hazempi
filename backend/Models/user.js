@@ -18,6 +18,8 @@ const UserSchema = new mongoose.Schema({
     bloque: {type:Boolean, default: false},
     verify: {type:Boolean, default: false},
     emailToken:{ type: String},
+    provider : {type: String,
+        enum:['google','facebook','github']},
     role :RoleSchema,
     status: {
         type: String,enum: ['pending', 'approved', 'rejected'],default: 'pending'

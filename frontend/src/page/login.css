@@ -135,8 +135,13 @@ z-index: 3;
 
   .visibility-icon {
     padding: 0.5rem;
-    color: #aaa;
+    color: #000;
     cursor: pointer;
+    position: absolute;
+    margin-top:-45px;
+    margin-left:290px;
+    
+    
   }
 
   

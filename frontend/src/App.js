@@ -44,8 +44,8 @@ function App() {
     <Router>
     {isAdmin ? (
     <Routes> 
-    <Route path="/login" element={<Login/>} />
-    <Route path="/register" element={<Register/>} />     
+    <Route path="/login" element={<> <Navbarr /> <Login/> </>} />
+    <Route path="/register" element={<> <Navbarr /> <Register/> </>} />     
     <Route path="/dashboard" element={<Dashboard/>} />
     <Route path="/forget-password" element={<><Navbarr /> <ForgetPassword/> </>} />
     <Route path="/reset-password" element={<><Navbarr /><ResetPassword/> </>} />
@@ -61,8 +61,8 @@ function App() {
     
       
       ):(<Routes>
-        <Route path="/login" element={<Login/>} />
-    <Route path="/register" element={<Register/>} />     
+        <Route path="/login" element={<> <Navbarr /> <Login/></>} />
+    <Route path="/register" element={<> <Navbarr /><Register/> </>} />     
     <Route path="/forget-password" element={ <> <Navbarr /><ForgetPassword/> </> } />
     <Route path="/reset-password" element={<> <Navbarr /> <ResetPassword/></>} />
     <Route path="/profile" element={<> <Navbarr /> <Profile/> </>} />
