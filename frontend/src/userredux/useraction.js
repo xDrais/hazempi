@@ -40,7 +40,7 @@ export const login = (email,password) => async (dispatch)=>{
 
     }
 }
-export const register = (firstName,lastName,cin,phone,dateOfBirth,imageUrl,email,password,speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste,certification,entrepriseName,sector,descriptionSponsor,file,fil) => async (dispatch)=>{
+export const register = ({firstName,lastName,cin,phone,dateOfBirth,imageUrl,email,password,speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste,certification,entrepriseName,sector,descriptionSponsor,file,fil}) => async (dispatch)=>{
   try {
         dispatch({
             type:USER_REGISTER_REQUEST

@@ -101,7 +101,7 @@ const Register = () => {
     e.preventDefault();
     dispatch(
       register(
-        firstName,
+       { firstName,
         lastName,
         phone,
         cin,
@@ -118,7 +118,7 @@ const Register = () => {
         descriptionSponsor,
         entrepriseName,
         file,
-        fil
+        fil}
         
       )
     );

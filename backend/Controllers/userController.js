@@ -82,6 +82,16 @@ const registerUser = asynHandler( async ( req , res )=> {
         titrePoste
         
     } = req.body
+    console.log(speciality)
+    console.log(descriptionCoach)
+    console.log(dateDebutExperience)
+    console.log(dateFinExperience)
+    console.log(titrePoste)
+    console.log("============================")
+
+    console.log(entrepriseName)
+    console.log(sector)
+    console.log(descriptionSponsor)
         //Coach Creation
 
         if (speciality  ){
