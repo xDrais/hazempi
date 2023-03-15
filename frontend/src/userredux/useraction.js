@@ -55,17 +55,14 @@ export const register = ({firstName,lastName,cin,phone,dateOfBirth,imageUrl,emai
             config
           );
 
-       if( dispatch({
+        dispatch({
             type : USER_REGISTER_SUCCESS,
             payload : data
-        })) 
-        dispatch ({
-            type : USER_LOGIN_SUCCESS,
-            payload : data
         })
-        localStorage.setItem('userInfo', JSON.stringify(data))
+     
+       // localStorage.setItem('userInfo', JSON.stringify(data))
 
-    } catch(error){
+       } catch(error){
       if (error.response && error.response.data.message === 'User with this E-mail adress already exists') {
           dispatch({
               type: USER_REGISTER_FAIL,

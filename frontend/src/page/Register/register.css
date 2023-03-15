@@ -128,6 +128,15 @@ font-weight: 700;
 .hide {
   display: none;
 }
+.visibility-icon {
+  padding: 0.5rem;
+  color: #aaa;
+  cursor: pointer;
+  position: absolute;
+  margin-top:-45px;
+  margin-left:290px;
+
+}
 
 .register > label {
   display: block;
