@@ -66,10 +66,6 @@ function App() {
     <Route path="/forget-password" element={ <> <Navbarr /><ForgetPassword/> </> } />
     <Route path="/reset-password" element={<> <Navbarr /> <ResetPassword/></>} />
     <Route path="/profile" element={<> <Navbarr /> <Profile/> </>} />
-    <Route path="/dashboard" element={<Dashboard/>} />
-    <Route exact  path="/sponsor/:id" element={ <GetSponsor/>} />
-    <Route exact  path="/coach/:id" element={<GetCoach/>} />
-
     <Route path="/" element={<><Navbarr /><Home/></>} />
     
     <Route path="/verify-email/:emailToken" element={<><Navbarr /> <Login/> </>} />

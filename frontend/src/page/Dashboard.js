@@ -33,7 +33,7 @@ import ReactPaginate from 'react-paginate';
   };
 
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 3;
+  const itemsPerPage = 5;
 
   
   const offset = currentPage * itemsPerPage;
@@ -344,6 +344,7 @@ const {userInfo} =userLogin
             }).then((result) => {
               if (result.isConfirmed) {
                 handleApprove(i._id, "sponsor");
+                handleRefrech();
                 Swal.fire('Approved as Sponsor!', '', 'success');
               } else if (result.isDenied) {
                 Swal.fire('User is not Approved', '', 'info');
@@ -370,6 +371,7 @@ const {userInfo} =userLogin
             }).then((result) => {
               if (result.isConfirmed) {
                 handleApprove(i._id, "coach");
+                handleRefrech();
                 Swal.fire('Approved as Coach!', '', 'success');
               } else if (result.isDenied) {
                 Swal.fire('User is not Approved', '', 'info');
