@@ -68,7 +68,7 @@ export default function Profile() {
   return (
     <div>
     {loading && <Loader></Loader>}
-      <Parallax small filter image="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png" />
+      <Parallax small filter image="/images/handmade.jpg" />
       <div className={classNames(classes.main, classes.mainRaised)}>
         <div>
           <div className={classes.container}>

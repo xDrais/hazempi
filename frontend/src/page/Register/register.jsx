@@ -84,7 +84,9 @@ const Register = () => {
     /^(?:19|20)\d{2}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])$/;
   const IMAGE_REGEX = /\.(png|jpe?g)$/i;
   const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   const dispatch = useDispatch();
+  //use selector tjibli fel reducer eli houwa userRegister eml store 
   const userRegister = useSelector((state) => state.userRegister);
   const { loading, error, userInfo,messageSuccess } = userRegister;
   const toggleShowPassword = () => {
@@ -101,6 +103,8 @@ const Register = () => {
       setIsCaptchaVerified(false);
     }
   };
+    //RADIOBOX taa terms and conditions
+
   const [isChecked, setIsChecked] = useState(false);
 
   // Creating the user
