@@ -54,9 +54,16 @@ const {userInfo} =userLogin
     // return () => clearInterval(interval); // clear the interval on component unmount
   }, [dispatch ]);
 
+  const handleRefrech = () => {
+    setTimeout(() => {
+      dispatch(getUsers());
+    }, 1000);
+  };
+
   const handleApprove = (id, role) => {
     dispatch(approveUser(id, role));
   };
+  
 
   const handleBlockUser = (id, blocked) => {
     if (blocked) {
@@ -313,55 +320,68 @@ const {userInfo} =userLogin
                         </td>
                         <td ><span className={i.verify === true ? 'badge bg-label-success me-1' : 'badge bg-label-warning me-1'}>{i.verify ? 'Verifed': 'Not-Verifed'}</span>
                         <span className={i.bloque === true ? 'badge bg-label-warning me-1' :'badge bg-label-success me-1' }>{i.bloque ? 'Blocked': 'Not-Blocked'}</span></td>
-                        <td >    <span className={i.status === 'pending' ? 'badge bg-label-warning me-1' : 'badge bg-label-success me-1'}>{i.status === 'approved' ? 'approved' : 'pending'}</span></td>
+                        <td >  {i.status === 'approved' ? (
+  <span className="badge bg-label-success me-1">approved</span>
+) : i.status === 'pendingAsSponsor' || i.status === 'pendingAsCoach' ? (
+  <span className="badge bg-label-warning me-1">pending</span>
+) : (
+  <span className="badge bg-label-secondary me-1">------</span>
+)}</td>
 
                         <td>
                         <DropdownButton title="Actions">
-                        {i.status === "pending" && (
-                     <>
-                    {i?.role?.name === "userRole"  ? (
-                        <>
-                      <Dropdown.Item onClick={() => {
-                        Swal.fire({
-                          title: 'Do you want to Approve this User as Sponsor?',
-                          showDenyButton: true,
-                          showCancelButton: true,
-                          confirmButtonText: 'Save',
-                          denyButtonText: `Don't save`,
-                        }).then((result) => {
-                          if (result.isConfirmed) {
-                            handleApprove(i._id, "sponsor");
-                            Swal.fire('Approved!', '', 'success');
-                          } else if (result.isDenied) {
-                            Swal.fire('User is not Approved', '', 'info');
-                          }
-                        });
-                      }}>
-                        <i className="bx bx-edit-alt me-1"></i> Approve Sponsor
-                      </Dropdown.Item>
-
-                      <Dropdown.Item onClick={() => {
-                        Swal.fire({
-                          title: 'Do you want to Approve this User as Coach?',
-                          showDenyButton: true,
-                          showCancelButton: true,
-                          confirmButtonText: 'Save',
-                          denyButtonText: `Don't save`,
-                        }).then((result) => {
-                          if (result.isConfirmed) {
-                            handleApprove(i._id, "coach");
-                            Swal.fire('Approved!', '', 'success');
-                          } else if (result.isDenied) {
-                            Swal.fire('User is not Approved', '', 'info');
-                          }
-                        });
-                      }}>
-                        <i className="bx bx-edit-alt me-1"></i>Approve Coach
-                      </Dropdown.Item>
-                        </>
-                      ) : null}
-                   </>
-                       )}
+                        {i.status === "pendingAsSponsor" && (
+    <>
+      {i?.role?.name === "userRole" && (
+        <>
+          <Dropdown.Item onClick={() => {
+            Swal.fire({
+              title: 'Do you want to Approve this User as Sponsor?',
+              showDenyButton: true,
+              showCancelButton: true,
+              confirmButtonText: 'Save',
+              denyButtonText: `Don't save`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                handleApprove(i._id, "sponsor");
+                Swal.fire('Approved as Sponsor!', '', 'success');
+              } else if (result.isDenied) {
+                Swal.fire('User is not Approved', '', 'info');
+              }
+            });
+          }}>
+            <i className="bx bx-edit-alt me-1"></i> Approve as Sponsor
+          </Dropdown.Item>
+        </>
+      )}
+    </>
+  )}
+  {i.status === "pendingAsCoach" && (
+    <>
+      {i?.role?.name === "userRole" && (
+        <>
+          <Dropdown.Item onClick={() => {
+            Swal.fire({
+              title: 'Do you want to Approve this User as Coach?',
+              showDenyButton: true,
+              showCancelButton: true,
+              confirmButtonText: 'Save',
+              denyButtonText: `Don't save`,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                handleApprove(i._id, "coach");
+                Swal.fire('Approved as Coach!', '', 'success');
+              } else if (result.isDenied) {
+                Swal.fire('User is not Approved', '', 'info');
+              }
+            });
+          }}>
+            <i className="bx bx-edit-alt me-1"></i>Approve as Coach
+          </Dropdown.Item>
+        </>
+      )}
+    </>
+  )}
                       <Dropdown.Item href="#/action-1"> <i className="bx bx-edit-alt me-1"></i> Edit</Dropdown.Item>
                       <Dropdown.Item href="" onClick={() => {
                               if (i.bloque) {

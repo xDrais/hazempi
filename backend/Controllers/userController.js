@@ -26,6 +26,11 @@ const registerUser = asynHandler( async ( req , res )=> {
     const  imageUrl =req.file.filename 
 
     const { entrepriseName,sector,descriptionSponsor,file} = req.body
+    const { speciality,descriptionCoach,dateDebutExperience ,
+      dateFinExperience,
+      titrePoste
+      
+  } = req.body
 
 
     if (!firstName || !lastName  ){
@@ -57,6 +62,7 @@ const registerUser = asynHandler( async ( req , res )=> {
         cin ,
         dateOfBirth ,
         phone,
+        status: entrepriseName  ? 'pendingAsSponsor' : speciality  ? 'pendingAsCoach' : '',
         role: {name: "userRole"},
                 emailToken: otp
 
@@ -77,11 +83,7 @@ const registerUser = asynHandler( async ( req , res )=> {
             
     }
     
-    const { speciality,descriptionCoach,dateDebutExperience ,
-        dateFinExperience,
-        titrePoste
-        
-    } = req.body
+
     console.log(speciality)
     console.log(descriptionCoach)
     console.log(dateDebutExperience)
@@ -147,7 +149,7 @@ const ApproveUser = asynHandler( async (req, res) => {
       const role = req.body.role;
       try {
         const user = await User.findById(id);
-        if (user && user.status === 'pending') {
+        if (user && user.status === 'pendingAsSponsor' ||'pendingAsCoach')  {
           user.role.name = role;
           user.status = 'approved';
           await user.save();
