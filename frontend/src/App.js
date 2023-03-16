@@ -9,6 +9,8 @@ import Navbarr from './Components/Navbar/navbar';
 import Loader from './Components/Loader';
 import Home from './page/Home/home';
 import  { useEffect, useState } from "react";
+import UpdateUser from './page/Modifyaccount/updateUser'
+import UpdateCoach from './page/Modifyaccount/updateCoach'
 import { useDispatch , useSelector , } from "react-redux";
 import axios from "axios";
 const ForgetPassword =lazy(() => import('./page/ForgetPassword'));
@@ -54,6 +56,7 @@ function App() {
     <Route exact  path="/sponsor/:id" element={ <GetSponsor/>} />
     <Route exact  path="/coach/:id" element={<GetCoach/>} />
     <Route path="/verify-email/:emailToken" element={<><Navbarr /><Login/> </>} />
+    
 
 
 
@@ -67,7 +70,8 @@ function App() {
     <Route path="/reset-password" element={<> <Navbarr /> <ResetPassword/></>} />
     <Route path="/profile" element={<> <Navbarr /> <Profile/> </>} />
     <Route path="/" element={<><Navbarr /><Home/></>} />
-    
+    <Route path="/userupdate" element={<UpdateUser />} /> 
+    <Route path="/updatecoach" element={<UpdateCoach></UpdateCoach> } /> 
     <Route path="/verify-email/:emailToken" element={<><Navbarr /> <Login/> </>} />
         </Routes>)}
     </Router>

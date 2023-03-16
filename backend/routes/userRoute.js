@@ -10,6 +10,8 @@ const {
     reset,
     forgetPass,
     updateUser,
+    updateSponsor,
+    updateCoach,
     findUserById,
     getAllUser,
     ApproveUser,
@@ -57,7 +59,9 @@ router.put('/verify-email/:token',verifyEmail)
 router.post('/login',logIn)
 router.post('/forget-password',forgetPass)
 router.post('/reset-password',validator,reset)
-router.put('/updateUser/:id',protectSimpleUser,updateUser)
+router.put('/updateUser/:id',updateUser)
+router.put('/updateSponsor/:id',updateSponsor)
+router.put('/updateCoach/:id',updateCoach)
 router.get('/getuser/:id',protectSimpleUser,findUserById)
 router.get('/getalluser',getAllUser)
 router.get('/coach/:userId',GetCoach)
