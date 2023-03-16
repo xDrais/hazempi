@@ -22,7 +22,7 @@ const UserSchema = new mongoose.Schema({
         enum:['google','facebook','github']},
     role :RoleSchema,
     status: {
-        type: String,enum: ['pendingAsCoach','pendingAsSponsor', 'approved', 'rejected' ,''],default: ''
+        type: String,enum: ['pendingAsCoach','pendingAsSponsor', 'approved', 'rejected' ,'' , 'pending'],default: ''
     },
     
 

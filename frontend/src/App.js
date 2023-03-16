@@ -67,7 +67,8 @@ function App() {
     <Route path="/reset-password" element={<> <Navbarr /> <ResetPassword/></>} />
     <Route path="/profile" element={<> <Navbarr /> <Profile/> </>} />
     <Route path="/" element={<><Navbarr /><Home/></>} />
-    
+    <Route path="/dashboard" element={<Dashboard/>} />
+
     <Route path="/verify-email/:emailToken" element={<><Navbarr /> <Login/> </>} />
         </Routes>)}
     </Router>

@@ -46,7 +46,7 @@ const registerUser = asynHandler( async ( req , res )=> {
     const test = generatorOTP()
 
     const [otp, expirationStr] = test.split('|');
-       expiration = new Date(expirationStr);
+    expiration = new Date(expirationStr);
 
 
     //create user
@@ -266,12 +266,6 @@ const user = await User.findOne({ emailToken });
                 user.verify=true;
               
                 await user.save(); 
-                res.status(200).json({
-                  _id: user._id,
-                  email: user.email,
-                  verify: user?.verify,
-                });
-              
                     mailTransport().sendMail({
                       from: "devtestmailer101@gmail.com",
                       to: user.email,
@@ -290,6 +284,8 @@ const user = await User.findOne({ emailToken });
                       `
                       
                     });
+
+                 
               
   }
   
