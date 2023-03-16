@@ -276,7 +276,7 @@ const Register = () => {
           {step === 1 && (
             <>
              
-            <h1>Sign In</h1>
+            <h1>Sign Up</h1>
               <input
                 id="firstName"
                 type="text"
@@ -579,7 +579,7 @@ const Register = () => {
                 type="submit"
                 disabled={!isChecked || !isCaptchaVerified                }
               >
-                Sign In
+                Sign Up
               </Button>
               <Row className="py-3">
                 <Col>
