@@ -5,14 +5,10 @@ const Coach = require('../Models/coach.js')
 const Sponsor = require('../Models/sponsor.js')
 const { generatorOTP ,mailTransport,generateToken } = require('./utils/mail.js')
 const verficationToken = require('../Models/token.js')
-const { isValidObjectId  } = require("mongoose")
 const validator = require("email-validator");
-const crypto= require("crypto");
-const jwt = require("jsonwebtoken");
-const {storage } = require ('../routes/userRoute')
 const fs = require('fs')
 const handlebars = require('handlebars');
-
+const path = require("path");
 const registerUser = asynHandler( async ( req , res )=> {
     const {  firstName ,
         lastName , 
@@ -47,8 +43,10 @@ const registerUser = asynHandler( async ( req , res )=> {
     //bcryptjs password cryptage
     const salt = await bcrypt.genSalt(10)
     const headPassword = await bcrypt.hash(password,salt)
-    const otp = generatorOTP()
+    const test = generatorOTP()
 
+    const [otp, expirationStr] = test.split('|');
+       expiration = new Date(expirationStr);
 
 
     //create user
@@ -116,31 +114,82 @@ const registerUser = asynHandler( async ( req , res )=> {
     mailTransport().sendMail({
       from:"devtestmailer101@gmail.com",
       to: user.email,
-      subject: "Account Verified ",
-      html: `<h1>Account Verified  ${user.lastName} ,
-      <a href = '${process.env.CLIENT_URL}/verify-email/${user.emailToken}'> Verify your Email
-      </h1>` ,
-     })
+     subject: "One Step To Verify Your Account ",
+     html: `
+       <html>
+         <head>
+           <style>
+             /* Define your CSS styles here */
+             h1 {
+               color: #FFFFFF; /* Set header text color to blue */
+               text-align: center;
+             }
+             p {
+               color: #444444; /* Set paragraph text color to dark gray */
+               font-size: 16px;
+               text-align: justify;
+             }
+             a {
+               color: #ffffff; /* Set link text color to white */
+               background-color: #AB7F42; /* Set link background color to the desired color */
+               padding: 12px 24px;
+               display: inline-block;
+               text-decoration: none;
+               border-radius: 4px;
+             }
+             a:hover {
+               background-color: #007bff; /* Set link background color to darker blue on hover */
+             }
+           </style>
+         </head>
+         <body>
+           <table width="100%" border="0" cellspacing="0" cellpadding="0">
+             <tr>
+               <td align="center">
+                 <img src="cid:logo" alt="Logo" style="max-width: 200px;">
+                 <h1 style="color: #AB7F42; text-align: center;">Account Verified ${user.lastName}  </h1>
+                 <h3 style="color: #444444; font-size: 16px; text-align: justify;">Dear ${user.firstName},</p>
+                 <p style="color: #444444; font-size: 16px; text-align: justify;">We are pleased to inform you that your account has been successfully verified.</p>
+                 <p style="color: #444444; font-size: 16px; text-align: justify;">Please follow the link below to complete the email verification process:</p>
+                     <div style="text-align: center;">
+                         <a href="${process.env.CLIENT_URL}/verify-email/${user.emailToken}"  style="color: #FFFFFF; background-color: #F8C471; padding: 12px 24px; display: inline-block; text-decoration: none; border-radius: 4px;">Verify your Email</a>
+                     </div>
+                 <p style="color: #444444; font-size: 16px; text-align: justify;">Thank you for choosing our services.</p>
+                 <p style="color: #444444; font-size: 16px; text-align: justify;">Sincerely,</p>
+                 <h3 style="color: #444444; font-size: 16px; text-align: justify;">The CARTHAGE CARES Team</p>
+               </td>
+             </tr>
+           </table>
+         </body>
+       </html>
+     `,
+     attachments: [{
+       filename: 'logo.png',
+       path: path.join(__dirname, '../../public/logo.png'),
+       cid: 'logo'
+     }]
+   });
+   
 
 
-
-    if(user){
-        res.status(201).json({
-            _id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            phone: user.phone,
-            email: user.email,
-            imageUrl: user.imageUrl,
-            cin: user.cin,
-            dateOfBirth: user.dateOfBirth,
-            role : user.role,    
-            verfication : user.emailToken         })
-    }
-    else{
-        res.status(400)
-        throw new Error('Invalid user data')
-    }
+   if(user){
+       res.status(201).json({
+           _id: user.id,
+           firstName: user.firstName,
+           lastName: user.lastName,
+           phone: user.phone,
+           email: user.email,
+           imageUrl: user.imageUrl,
+           cin: user.cin,
+           dateOfBirth: user.dateOfBirth,
+           role : user.role,    
+           verfication : user.emailToken       
+       })
+   }
+   else{
+       res.status(400)
+       throw new Error('Invalid user data')
+   }
 
 })
 
@@ -164,56 +213,88 @@ const ApproveUser = asynHandler( async (req, res) => {
       });
 
 const  verifyEmail = asynHandler( async (req,res) => {
-   // const emailToken =req.body.emailToken; 
+
+
+    // const emailToken =req.body.emailToken; 
 
   const emailToken = req.params.token; 
 
+
+
+
+// if true = email token is undefined 
+  // if false = email token is defined
   console.log("emailToken is undefined:", !emailToken);
 
-  if (!emailToken || !emailToken.trim()) {
-    console.log("Invalid emailToken:", emailToken);
-    res.status(400);
-    throw new Error("Invalid request");
+const user = await User.findOne({ emailToken });
+  if (!emailToken.trim()) {
+    // email is incorrect
+         console.log("Invalid emailToken :", emailToken);
+         res.status(400);
+         throw new Error("Invalid request");
+
+  } else if (expiration < Date.now()) {
+    if (user) {
+      user.emailToken= null;
+    
+      await user.save(); 
+    // OTP has expired
+        console.log(" the token is expired:", expiration);
+      res.status(400);
+      throw new Error("Invalid request");
+
+    }
+  } else {
+    // OTP is valid
+
+                if (!user) {
+                  res.status(404);
+                  throw new Error("User Not Found!!");
+                }
+              
+                if (user.verify) {
+                  res.status(400); 
+                  throw new Error("User Already Verified!!");
+                }
+              
+                if (!emailToken) {
+                    res.status(404)
+                    throw  new Error(" Invalid Token !! ")
+                }
+                if (user) {
+                user.emailToken= null;
+                user.verify=true;
+              
+                await user.save(); 
+                res.status(200).json({
+                  _id: user._id,
+                  email: user.email,
+                  verify: user?.verify,
+                });
+              
+                    mailTransport().sendMail({
+                      from: "devtestmailer101@gmail.com",
+                      to: user.email,
+                      subject: "Account Verified Succeffuly ",
+                      html: `
+                        <td align="center">
+                        
+                          <h1 style="color: #AB7F42; text-align: center;"> ${user.lastName} Your Account Is Verified </h1>
+                          <h3 style="color: #444444; font-size: 16px; text-align: justify;">Dear ${user.firstName},</p>
+                        <p>We are pleased to inform you that your account has been verified. You can now access all the features and services that we offer.</p>
+                        <p>If you have any questions or concerns, please don't hesitate to contact us.</p>
+                        <p>Best regards,</p>
+              
+                        <h3 style="color: #444444; font-size: 16px; text-align: justify;">The CARTHAGE CARES Team</p>
+                        </td>
+                      `
+                      
+                    });
+              
   }
-
-  const user = await User.findOne({ emailToken });
-  if (!user) {
-    res.status(404);
-    throw new Error("User Not Found!!");
-  }
-
-  if (user.verify) {
-    res.status(400); 
-    throw new Error("User Already Verified!!");
-  }
-
-  if (!emailToken) {
-      res.status(404)
-      throw  new Error(" Invalid Token !! ")
-  }
-  if (user) {
-  user.emailToken= null;
-  user.verify=true;
-
-  await user.save(); 
-  res.status(200).json({
-    _id: user._id,
-    email: user.email,
-    verify: user?.verify,
-  });
-
-  mailTransport().sendMail({
-      from:"devtestmailer101@gmail.com",
-      to: user.email,
-      subject: "Account Verified ",
-      html: `<h1>Your Account Is Verified</h1>`
-  })
-  res.json("Your Email is Verified ")
-  }
-
   
-  res.redirect(`${process.env.CLIENT_URL}/login`);
-})
+}
+});
 const logIn = asynHandler( async (req,res)=>{
         const  { email , password } = req.body
         

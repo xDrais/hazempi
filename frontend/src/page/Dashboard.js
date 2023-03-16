@@ -13,6 +13,8 @@ import Swal from 'sweetalert2';
 import ReactPaginate from 'react-paginate';
 
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSync } from '@fortawesome/free-solid-svg-icons'
 
 
 
@@ -54,11 +56,13 @@ const {userInfo} =userLogin
     // return () => clearInterval(interval); // clear the interval on component unmount
   }, [dispatch ]);
 
-  const handleRefrech = () => {
-    setTimeout(() => {
-      dispatch(getUsers());
-    }, 1000);
-  };
+ 
+ const handleRefresh = () => {
+   setTimeout(() => {
+     dispatch(getUsers());
+   }, 1000); 
+   console.log("after 1 second");// Refresh after 1 seconds (adjust the number as needed)
+ };
 
   const handleApprove = (id, role) => {
     dispatch(approveUser(id, role));
@@ -127,6 +131,9 @@ const {userInfo} =userLogin
         <div className="card">
        
                 <h5 className="card-header">Accounts</h5>
+                <button className="btn btn-primary" onClick={handleRefresh}>
+      <FontAwesomeIcon icon={faSync} /> 
+    </button>
                 <div className="table-responsive text-nowrap">
                   <table className="table table-striped">
                     <thead>
@@ -235,6 +242,7 @@ const {userInfo} =userLogin
                                 }).then((result) => {
                                     if (result.isConfirmed) {
                                         handleBlockUser(i._id, true);
+                                        handleRefresh();
                                         Swal.fire(
                                           'Unblocked!',
                                           'The user has been unblocked.',
@@ -255,6 +263,8 @@ const {userInfo} =userLogin
                                   }).then((result) => {
                                       if (result.isConfirmed) {
                                           handleBlockUser(i._id, false);
+
+                                          handleRefresh();
                                           Swal.fire(
                                             'Blocked!',
                                             'The user has been blocked.',
@@ -344,7 +354,7 @@ const {userInfo} =userLogin
             }).then((result) => {
               if (result.isConfirmed) {
                 handleApprove(i._id, "sponsor");
-                handleRefrech();
+                handleRefresh();
                 Swal.fire('Approved as Sponsor!', '', 'success');
               } else if (result.isDenied) {
                 Swal.fire('User is not Approved', '', 'info');
@@ -371,7 +381,7 @@ const {userInfo} =userLogin
             }).then((result) => {
               if (result.isConfirmed) {
                 handleApprove(i._id, "coach");
-                handleRefrech();
+                handleRefresh();
                 Swal.fire('Approved as Coach!', '', 'success');
               } else if (result.isDenied) {
                 Swal.fire('User is not Approved', '', 'info');
@@ -398,6 +408,7 @@ const {userInfo} =userLogin
                                 }).then((result) => {
                                     if (result.isConfirmed) {
                                         handleBlockUser(i._id, true);
+                                        handleRefresh();
                                         Swal.fire(
                                           'Unblocked!',
                                           'The user has been unblocked.',
@@ -418,6 +429,7 @@ const {userInfo} =userLogin
                                   }).then((result) => {
                                       if (result.isConfirmed) {
                                           handleBlockUser(i._id, false);
+                                          handleRefresh();
                                           Swal.fire(
                                             'Blocked!',
                                             'The user has been blocked.',
