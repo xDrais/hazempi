@@ -554,6 +554,41 @@ const GetSponsor = asynHandler(  async (req, res) => {
     res.send(results);
   });
   
+const coach = asynHandler(async (req,res)=>{
+    const {user,file,speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste}=req.body
+    const{coach}=req.body
+    console.log(coach)
+    console.log(req.body)
+    console.log("===============")
+    console.log(file)
+    console.log("===============")
+    const z =await Coach.create({
+      user:user,
+      file:file,
+      speciality:speciality,
+      descriptionCoach:descriptionCoach,
+      dateDebutExperience:dateDebutExperience,
+      dateFinExperience:dateFinExperience,
+      titrePoste:titrePoste
+    })
+    console.log("===============")
+    console.log(z)
+    res.status(201).json(z)
+
+  })
+  const sponsor = asynHandler(async (req,res)=>{
+    const {user,file,entrepriseName,sector,descriptionSponsor}=req.body
+    const sponsor = await Sponsor.create({
+      user:user,
+      file:file,
+      entrepriseName:entrepriseName,
+      sector:sector,
+      descriptionSponsor:descriptionSponsor
+    })
+    res.status(201).json(sponsor)
+
+  })
+  
 module.exports = { 
     registerUser,
     verifyEmail,
@@ -571,6 +606,8 @@ module.exports = {
     GetSponsor,
     GetCoach,
     Unbloque,
-    Search
+    Search,
+    coach,
+    sponsor
     
  }
