@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS ,USER_REGISTER_FAIL, APPROVE_USER_SUCCESS, GET_USERS_SUCCESS, FORGET_PASSWORD_REQUEST, FORGET_PASSWORD_SUCCESS, FORGET_PASSWORD_FAIL, RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAIL, BLOCK_USER, UNBLOCK_USER, USER_VERIFY_REQUEST, USER_VERIFY_SUCCESS, USER_VERIFY_FAIL, USER_BLOCK_REQUEST, USER_BLOCK_SUCCESS, USER_BLOCK_FAIL} from "./userconstant"
+import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS ,USER_REGISTER_FAIL, APPROVE_USER_SUCCESS, GET_USERS_SUCCESS, FORGET_PASSWORD_REQUEST, FORGET_PASSWORD_SUCCESS, FORGET_PASSWORD_FAIL, RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAIL, BLOCK_USER, UNBLOCK_USER, USER_VERIFY_REQUEST, USER_VERIFY_SUCCESS, USER_VERIFY_FAIL, USER_BLOCK_REQUEST, USER_BLOCK_SUCCESS, USER_BLOCK_FAIL, ADD_COACH_REQUEST, ADD_COACH_SUCCESS, ADD_COACH_FAIL, ADD_SPONSOR_REQUEST, ADD_SPONSOR_SUCCESS, ADD_SPONSOR_FAIL} from "./userconstant"
 import { useNavigate } from 'react-router-dom'
 
 export const login = (email,password) => async (dispatch)=>{
@@ -319,5 +319,73 @@ export const verifyEmail = (emailToken) => async (dispatch)=>{
           });
       }
       console.log(error.response.data.message);
+  }
+}
+export const coachaction = (coach) => async (dispatch)=>{
+  try {
+      dispatch({
+          type:ADD_COACH_REQUEST
+      })
+      const config = {
+          headers:{
+              'Content-Type' : 'application/json'
+          }
+      }
+      const {data } =await axios.post(
+          `http://localhost:5000/api/user/coach`,
+          coach,
+          config
+      )
+
+      dispatch({
+          type : ADD_COACH_SUCCESS,
+          payload : data
+          
+      })
+  } catch(error){
+      dispatch({
+        
+          type: ADD_COACH_FAIL,
+          payload:
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message,
+        })
+
+  }
+}
+
+
+export const sponsoraction = (sponsor) => async (dispatch)=>{
+  try {
+      dispatch({
+          type:ADD_SPONSOR_REQUEST
+      })
+      const config = {
+          headers:{
+              'Content-Type' : 'application/json'
+          }
+      }
+
+      const {data } =await axios.post(
+          `http://localhost:5000/api/user/sponsor`,
+          sponsor,
+          config
+      )
+
+      dispatch({
+          type : ADD_SPONSOR_SUCCESS,
+          payload : data
+          
+      })
+  } catch(error){
+      dispatch({
+          type: ADD_SPONSOR_FAIL,
+          payload:
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message,
+        })
+
   }
 }

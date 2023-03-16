@@ -3,7 +3,7 @@ import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,
      USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, 
      USER_REGISTER_FAIL, GET_USERS_SUCCESS, APPROVE_USER_SUCCESS, 
      FORGET_PASSWORD_REQUEST, FORGET_PASSWORD_SUCCESS, FORGET_PASSWORD_FAIL, 
-     RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAIL, UNBLOCK_USER, USER_BLOCK_SUCCESS } from "./userconstant";
+     RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAIL, UNBLOCK_USER, USER_BLOCK_SUCCESS, ADD_COACH_REQUEST, ADD_COACH_SUCCESS, ADD_COACH_FAIL, ADD_SPONSOR_REQUEST, ADD_SPONSOR_SUCCESS, ADD_SPONSOR_FAIL } from "./userconstant";
 
  export const userLoginReducer=(state={},action)=>{
     // eslint-disable-next-line default-case
@@ -119,3 +119,31 @@ export const userBlockReducer = (state = { users: [] }, action) => {
 
     }
  }
+ export const coachReducer=(state={},action)=>{
+  // eslint-disable-next-line default-case
+  switch (action.type) {
+      case ADD_COACH_REQUEST : 
+          return {loading : true}
+      case ADD_COACH_SUCCESS : 
+          return {loading : false , succes : true}
+      case ADD_COACH_FAIL :
+          return {loading : false , error: action.payload }        
+      default:
+          return state    
+
+  }
+}
+ export const sponsorReducer=(state={},action)=>{
+  // eslint-disable-next-line default-case
+  switch (action.type) {
+      case ADD_SPONSOR_REQUEST : 
+          return {loading : true}
+      case ADD_SPONSOR_SUCCESS : 
+          return {loading : false , succes : true}
+      case ADD_SPONSOR_FAIL :
+          return {loading : false , error: action.payload }        
+      default:
+          return state    
+
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // @material-ui/core components
@@ -6,6 +6,8 @@ import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 import Camera from "@material-ui/icons/Camera";
 import Palette from "@material-ui/icons/Palette";
+import add from "@material-ui/icons/Add";
+
 import Favorite from "@material-ui/icons/Favorite";
 // core components
 // import Header from "/components/Header/Header.js";
@@ -17,17 +19,41 @@ import NavPills from "../Components/NavPills/NavPills.js"
 import Parallax from "../Components/Parallax/Parallax.js";
 
 import styles from "../Components/styles/jss/nextjs-material-kit/pages/profilePage.js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Components/Loader.js";
 import { toast,ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
+import Input from "../Components/Input.jsx";
+import UploadfFile from "./UploadfFile.jsx";
 
 const useStyles = makeStyles(styles);
 
 export default function Profile() {
 
+  const handle=()=>{
+    if (show ){
+      return setShow(!show)
+    }
+    return setShow(!show)
+  }
+    const [toggle,setToggle]=useState(()=> {return ['a']}) 
     const userLogin = useSelector(state => state.userLogin)
     const {loading , error,userInfo } = userLogin  
+    
+    const addFiled=()=>{
+      if (toggle.length<5) {
+        setToggle([...toggle,'&'])
+      }
+    }
+    
+
+  
+    const [show,setShow]=useState(false)
+   
     useEffect(()=>{
+      
+ 
         if(error){
             toast.error(error)
         }
@@ -191,8 +217,33 @@ export default function Profile() {
                     }
                   ]}
                 />
+                <GridContainer justify="center">
+                  {userInfo.role.name==="coach"  &&
+                  <Button  onClick={handle}>add more Experiance</Button>
+                  }
+                  {userInfo.role.name==="sponsor"  &&
+                  <Button  onClick={handle}  >add more Experiance</Button>
+                  }
+                  
+
+                </GridContainer>
+                
+                  
+                  {show && 
+                  <>
+                   {toggle.map((index)=>{
+                  return <Input
+                  key={Math.random()}
+                  /> 
+                  })} 
+                  <Button onClick={addFiled} > Add Filed</Button>
+                  </>
+                  }
+                  
+                  
               </GridItem>
             </GridContainer>
+            
           </div>
         </div>
       </div>

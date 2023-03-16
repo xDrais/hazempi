@@ -6,6 +6,7 @@ import { resetPassword } from '../userredux/useraction'
 import { useDispatch , useSelector } from "react-redux";
 import video from "../Components/HeroSection/pottery2.mp4"
 import {toast,ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ResetPassword = () => {
     const dispatch =useDispatch()

@@ -17,7 +17,9 @@ const {
     GetSponsor,
     bloque,
     Unbloque,
-    Search
+    Search,
+    coach,
+    sponsor
 
 } = require('../Controllers/userController.js')
 
@@ -62,7 +64,8 @@ router.get('/coach/:userId',GetCoach)
 router.get('/sponsor/:userId',GetSponsor)
 router.put('/approve/:id',ApproveUser)
 router.get('/search/:key',Search)
-
+router.post('/coach',coach)
+router.post('/sponsor',sponsor)
 
 //router.get('/test',protectSimpleUser,test)
 
