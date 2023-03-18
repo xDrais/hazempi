@@ -8,6 +8,8 @@ const verficationToken = require('../Models/token.js')
 const validator = require("email-validator");
 const fs = require('fs')
 const handlebars = require('handlebars');
+const optGenerator = require('otp-generator')
+
 const path = require("path");
 
 const registerUser = asynHandler( async ( req , res )=> {
@@ -47,7 +49,7 @@ const registerUser = asynHandler( async ( req , res )=> {
     const test = generatorOTP()
 
     const [otp, expirationStr] = test.split('|');
-    expiration = new Date(expirationStr);
+     expiration = new Date(expirationStr);
 
 
     //create user
@@ -330,8 +332,10 @@ if (!email ){
     if(!user){
         res.status(404).json({"message":"Invalid User"})
     }
-    const otp = generatorOTP()
+    const otp = optGenerator.generate(10, { specialChars: false });
+
     console.log(otp)
+    console.log("================================")
     await verficationToken.create({
         owner : user._id,
         vtoken: otp
@@ -341,10 +345,12 @@ if (!email ){
         if (err) {
           console.log(err);
         } else {
+            console.log(otp)
             var template = handlebars.compile(html);
             var replacements = {
                 name: user.lastName+" "+user.firstName,
                 action_url: `http://localhost:3000/reset-password?id=${user._id}&token=${otp}`,
+                
             };
             var htmlToSend = template(replacements);
     mailTransport().sendMail({

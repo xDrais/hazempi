@@ -97,7 +97,7 @@ REGISTER                         </Link>
                     <NavDropdown   title={userInfo.lastName + " " + userInfo.firstName } id="username">
                       
                         <LinkContainer  to='/profile'>
-                            <NavDropdown.Item >PROFILE</NavDropdown.Item>
+                            <NavDropdown.Item > <Link to="/profile" >PROFILE</Link> </NavDropdown.Item>
                         </LinkContainer>
                         <NavDropdown.Item onClick={logoutHandler} >LOGOUT</NavDropdown.Item>
                     </NavDropdown>  </div>
