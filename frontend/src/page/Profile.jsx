@@ -7,7 +7,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Camera from "@material-ui/icons/Camera";
 import Palette from "@material-ui/icons/Palette";
 import add from "@material-ui/icons/Add";
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBuilding,faChalkboardUser} from '@fortawesome/free-solid-svg-icons';
 import Favorite from "@material-ui/icons/Favorite";
 // core components
 // import Header from "/components/Header/Header.js";
@@ -69,21 +70,21 @@ export default function Profile() {
     <div>
     {loading && <Loader></Loader>}
       <Parallax small filter image="/images/handmade.jpg" />
-      <div className={classNames(classes.main, classes.mainRaised)}>
-        <div>
+      <div style={{backgroundColor: "#FCFFE7"}} className={classNames(classes.main, classes.mainRaised)}>
+        <div> <div></div>
           <div className={classes.container}>
-            <GridContainer justify="center">
+            <GridContainer  justify="center">
               <GridItem xs={12} sm={12} md={6}>
                 <div className={classes.profile}>
                   <div>
                     <img
                       src={"/images/"+userInfo.imageUrl}
                       alt="..."
-                      style={{"borderRadius": "50%","height":"120px"}}
+                      style={{"borderRadius": "50%","height":"160px"}}
                     />
                   </div>
                   <div className={classes.name +"py-3"}>
-                    <h3 className={classes.title}>{userInfo.lastName+" "+userInfo.firstName}</h3>
+                    <h3 style={{ color: "#93643b"}}className={classes.title}>{userInfo.lastName+" "+userInfo.firstName}</h3>
                      <h6>{userInfo.role.name}</h6> 
                     <Button justIcon link className={classes.margin5}>
                       <i className={"fab fa-twitter"} />
@@ -107,7 +108,7 @@ export default function Profile() {
               <GridItem xs={12} sm={12} md={8} className={classes.navWrapper}>
                 <NavPills
                   alignCenter
-                  color="primary"
+                  color="#000"
                   tabs={[
                     {
                       tabButton: "Course",

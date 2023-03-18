@@ -31,6 +31,7 @@ app.use(morgan('dev'))
 
 app.use(express.urlencoded({extended : false}))
 app.use('/api/user',require('./routes/userRoute.js'))
+app.use('/api/product',require('./routes/userRoute.js'))
 app.use('/api/upload', require('./routes/uploadRoute'));
 app.use("/auth",authRoute);
 // npm run dev
