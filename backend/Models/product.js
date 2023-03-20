@@ -13,10 +13,9 @@ const reviewSchema = mongoose.Schema(
   )
 
 const ProductSchema = new mongoose.Schema({
-    user : {type: mongoose.Types.ObjectId,required:true,ref:'User'},
+    user : {type: mongoose.Types.ObjectId,ref:'User'},
     imageProduct: {
         type: String,
-        required: true,
       },
       category: {
         type: String,
@@ -38,16 +37,13 @@ const ProductSchema = new mongoose.Schema({
       },
       rating: {
         type: Number,
-        required: true,
         default: 0,
       },
       numReviews: {
         type: Number,
-        required: true,
         default: 0,
       },
       reviews: [reviewSchema]
 
 })
 module.exports = mongoose.model('Product', ProductSchema)
-export default Product

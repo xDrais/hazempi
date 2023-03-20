@@ -1,13 +1,14 @@
 const path = require("path")
 const { v4 : uuid4 } = require('uuid');
 const multer = require('multer')
-const express = require('express')
+const express = require('express');
+const { createProduct, getAllProducts, deleteProduct, updateProduct } = require("../Controllers/productController");
 const router = express.Router()
-const {
-  
-createProduct
-} = require('../Controllers/productController.js')
+
+router.post('/createProduct' ,createProduct),
+router.get('/getAll' ,getAllProducts),
+router.delete('/delete/:id' ,deleteProduct),
+router.put('/updateProduct/:id' ,updateProduct),
 
 
-router.post('/createProduct' ,createProduct)
 module.exports = router
