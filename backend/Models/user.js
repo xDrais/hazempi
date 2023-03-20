@@ -21,6 +21,7 @@ const UserSchema = new mongoose.Schema({
     provider : {type: String,
         enum:['google','facebook','github']},
     role :RoleSchema,
+    certified: {type:Boolean, default: false},
     status: {
         type: String,enum: ['pendingAsCoach','pendingAsSponsor', 'approved', 'rejected' ,'' , 'pending'],default: ''
     },
