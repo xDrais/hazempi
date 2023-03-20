@@ -3,8 +3,8 @@
 body {
     width: 100vw;
     height: 100vh;
- 
-    background-image: url(https://img.freepik.com/photos-premium/potter-coupe-bords-poterie-du-fil-rouet_23-2148154823.jpg);
+ overflow-x: hidden;
+    background-image: url(https://images.unsplash.com/photo-1520408222757-6f9f95d87d5d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1580&q=80);
     background-size: cover ; 
     background-repeat: no-repeat;
 }
@@ -18,10 +18,10 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 1300px;
-  height: 860px;
-background: rgba(255, 255, 255, 0.2);
+  height: 760px;
+background: rgba(255, 255, 255, 0.089);
   box-shadow: 4px 4px 50px rgba(0, 0, 0, 0.49);
-  backdrop-filter: blur(100px);
+  backdrop-filter: blur(20px);
   border-radius: 20px;
   z-index: 99;
 }
@@ -217,7 +217,7 @@ background: rgba(255, 255, 255, 0.2);
 /* ------------------ Library (part 3 )------------------- */
 .library_trending {
   width: 850px;
-  height: 500px;
+  height: 430px;
   padding: 0 20px;
   overflow-y: scroll;
   scroll-behavior: smooth;
