@@ -6,6 +6,7 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import SpecialButton from "../../Components/Button/button";
 import { useDispatch , useSelector , } from "react-redux";
 import { productadd } from "../../productredux/productaction";
+import Loader from "../../Components/Loader";
 function UserDashboard(){
     const userLogin = useSelector(state => state.userLogin)
     const {userInfo } = userLogin
@@ -14,7 +15,9 @@ function UserDashboard(){
 
     const [showCreate, setShowCreate] = useState(false);
 
-    const [name,setName]=useState("");
+    const [productName,setName]=useState("");
+    const [imageProduct,setImageProduct]=useState("");
+
     const [description, setDescription]=useState("")
     const [price,setPrice]=useState("")
     const [category,setCategory]=useState("")
@@ -26,16 +29,17 @@ const submitHandlerj = (e) => {
     e.preventDefault();
     dispatch(
       productadd(
-       {  name ,
+       {  productName,
         price ,
-        user:userInfo._id,
+        imageProduct,
+        user:userInfo,
         category , 
         countInStock ,
         description}
         
       )
     );
-    console.log(name,price,user,category,countInStock,description)
+    console.log(productName,price,user,category,countInStock,description,imageProduct)
   };
   const handleCreateClick = () => {
     setShowCreate(true);
@@ -50,6 +54,10 @@ const submitHandlerj = (e) => {
         <><body className="yoo">
         <main className="mp_main">
             <div style={{marginTop:"500px"}}>
+            {error && <div className="alert">{error}</div>}
+          {messageSuccess && <div className="alertgreen">{messageSuccess}</div>}
+
+          {loading && <Loader />}
   <div className="mp_sidebar">
     <div className="sidebar_logo">
       <img src={process.env.PUBLIC_URL + "/images/logo.png"}/>
@@ -103,7 +111,7 @@ const submitHandlerj = (e) => {
         className={`create ${showCreate ? "show" : "hide"} ${showCreate ? "library_trending" : ""}`}
       >     <h3 className="library_trending_title">Create your product </h3>
 
-          <input type="text" placeholder="Product name" id="name"   value={name}
+          <input type="text" placeholder="Product name" id="name"   value={productName}
                 onChange={(e) => setName(e.target.value)}></input>
           <input type="text" placeholder="Category"  value={category}
                 onChange={(e) => setCategory(e.target.value)}></input>
@@ -111,8 +119,10 @@ const submitHandlerj = (e) => {
                 onChange={(e) => setDescription(e.target.value)}></input>
           <input type="text" placeholder="How many are you going to sell ?"  value={countInStock}
                 onChange={(e) => setCountInStock(e.target.value)}></input>
-          <input type="text" placeholder="Price "  value={price}
+          <input type="text" placeholder="Price "  value={price} 
                 onChange={(e) => setPrice(e.target.value)}></input>
+                 <input type="file" placeholder="Price " id="imageProduct" name="imageProduct" 
+                onChange={(e) => setImageProduct(e.target.files[0])}></input> 
 <SpecialButton name="Create" onClick={submitHandlerj} type="submit"/>
 </div>
     <div id="list"        className={`create ${!showCreate ? "show" : "hide"} ${!showCreate ? "library_trending" : ""}`}

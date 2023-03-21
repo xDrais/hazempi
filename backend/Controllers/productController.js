@@ -12,8 +12,12 @@ const createProduct = asynHandler(async (req, res) => {
         description,
         user
       } = req.body
+      const  imageProduct =req.file.filename 
 
-      
+      if (!productName || isNaN(price) || !category || isNaN(countInStock) || !description) {
+        res.json({"message":"Please add  all fields"}).status(402)
+            throw new Error('Please add  all fields')
+    }
      
     const product = await Product.create({
       productName ,
@@ -21,9 +25,9 @@ const createProduct = asynHandler(async (req, res) => {
             user,
             category , 
             countInStock ,
-            description
+            description,imageProduct
     })
-
+   
    if(product){
       res.status(201).json({
           _id: product.id,
@@ -32,9 +36,11 @@ const createProduct = asynHandler(async (req, res) => {
           price: product.price,
           category: product.category,
           countInStock: product.countInStock,
-          description: product.description
+          description: product.description,
+          imageProduct: product.imageProduct
       })
   }
+ 
   else{
       res.status(400)
       throw new Error('Invalid user data')

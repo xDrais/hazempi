@@ -2,7 +2,8 @@ import axios from 'axios'
 import { PRODUCT_ADD_FAIL, PRODUCT_ADD_REQUEST, PRODUCT_ADD_SUCCESS,GET_PRODUCT_SUCCESS } from './productconstant';
 
 export const productadd = ({ 
-    name ,
+    productName ,
+    imageProduct,
     price , 
     user,
     category , 
@@ -14,14 +15,15 @@ export const productadd = ({
           })
           const config = {
               headers:{
-                  'Content-Type' : 'application/json'
+                  'Content-Type' : 'multipart/form-data'
               }
           }
   
           const { data } = await axios.post(
               'http://localhost:5000/product/createProduct',
-{name ,
+{productName ,
     price , 
+    imageProduct,
     user,
     category , 
     countInStock ,
@@ -41,7 +43,9 @@ export const productadd = ({
                 type: PRODUCT_ADD_FAIL,
                 payload: error.response.data.message
             });
-        } else {
+        }
+          
+        else {
             dispatch({
                 type: PRODUCT_ADD_FAIL,
                 payload: error.response && error.response.data.message
