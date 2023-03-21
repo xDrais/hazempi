@@ -102,11 +102,28 @@ const updateProduct = asynHandler(async (req, res) => {
 })
 
 
+const SearchProduct = asynHandler( async (req, res) => {
+  const key = req.params.key;
+  
+  const productResults = await Product.find({
+    $or: [
+      { name: { $regex:  new RegExp(key, 'i')  } },
+      { category: { $regex:  new RegExp(key, 'i')  } },
+      { description: { $regex:  new RegExp(key, 'i')  } },
+    ],
+  });
+  
+  const results = productResults;
+  
+  res.send(results);
+});
+
 module.exports = { 
    createProduct,
    getAllProducts,
    deleteProduct,
-   updateProduct
+   updateProduct,
+   SearchProduct
 
 }
   
