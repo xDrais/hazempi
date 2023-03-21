@@ -55,6 +55,19 @@ const getAllProducts = asynHandler(async(req,res)=>{
 
 })
 
+const GetProductsById = asynHandler(  async (req, res) => {
+  try {
+    const product = await Product.find({ user: req.params.userId }).populate('user');
+    if (!product) {
+      return res.status(404).json({ message: 'product not found' });
+    }
+    res.json({ product });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 const deleteProduct = asynHandler(async (req, res) => {
   const product = await Product.findById(req.params.id)
 
@@ -123,7 +136,8 @@ module.exports = {
    getAllProducts,
    deleteProduct,
    updateProduct,
-   SearchProduct
+   SearchProduct,
+   GetProductsById
 
 }
   
