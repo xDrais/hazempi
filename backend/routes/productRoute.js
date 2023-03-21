@@ -1,8 +1,8 @@
 const path = require("path")
 const { v4 : uuid4 } = require('uuid');
 const multer = require('multer')
-const express = require('express')
-const { createProduct, getAllProducts, deleteProduct, updateProduct, SearchProduct } = require("../Controllers/productController");
+const express = require('express');
+const { createProduct, getAllProducts, deleteProduct, updateProduct, SearchProduct, GetProductsById } = require("../Controllers/productController");
 const router = express.Router()
 
 const storage = multer.diskStorage({
@@ -29,7 +29,8 @@ router.post('/createProduct',upload.single('imageProduct') ,createProduct),
 router.get('/getAll' ,getAllProducts),
 router.delete('/delete/:id' ,deleteProduct),
 router.put('/updateProduct/:id' ,updateProduct),
-router.get('/search/:key',SearchProduct)
+router.get('/search/:key',SearchProduct),
+router.get('/productById/:userId',GetProductsById)
 
 
 

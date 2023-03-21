@@ -141,7 +141,7 @@ import { getProducts } from "../../productredux/productaction";
                             <tr key={i.id}>
                             
                           <td><i className="fab fa-angular fa-lg text-danger me-3"></i>{i?.user?.firstName ?? 'No First Name'}</td>
-                          <td> {i.productName}</td> 
+                          <td> {i.name}</td> 
                           <td> {i.category}</td> 
                         <td>
                         {i.description}
@@ -172,7 +172,7 @@ import { getProducts } from "../../productredux/productaction";
                             <tr key={i.id}>
                             
                             <td><i className="fab fa-angular fa-lg text-danger me-3"></i>{i?.user?.firstName ?? 'No First Name'}</td>
-                            <td> {i.productName}</td> 
+                            <td> {i.name}</td> 
                           <td> {i.category}</td> 
                         <td>
                         {i.description}
