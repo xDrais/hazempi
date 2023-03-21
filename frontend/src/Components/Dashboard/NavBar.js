@@ -87,19 +87,15 @@ function NavBar  ()  {
           </li>
 
         
-          <li className="menu-item active">
-          {pathname === "/productdashboard" && (
-    <Link to="/productdashboard" className="menu-link active">
-      <i className="menu-icon tf-icons bx bx-user-circle"></i>
-      <div data-i18n="Analytics">Product</div>
-    </Link>
-  )}
-  {pathname === "/dashboard" && (
+    <li className={pathname === "/dashboard" ? 'menu-item active' : 'menu-item'}>
     <Link to="/dashboard" className="menu-link active">
       <i className="menu-icon tf-icons bx bx-user-circle"></i>
       <div data-i18n="Analytics">Admin</div>
     </Link>
-  )}
+  </li>
+          <li className="menu-item active">
+
+
   {pathname === `/sponsor/${id}` && (
     <Link to={`/sponsor/${id}`} className="menu-link active">
       <i className="menu-icon tf-icons bx bx-user-circle"></i>
@@ -115,6 +111,13 @@ function NavBar  ()  {
 </li>
 
 
+<li className={pathname === "/productdashboard" ? 'menu-item active' : 'menu-item'}>
+    <Link to="/productdashboard" className="menu-link active">
+      <i className="menu-icon tf-icons bx bx-user-circle"></i>
+      <div data-i18n="Analytics">Product</div>
+    </Link>
+
+</li>
 
 
         

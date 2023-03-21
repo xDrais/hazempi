@@ -46,7 +46,7 @@ const createProduct = asynHandler(async (req, res) => {
 
 const getAllProducts = asynHandler(async(req,res)=>{
     
-  const product = await Product.find( {})
+  const product = await Product.find( {}).populate('user');
   if (!product) {
       res.Error(404)
       throw new Error(" Product Not Found !!")
