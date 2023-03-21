@@ -5,7 +5,7 @@ const path = require("path");
 const createProduct = asynHandler(async (req, res) => {
  
       const {  
-        name ,
+        productName ,
         price , 
         category , 
         countInStock ,
@@ -20,7 +20,7 @@ const createProduct = asynHandler(async (req, res) => {
     }
      
     const product = await Product.create({
-      name ,
+      productName ,
             price , 
             user,
             category , 
@@ -31,7 +31,7 @@ const createProduct = asynHandler(async (req, res) => {
    if(product){
       res.status(201).json({
           _id: product.id,
-          name: product.name,
+          productName: product.productName,
           user : product.user,
           price: product.price,
           category: product.category,

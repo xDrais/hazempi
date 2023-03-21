@@ -93,7 +93,32 @@ const submitHandlerj = (e) => {
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABxElEQVRIidWUv27UQBCHv1m7ubsUpCf0EY9wXh/HKyBFugaq0PAEFKmQ8gKIhj9NhHSRDvEKR7y+gheAPtCeghRSIMs7FLeGBBzbR4IQv2bs0fzm2x2vF/53SV3SObcpIjtAoqpbIX0cRVFeluXMWnvyx4DFYnHXe78H9GsNImfAkyRJ5msDQvP9VR858t4fxnH8MTTeLopiIiKpiHhVfWytfdcZ4JzbBN4CfWPM0+Fw+LrO4Jy7DzwSka9FUdwbj8dfmgDmB2k1876IHF3WHMBaewA4Vd2I43inbQfm3LMF8N4ftpmAaYhJZ4Cq3gSoZt6kXq9X1Ww1FnJxB9pWXGm5XNYe70aAiHwOcbvNNBgMqppPnQHGGAdQFMWkzaSqkxBdZ0BZljMRORORNBzFWuV5/oDVxz0VkTdtgAuzzPN8DOyrqgEcMI2i6AOA9/52WHkS3p+PRqNXawEAnHN3RGRPVTcu8Zx676fGmIcAqvoyTdMXnQEA8/n8RviJEuBWSB8DOTCz1p44595X9U2QzsftV1VXxrnUgbX22bUBukKuBOgCuTKgDWLqLesp3LA/Vy3y7Tr6/qYsy3azLNv9K83/mb4D+s23Z1Qya+gAAAAASUVORK5CYII=" />
       </div>
     </div>
-    <div className="library_album">
+   
+    <div
+        id="create"
+        className={`create ${showCreate ? "show" : "hide"} ${showCreate ? "library_trending" : ""}`}
+      >     <h3 className="library_trending_title">Create your product </h3>
+
+          <input type="text" placeholder="Product name" id="name"   value={productName}
+                onChange={(e) => setName(e.target.value)}></input>
+          <input type="text" placeholder="Category"  value={category}
+                onChange={(e) => setCategory(e.target.value)}></input>
+          <input type="text" placeholder="Description"  value={description}
+                onChange={(e) => setDescription(e.target.value)}></input>
+          <input type="text" placeholder="How many are you going to sell ?"  value={countInStock}
+                onChange={(e) => setCountInStock(e.target.value)}></input>
+          <input type="text" placeholder="Price "  value={price} 
+                onChange={(e) => setPrice(e.target.value)}></input>
+                 <input type="file" placeholder="Price " id="imageProduct" name="imageProduct" 
+                onChange={(e) => setImageProduct(e.target.files[0])}></input> 
+<SpecialButton name="Create" onClick={submitHandlerj} type="submit"/>
+
+ </div>
+
+
+
+    <div id="list"        className={`create ${!showCreate ? "show" : "hide"} ${!showCreate ? "library_trending" : ""}`}
+>  <div className="library_album">
       <h3>User Dashboard</h3>
       <div className="library_album_albums">
         <div className="library_album_covers">
@@ -121,28 +146,8 @@ const submitHandlerj = (e) => {
           <span></span>
         </div>
       </div>
-    </div>
-    <div
-        id="create"
-        className={`create ${showCreate ? "show" : "hide"} ${showCreate ? "library_trending" : ""}`}
-      >     <h3 className="library_trending_title">Create your product </h3>
-
-          <input type="text" placeholder="Product name" id="name"   value={productName}
-                onChange={(e) => setName(e.target.value)}></input>
-          <input type="text" placeholder="Category"  value={category}
-                onChange={(e) => setCategory(e.target.value)}></input>
-          <input type="text" placeholder="Description"  value={description}
-                onChange={(e) => setDescription(e.target.value)}></input>
-          <input type="text" placeholder="How many are you going to sell ?"  value={countInStock}
-                onChange={(e) => setCountInStock(e.target.value)}></input>
-          <input type="text" placeholder="Price "  value={price} 
-                onChange={(e) => setPrice(e.target.value)}></input>
-                 <input type="file" placeholder="Price " id="imageProduct" name="imageProduct" 
-                onChange={(e) => setImageProduct(e.target.files[0])}></input> 
-<SpecialButton name="Create" onClick={submitHandlerj} type="submit"/>
-</div>
-    <div id="list"        className={`create ${!showCreate ? "show" : "hide"} ${!showCreate ? "library_trending" : ""}`}
->     <h3 className="library_trending_title">Review Your products</h3>
+    </div>     
+<h3 className="library_trending_title">Review Your products</h3>
 
       <table>
      {product.map((i , index) => {
@@ -152,10 +157,10 @@ const submitHandlerj = (e) => {
             <p>{index + 1}</p>
           </td>
           <td>
-          <img style={{width:"200px",height:"auto"}} src={`${process.env.PUBLIC_URL}/images/${i.imageProduct}`} alt="My Image" className="song_cover" />
+          <img style={{width:"70px",height:"auto"}} src={`${process.env.PUBLIC_URL}/images/${i.imageProduct}`} alt="My Image" className="song_cover" />
           </td>
           <td className="song">
-            <h4>{i.name}</h4>
+            <h4>{i.productName}</h4>
             <p> {i.description}</p>
           </td>
           <td>

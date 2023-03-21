@@ -11,11 +11,3 @@
   color: #264b2e;
   background-color: shift-color(#264b2e, -80%);
 }/*# sourceMappingURL=courses.css.map */
-.coursebg{
-  background-color: #3c3f30;
-  background-image: url(./olive.png);
-  color: wheat;
-}
-.detailcolor{
-  color: #b48f4ae4
-}

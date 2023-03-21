@@ -9,7 +9,7 @@ body {
 .yoo{
     background-size: cover ; 
     background-repeat: repeat ; 
-    background-image: url(https://images.unsplash.com/photo-1520408222757-6f9f95d87d5d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1580&q=80);
+    background-image: url(https://www.nichepursuits.com/wp-content/uploads/2022/12/Candl-1200x750.png);
 
     
 }
@@ -220,11 +220,20 @@ background: rgba(255, 255, 255, 0.089);
 /* ------------------ Library (part 3 )------------------- */
 .library_trending {
   width: 850px;
-  height: 430px;
+  height: auto;
   padding: 0 20px;
   overflow-y: scroll;
   scroll-behavior: smooth;
+  max-height: 700px;
 }
+
+.library_trending_create {
+    width: 850px;
+    height: 800px;
+    padding: 0 20px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+  }
 
 .library_trending::-webkit-scrollbar {
   width: 10px;
@@ -282,7 +291,7 @@ background: rgba(255, 255, 255, 0.089);
   color: white;
 
   gap: 5px;
-  margin-left: -15%;
+  margin-left: -5%;
 }
 .off{
     display: none;
