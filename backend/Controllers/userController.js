@@ -312,7 +312,8 @@ const logIn = asynHandler( async (req,res)=>{
                 verify : user.verify, 
                 bloque : user.bloque, 
                 dateOfBirth : user.dateOfBirth, 
-                token: generateToken(user._id)
+                token: generateToken(user._id),
+                certified : user.certified
             })
             
         }else{

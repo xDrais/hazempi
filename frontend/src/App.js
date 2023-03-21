@@ -13,6 +13,7 @@ import UpdateUser from './page/Modifyaccount/updateUser'
 import UpdateCoach from './page/Modifyaccount/updateCoach'
 import { useDispatch , useSelector , } from "react-redux";
 import axios from "axios";
+import UserDashboard from './page/UserDashboard/UserDashboard';
 const ForgetPassword =lazy(() => import('./page/ForgetPassword'));
 const ResetPassword = lazy(()=>import('./page/ResetPassword'))
 const Profile = lazy(()=>import('./page/Profile'))
@@ -74,7 +75,9 @@ function App() {
     <Route path="/userupdate" element={<UpdateUser />} /> 
     <Route exact  path="/sponsor/:id" element={ <GetSponsor/>} />
     <Route exact  path="/coach/:id" element={<GetCoach/>} />
-    <Route path="/updatecoach" element={<UpdateCoach></UpdateCoach> } /> 
+    <Route path="/updatecoach" element={<UpdateCoach></UpdateCoach> } />
+    <Route path="/userdashboard" element={<><div className='yo'><Navbarr /> <UserDashboard></UserDashboard></div></> } /> 
+ 
     <Route path="/verify-email/:emailToken" element={<><Navbarr /> <Login/> </>} />
         </Routes>)}
     </Router>
