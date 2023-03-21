@@ -88,6 +88,12 @@ function NavBar  ()  {
 
         
           <li className="menu-item active">
+          {pathname === "/productdashboard" && (
+    <Link to="/productdashboard" className="menu-link active">
+      <i className="menu-icon tf-icons bx bx-user-circle"></i>
+      <div data-i18n="Analytics">Product</div>
+    </Link>
+  )}
   {pathname === "/dashboard" && (
     <Link to="/dashboard" className="menu-link active">
       <i className="menu-icon tf-icons bx bx-user-circle"></i>

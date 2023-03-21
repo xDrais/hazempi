@@ -5,7 +5,7 @@ const path = require("path");
 const createProduct = asynHandler(async (req, res) => {
  
       const {  
-        name ,
+        productName ,
         price , 
         category , 
         countInStock ,
@@ -16,7 +16,7 @@ const createProduct = asynHandler(async (req, res) => {
       
      
     const product = await Product.create({
-            name ,
+      productName ,
             price , 
             user,
             category , 
@@ -27,7 +27,7 @@ const createProduct = asynHandler(async (req, res) => {
    if(product){
       res.status(201).json({
           _id: product.id,
-          name: product.name,
+          productName: product.productName,
           user : product.user,
           price: product.price,
           category: product.category,
@@ -69,7 +69,7 @@ const deleteProduct = asynHandler(async (req, res) => {
 
 const updateProduct = asynHandler(async (req, res) => {
   const {
-    name,
+    productName,
     price,
     description,
     category,
@@ -79,7 +79,7 @@ const updateProduct = asynHandler(async (req, res) => {
   const product = await Product.findById(req.params.id)
 
   if (product) {
-    product.name = name
+    product.productName = productName
     product.price = price
     product.description = description
     product.category = category
@@ -88,7 +88,7 @@ const updateProduct = asynHandler(async (req, res) => {
     const updatedProduct = await product.save()
     res.status(201).json({
       _id: product.id,
-      name: product.name,
+      productName: product.productName,
       user : product.user,
       price: product.price,
       category: product.category,
@@ -107,12 +107,12 @@ const SearchProduct = asynHandler( async (req, res) => {
   
   const productResults = await Product.find({
     $or: [
-      { name: { $regex:  new RegExp(key, 'i')  } },
+      { productName: { $regex:  new RegExp(key, 'i')  } },
       { category: { $regex:  new RegExp(key, 'i')  } },
       { description: { $regex:  new RegExp(key, 'i')  } },
     ],
   });
-  
+
   const results = productResults;
   
   res.send(results);

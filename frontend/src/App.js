@@ -4,6 +4,7 @@ import {BrowserRouter as Router,Route,Routes,useNavigate} from 'react-router-dom
 import Register from './page/Register/register';
 import Dashboard from './page/Dashboard';
 import GetSponsor from './page/GetSponsor ';
+import ProductDashboard from './page/Product/ProductDashboard';
 import GetCoach from './page/GetCoach';
 import Navbarr from './Components/Navbar/navbar';
 import Loader from './Components/Loader';
@@ -77,6 +78,7 @@ function App() {
     <Route exact  path="/coach/:id" element={<GetCoach/>} />
     <Route path="/updatecoach" element={<UpdateCoach></UpdateCoach> } />
     <Route path="/userdashboard" element={<><div className='yo'><Navbarr /> <UserDashboard></UserDashboard></div></> } /> 
+    <Route path="/productdashboard" element={<ProductDashboard/>} />
  
     <Route path="/verify-email/:emailToken" element={<><Navbarr /> <Login/> </>} />
         </Routes>)}
