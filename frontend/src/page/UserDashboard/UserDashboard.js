@@ -17,8 +17,9 @@ function UserDashboard(){
 
     return(
 
-        <>
-        <main style={{marginTop:"500px"}}className="mp_main">
+        <><body className="yoo">
+        <main className="mp_main">
+            <div style={{marginTop:"500px"}}>
   <div className="mp_sidebar">
     <div className="sidebar_logo">
       <img src={process.env.PUBLIC_URL + "/images/logo.png"}/>
@@ -39,7 +40,7 @@ function UserDashboard(){
       </div>
     </div>
     <div className="library_album">
-      <h3>Categories of products</h3>
+      <h3>User Dashboard</h3>
       <div className="library_album_albums">
         <div className="library_album_covers">
           <img src="https://media.smallbiztrends.com/2021/05/beekeeping.png" alt="" className="album_cover" />
@@ -67,11 +68,11 @@ function UserDashboard(){
         </div>
       </div>
     </div>
-    <h3 className="library_trending_title">Your products</h3>
     <div
         id="create"
         className={`create ${showCreate ? "show" : "hide"} ${showCreate ? "library_trending" : ""}`}
-      > 
+      >     <h3 className="library_trending_title">Create your product </h3>
+
           <input type="text" placeholder="Product name"></input>
           <input type="text" placeholder="Product name"></input>
           <input type="text" placeholder="Product name"></input>
@@ -81,7 +82,8 @@ function UserDashboard(){
 
 </div>
     <div id="list"        className={`create ${!showCreate ? "show" : "hide"} ${!showCreate ? "library_trending" : ""}`}
->
+>     <h3 className="library_trending_title">Review Your products</h3>
+
       <table>
         <tr>
           <td>
@@ -256,12 +258,12 @@ function UserDashboard(){
     </div>
   </div>
   <div className="mp_playlist">
-    <h3>Tips on how to sell your products better</h3>
+    <h3>This is your mini Shop!</h3>
     <div className="mp_playlist_content">
       <div className="mp_playlist_song">
 <div >
 <img src={process.env.PUBLIC_URL + "/images/logo.png"}/>
-<p>Learn these tips so that you can sell your product as fast as you can!</p>
+<p>This is your Dashboard : Here you can sell and review your products!</p>
 <ol>
     <li>Focus on one craft</li>
     <li>Be patient</li>
@@ -281,8 +283,8 @@ function UserDashboard(){
         
       </div>
       <hr />
-    
-</main>
+      </div>
+</main> </body>
         </>
     )
 }

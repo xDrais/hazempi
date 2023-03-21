@@ -1,18 +1,21 @@
 
 
 body {
-    width: 100vw;
-    height: 100vh;
+   
  overflow-x: hidden;
-    background-image: url(https://images.unsplash.com/photo-1520408222757-6f9f95d87d5d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1580&q=80);
-    background-size: cover ; 
-    background-repeat: no-repeat;
-}
+
   
+}
+.yoo{
+    background-size: cover ; 
+    background-repeat: repeat ; 
+    background-image: url(https://images.unsplash.com/photo-1520408222757-6f9f95d87d5d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1580&q=80);
+
+    
+}
 
 .mp_main {
   
-
   position: relative;
   top: 50%;
   left: 50%;
@@ -305,7 +308,7 @@ background-image: url(../../../public/images/logo.png);
 
 .library_trending table tr .song p {
   font-size: 13px;
-  color: rgb(83, 69, 6);
+  color: rgb(209, 199, 156);
 }
 
 .library_trending .song_cover {

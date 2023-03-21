@@ -4,6 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import {userLoginReducer, userReducers, userRegisterReducer,
   forgetPassword,resetPassword,
   sponsorReducer,coachReducer} from '../userredux/userreducer'
+import { productAddReducer } from '../productredux/productreducer';
 //el store houwa objet bch ykounou fih des données partagées bin el components lkol
 
 const reducer = combineReducers({
@@ -15,6 +16,7 @@ const reducer = combineReducers({
     resetpass: resetPassword,
     sponsorReducer:sponsorReducer,
     coachReducer:coachReducer,
+    productAddReducer : productAddReducer
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null 
