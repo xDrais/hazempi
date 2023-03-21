@@ -145,7 +145,7 @@ const submitHandlerj = (e) => {
           <img style={{width:"200px",height:"auto"}} src={`${process.env.PUBLIC_URL}/images/${i.imageProduct}`} alt="My Image" className="song_cover" />
           </td>
           <td className="song">
-            <h4>{i.productName}</h4>
+            <h4>{i.name}</h4>
             <p> {i.description}</p>
           </td>
           <td>

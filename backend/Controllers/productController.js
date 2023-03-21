@@ -5,7 +5,7 @@ const path = require("path");
 const createProduct = asynHandler(async (req, res) => {
  
       const {  
-        productName ,
+        name ,
         price , 
         category , 
         countInStock ,
@@ -16,7 +16,7 @@ const createProduct = asynHandler(async (req, res) => {
       
      
     const product = await Product.create({
-      productName ,
+      name ,
             price , 
             user,
             category , 
@@ -27,7 +27,7 @@ const createProduct = asynHandler(async (req, res) => {
    if(product){
       res.status(201).json({
           _id: product.id,
-          productName: product.productName,
+          name: product.name,
           user : product.user,
           price: product.price,
           category: product.category,
@@ -82,7 +82,7 @@ const deleteProduct = asynHandler(async (req, res) => {
 
 const updateProduct = asynHandler(async (req, res) => {
   const {
-    productName,
+    name,
     price,
     description,
     category,
@@ -92,7 +92,7 @@ const updateProduct = asynHandler(async (req, res) => {
   const product = await Product.findById(req.params.id)
 
   if (product) {
-    product.productName = productName
+    product.name = name
     product.price = price
     product.description = description
     product.category = category
@@ -101,7 +101,7 @@ const updateProduct = asynHandler(async (req, res) => {
     const updatedProduct = await product.save()
     res.status(201).json({
       _id: product.id,
-      productName: product.productName,
+      name: product.name,
       user : product.user,
       price: product.price,
       category: product.category,
@@ -120,7 +120,7 @@ const SearchProduct = asynHandler( async (req, res) => {
   
   const productResults = await Product.find({
     $or: [
-      { productName: { $regex:  new RegExp(key, 'i')  } },
+      { name: { $regex:  new RegExp(key, 'i')  } },
       { category: { $regex:  new RegExp(key, 'i')  } },
       { description: { $regex:  new RegExp(key, 'i')  } },
     ],
