@@ -5,7 +5,7 @@ const path = require("path");
 const createProduct = asynHandler(async (req, res) => {
  
       const {  
-        name ,
+        productName ,
         price , 
         category , 
         countInStock ,
@@ -16,7 +16,7 @@ const createProduct = asynHandler(async (req, res) => {
       
      
     const product = await Product.create({
-            name ,
+      productName ,
             price , 
             user,
             category , 
@@ -27,7 +27,7 @@ const createProduct = asynHandler(async (req, res) => {
    if(product){
       res.status(201).json({
           _id: product.id,
-          name: product.name,
+          productName: product.productName,
           user : product.user,
           price: product.price,
           category: product.category,
@@ -46,7 +46,7 @@ const createProduct = asynHandler(async (req, res) => {
 
 const getAllProducts = asynHandler(async(req,res)=>{
     
-  const product = await Product.find( {})
+  const product = await Product.find( {}).populate('user');
   if (!product) {
       res.Error(404)
       throw new Error(" Product Not Found !!")
@@ -69,7 +69,7 @@ const deleteProduct = asynHandler(async (req, res) => {
 
 const updateProduct = asynHandler(async (req, res) => {
   const {
-    name,
+    productName,
     price,
     description,
     category,
@@ -79,7 +79,7 @@ const updateProduct = asynHandler(async (req, res) => {
   const product = await Product.findById(req.params.id)
 
   if (product) {
-    product.name = name
+    product.productName = productName
     product.price = price
     product.description = description
     product.category = category
@@ -88,7 +88,7 @@ const updateProduct = asynHandler(async (req, res) => {
     const updatedProduct = await product.save()
     res.status(201).json({
       _id: product.id,
-      name: product.name,
+      productName: product.productName,
       user : product.user,
       price: product.price,
       category: product.category,
@@ -102,11 +102,28 @@ const updateProduct = asynHandler(async (req, res) => {
 })
 
 
+const SearchProduct = asynHandler( async (req, res) => {
+  const key = req.params.key;
+  
+  const productResults = await Product.find({
+    $or: [
+      { productName: { $regex:  new RegExp(key, 'i')  } },
+      { category: { $regex:  new RegExp(key, 'i')  } },
+      { description: { $regex:  new RegExp(key, 'i')  } },
+    ],
+  });
+
+  const results = productResults;
+  
+  res.send(results);
+});
+
 module.exports = { 
    createProduct,
    getAllProducts,
    deleteProduct,
-   updateProduct
+   updateProduct,
+   SearchProduct
 
 }
   
