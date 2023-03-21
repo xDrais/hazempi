@@ -16,7 +16,7 @@ const reducer = combineReducers({
     resetpass: resetPassword,
     sponsorReducer:sponsorReducer,
     coachReducer:coachReducer,
-    productAddReducer : productAddReducer,
+    productAdd : productAddReducer,
     productGetReducer : productGetReducer
 })
 

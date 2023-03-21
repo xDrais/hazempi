@@ -1,7 +1,8 @@
-import axios from "axios";
-import { GET_PRODUCT_SUCCESS, USER_PRODUCTADD_FAIL, USER_PRODUCTADD_REQUEST, USER_PRODUCTADD_SUCCESS } from "./productconstant";
+import axios from 'axios'
+import { PRODUCT_ADD_FAIL, PRODUCT_ADD_REQUEST, PRODUCT_ADD_SUCCESS,GET_PRODUCT_SUCCESS } from './productconstant';
 
-export const productadd = ({ name ,
+export const productadd = ({ 
+    name ,
     price , 
     user,
     category , 
@@ -9,11 +10,11 @@ export const productadd = ({ name ,
     description}) => async (dispatch)=>{
     try {
           dispatch({
-              type:USER_PRODUCTADD_REQUEST
+              type:PRODUCT_ADD_REQUEST
           })
           const config = {
               headers:{
-                  'Content-Type' : 'multipart/form-data'
+                  'Content-Type' : 'application/json'
               }
           }
   
@@ -28,7 +29,7 @@ export const productadd = ({ name ,
             );
   
           dispatch({
-              type : USER_PRODUCTADD_SUCCESS,
+              type : PRODUCT_ADD_SUCCESS,
               payload : data
           })
        
@@ -37,12 +38,12 @@ export const productadd = ({ name ,
          } catch(error){
         if (error.response && error.response.data.message === 'Product with this name already exists') {
             dispatch({
-                type: USER_PRODUCTADD_FAIL,
+                type: PRODUCT_ADD_FAIL,
                 payload: error.response.data.message
             });
         } else {
             dispatch({
-                type: USER_PRODUCTADD_FAIL,
+                type: PRODUCT_ADD_FAIL,
                 payload: error.response && error.response.data.message
                     ? error.response.data.data.message
                     : error.message
@@ -51,7 +52,6 @@ export const productadd = ({ name ,
         console.log(error.response.data.message);
     }
   }
-
   export const getProducts = () => async (dispatch) => {
     try {
       const response = await fetch('http://localhost:5000/product/getAll', {
