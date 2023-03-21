@@ -1,13 +1,13 @@
-import { USER_PRODUCTADD_FAIL, USER_PRODUCTADD_REQUEST, USER_PRODUCTADD_SUCCESS } from "./productconstant"
+import { PRODUCT_ADD_FAIL, PRODUCT_ADD_REQUEST, PRODUCT_ADD_SUCCESS } from "./productconstant"
 
 export const productAddReducer=(state={},action)=>{
     // eslint-disable-next-line default-case
     switch (action.type) {
-        case USER_PRODUCTADD_REQUEST : 
+        case PRODUCT_ADD_REQUEST : 
             return {loading : true}
-        case USER_PRODUCTADD_SUCCESS : 
+        case PRODUCT_ADD_SUCCESS : 
             return {loading : false ,messageSuccess : "Product added!"}
-        case USER_PRODUCTADD_FAIL :
+        case PRODUCT_ADD_FAIL :
             return {loading : false , error: action.payload }        
         default:
             return state    

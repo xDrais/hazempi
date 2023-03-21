@@ -88,7 +88,7 @@ const Register = () => {
   const dispatch = useDispatch();
   //use selector tjibli fel reducer eli houwa userRegister eml store 
   const userRegister = useSelector((state) => state.userRegister);
-  const { loading, error, userInfo,messageSuccess } = userRegister;
+  const { loading, error,messageSuccess } = userRegister;
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };

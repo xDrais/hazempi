@@ -16,7 +16,7 @@ const reducer = combineReducers({
     resetpass: resetPassword,
     sponsorReducer:sponsorReducer,
     coachReducer:coachReducer,
-    productAddReducer : productAddReducer
+    productAdd : productAddReducer
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null 

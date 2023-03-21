@@ -4,9 +4,39 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import SpecialButton from "../../Components/Button/button";
+import { useDispatch , useSelector , } from "react-redux";
+import { productadd } from "../../productredux/productaction";
 function UserDashboard(){
+    const userLogin = useSelector(state => state.userLogin)
+    const {userInfo } = userLogin
+    const productAdd = useSelector((state) => state.productAdd);
+    const { loading, error,messageSuccess } = productAdd;
+
     const [showCreate, setShowCreate] = useState(false);
 
+    const [name,setName]=useState("");
+    const [description, setDescription]=useState("")
+    const [price,setPrice]=useState("")
+    const [category,setCategory]=useState("")
+    const [countInStock,setCountInStock]=useState("")
+    const[user,setUser]=useState("");
+    const dispatch = useDispatch();
+
+const submitHandlerj = (e) => {
+    e.preventDefault();
+    dispatch(
+      productadd(
+       {  name ,
+        price ,
+        user:userInfo._id,
+        category , 
+        countInStock ,
+        description}
+        
+      )
+    );
+    console.log(name,price,user,category,countInStock,description)
+  };
   const handleCreateClick = () => {
     setShowCreate(true);
   };
@@ -73,13 +103,17 @@ function UserDashboard(){
         className={`create ${showCreate ? "show" : "hide"} ${showCreate ? "library_trending" : ""}`}
       >     <h3 className="library_trending_title">Create your product </h3>
 
-          <input type="text" placeholder="Product name"></input>
-          <input type="text" placeholder="Product name"></input>
-          <input type="text" placeholder="Product name"></input>
-          <input type="text" placeholder="Product name"></input>
-          <input type="file" placeholder="Product name"></input> 
-          <SpecialButton name="Create Product" ></SpecialButton>
-
+          <input type="text" placeholder="Product name" id="name"   value={name}
+                onChange={(e) => setName(e.target.value)}></input>
+          <input type="text" placeholder="Category"  value={category}
+                onChange={(e) => setCategory(e.target.value)}></input>
+          <input type="text" placeholder="Description"  value={description}
+                onChange={(e) => setDescription(e.target.value)}></input>
+          <input type="text" placeholder="How many are you going to sell ?"  value={countInStock}
+                onChange={(e) => setCountInStock(e.target.value)}></input>
+          <input type="text" placeholder="Price "  value={price}
+                onChange={(e) => setPrice(e.target.value)}></input>
+<SpecialButton name="Create" onClick={submitHandlerj} type="submit"/>
 </div>
     <div id="list"        className={`create ${!showCreate ? "show" : "hide"} ${!showCreate ? "library_trending" : ""}`}
 >     <h3 className="library_trending_title">Review Your products</h3>
@@ -258,7 +292,7 @@ function UserDashboard(){
     </div>
   </div>
   <div className="mp_playlist">
-    <h3>This is your mini Shop!</h3>
+    <h3>Welcome {userInfo.firstName} to your mini Shop!</h3>
     <div className="mp_playlist_content">
       <div className="mp_playlist_song">
 <div >
@@ -270,6 +304,8 @@ function UserDashboard(){
     <li>Take courses on marketing</li>
     <li>Share on social media</li>
     <li>el section hedhi bch twali khir matkhafouch</li>
+    <SpecialButton name="tips"></SpecialButton>
+
 
 
 
