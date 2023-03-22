@@ -12,8 +12,12 @@ const createProduct = asynHandler(async (req, res) => {
         description,
         user
       } = req.body
+      const  imageProduct =req.file.filename 
 
-      
+      if (!productName || isNaN(price) || !category || isNaN(countInStock) || !description) {
+        res.json({"message":"Please add  all fields"}).status(402)
+            throw new Error('Please add  all fields')
+    }
      
     const product = await Product.create({
       productName ,
@@ -21,9 +25,9 @@ const createProduct = asynHandler(async (req, res) => {
             user,
             category , 
             countInStock ,
-            description
+            description,imageProduct
     })
-
+   
    if(product){
       res.status(201).json({
           _id: product.id,
@@ -32,9 +36,11 @@ const createProduct = asynHandler(async (req, res) => {
           price: product.price,
           category: product.category,
           countInStock: product.countInStock,
-          description: product.description
+          description: product.description,
+          imageProduct: product.imageProduct
       })
   }
+ 
   else{
       res.status(400)
       throw new Error('Invalid user data')
@@ -55,6 +61,19 @@ const getAllProducts = asynHandler(async(req,res)=>{
 
 })
 
+const GetProductsById = asynHandler(  async (req, res) => {
+  try {
+    const product = await Product.find({ user: req.params.userId }).populate('user');
+    if (!product) {
+      return res.status(404).json({ message: 'product not found' });
+    }
+    res.json({ product });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 const deleteProduct = asynHandler(async (req, res) => {
   const product = await Product.findById(req.params.id)
 
@@ -69,7 +88,7 @@ const deleteProduct = asynHandler(async (req, res) => {
 
 const updateProduct = asynHandler(async (req, res) => {
   const {
-    productName,
+    name,
     price,
     description,
     category,
@@ -79,7 +98,7 @@ const updateProduct = asynHandler(async (req, res) => {
   const product = await Product.findById(req.params.id)
 
   if (product) {
-    product.productName = productName
+    product.name = name
     product.price = price
     product.description = description
     product.category = category
@@ -88,7 +107,7 @@ const updateProduct = asynHandler(async (req, res) => {
     const updatedProduct = await product.save()
     res.status(201).json({
       _id: product.id,
-      productName: product.productName,
+      name: product.name,
       user : product.user,
       price: product.price,
       category: product.category,
@@ -107,7 +126,7 @@ const SearchProduct = asynHandler( async (req, res) => {
   
   const productResults = await Product.find({
     $or: [
-      { productName: { $regex:  new RegExp(key, 'i')  } },
+      { name: { $regex:  new RegExp(key, 'i')  } },
       { category: { $regex:  new RegExp(key, 'i')  } },
       { description: { $regex:  new RegExp(key, 'i')  } },
     ],
@@ -123,7 +142,8 @@ module.exports = {
    getAllProducts,
    deleteProduct,
    updateProduct,
-   SearchProduct
+   SearchProduct,
+   GetProductsById
 
 }
   
