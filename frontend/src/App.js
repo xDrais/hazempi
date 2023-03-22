@@ -73,10 +73,10 @@ function App() {
     <Route path="/profile" element={<> <Navbarr /> <Profile/> </>} />
     <Route path="/" element={<><Navbarr /><Home/></>} />
     <Route path="/dashboard" element={<Dashboard/>} />
-    <Route path="/userupdate" element={<UpdateUser />} /> 
+    <Route path="/userupdate" element={<> <Navbarr /> <UpdateUser /> </> } /> 
     <Route exact  path="/sponsor/:id" element={ <GetSponsor/>} />
     <Route exact  path="/coach/:id" element={<GetCoach/>} />
-    <Route path="/updatecoach" element={<UpdateCoach></UpdateCoach> } />
+    <Route path="/coachupdate" element={<> <Navbarr /> <UpdateCoach></UpdateCoach> </>} />
     <Route path="/userdashboard" element={<><div className='yo'><Navbarr /> <UserDashboard></UserDashboard></div></> } /> 
     <Route path="/productdashboard" element={<ProductDashboard/>} />
  

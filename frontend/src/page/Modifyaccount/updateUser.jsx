@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate ,redirect} from "react-router-dom";
 import { Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import video from "../../Components/HeroSection/pottery2.mp4";
 import "../../Components/HeroSection/HeroSection.css";
 import "../Register/register.css"
+import { Logout } from '../../userredux/useraction';
 
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import {
+  ArrowWrapperLeft,
+  ArrowWrapperRight,
+} from "../../Components/Arrows/Arrows";
 import SpecialButton from "../../Components/Button/button";
 
 import Message from "../../Components/Message";
@@ -41,8 +46,16 @@ const UpdateUser = () => {
   const [validEmail, setValidEmail] = useState(false);
   const [validConfirmPassword, setValidConfirmPassword] = useState(false);
   const [validPassword, setValidPassword] = useState(false);
+  const [validCin, setValidCin] = useState(false);
+  const [cin, setCin] = useState("");
 
+  const [showPassword, setShowPassword] = useState(false);
 
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+  //steps taa el form
+  const [step, setStep] = useState(1);
 
     // Clear the input field when the user interacts with it
 
@@ -67,23 +80,29 @@ const UpdateUser = () => {
     const submitHandler=async(e)=>{
       e.preventDefault();
 
-       // dispatch(update(firstName,lastName,phone,email,imageUrl,password,dateOfBirth))
+      console.log(imageUrl);
 
-       let result = await fetch(`http://localhost:5000/api/user/updateUser/${userInfo._id}`,{
-        method:"put",
-        body:JSON.stringify({firstName,lastName,phone,email,imageUrl,password,dateOfBirth}),
-        headers:{
-            "Content-type":"application/json"
-        }
-       
-    })
+const id=userInfo._id
 
+      dispatch(
+        update(
+         { firstName,
+          lastName,
+          phone,
+          cin,
+          dateOfBirth,
+          imageUrl,
+          email,
+          password,
+          id
+         }
+        )
+      );
+      navigate("/profile"); 
 
-    result = await result.json();
-    console.warn(result)
+    
 
-
-    }
+    };
 
 
 
@@ -97,6 +116,29 @@ const UpdateUser = () => {
     const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 
+
+
+
+
+
+     //Fonction Onclick taa el previous step
+  const handlePrevStep = () => {
+    if (step === 2) {
+      setStep(1);
+    } else if (step === 1) {
+      setStep(2);
+    } 
+     else setStep((prevStep) => prevStep - 1);
+  }
+  //Fonction Onclick taa el next step
+
+  const handleNextStep = () => {
+    if (step === 1) {
+      setStep(2);
+    } else if (step === 2) {
+      setStep(1);
+    } else setStep((prevStep) => prevStep + 1);
+  };
 
 {/* use effects taa controle de saisie */}
 
@@ -137,9 +179,12 @@ const UpdateUser = () => {
 
   useEffect(() => {
     const result = IMAGE_REGEX.test(imageUrl.name);
-
+    console.log(result);
+    console.log(imageUrl.name);
     setValidImageUrl(result);
   }, [imageUrl]);
+
+  
   useEffect(() => {
     if (dateOfBirth) {
       const inputDate = new Date(dateOfBirth);
@@ -160,8 +205,8 @@ const UpdateUser = () => {
   return (
     <>   
 
-      {/* el video taa el background */}
-      <div className="hero-container">
+     {/* el video taa el background */}
+     <div className="hero-container">
         <video src={video} autoPlay loop muted />
         {/* el message taa el controle de saisie w el loader   */}
        
@@ -176,22 +221,34 @@ const UpdateUser = () => {
           className="register"
           onSubmit={submitHandler}
           encType="multipart/form-data"
-          
         >
           <div
             align="center"
             style={{ marginBottom: "20px", marginTop: "-20px" }}
           >
-            {" "}
-            <h1>Update User</h1>{" "}
+          
           </div>
-            <label>First Name</label>
+          {/* les boutons mtaa previous w next */}
+
+          <ArrowWrapperLeft
+            onClick={handlePrevStep}
+          />
+          <ArrowWrapperRight
+            onClick={handleNextStep}
+   
+          />
+
+          {/* step lowla mtaa el form eli fiha el info taa simple user */}
+          {step === 1 && (
+            <>
+             
+            <h1>Update account</h1>
               <input
                 id="firstName"
                 type="text"
                 placeholder={ userInfo.firstName}
+
                 value={firstName}
-                
                 onChange={(e) => setFirstName(e.target.value)}
               ></input>
 
@@ -203,12 +260,11 @@ const UpdateUser = () => {
                 characters or numbers
               </p>
 
-              <label>Last Name </label>
               <input
                 id="lastName"
-                
-                type="text"
                 placeholder={userInfo.lastName}
+
+                type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
               ></input>
@@ -219,13 +275,12 @@ const UpdateUser = () => {
                 Last Name is at least 3 letters and cannot contain special
                 characters or numbers
               </p>
-              <label>Email</label>
               <input
                 id="email"
-                
-                type="email"
                 placeholder={userInfo.email}
-                 value={email}
+
+                type="email"
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
               ></input>
               <p
@@ -234,19 +289,51 @@ const UpdateUser = () => {
               >
                 Enter a valid e-mail adress{" "}
               </p>
-              <label>Password</label>
+
               <input
                 id="password"
-                type="password"
-             
-                
-                placeholder="change password"
+                type={showPassword ? "text" : "password"}
+                placeholder="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               ></input>
-             
-              <label>Phone</label>
+
+<div className="visibility-icon" onClick={toggleShowPassword}>
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </div>
+            
+              <p
+                id="notepwd"
+                className={password && !validPassword ? "none" : "hide"}
+              >
+                Password needs to contain at least 1 UpperCase letter , 1
+                LowerCase letter, 1 Number and at least 8{" "}
+              </p>
+
               <input
+                id="cin"
+                type="text"
+                placeholder={userInfo.cin}
+                
+                value={cin}
+                onChange={(e) => setCin(e.target.value)}
+              ></input>
+              <p id="noteCIN" className={cin && !validCin ? "none" : "hide"}>
+                Cin begins with 0 or 1 and is 8 digits long{" "}
+              </p>
+
+         
+       
+             
+            </>
+          )}
+
+
+          {/* step 5 mtaa terms of use w submit simple user */}
+
+          {step === 2 && (
+            <>
+     <input
                 id="phone"
                 type="phone"
                 placeholder={userInfo.phone}
@@ -260,17 +347,24 @@ const UpdateUser = () => {
               >
                 Phone contains 8 digits{" "}
               </p>
-
-
-              <label>Date Of Birth</label>
+              {dateOfBirth ? (
                 <input
                   id="dateOfBirth"
-                  type="date"  
-                  
+                  type="date"
+                  value={dateOfBirth} 
                   onFocus={handleInputFocus}
                   onChange={(event) => setDateOfBirth(event.target.value)}
                 />
-              
+              ) : (
+                <input
+                  id="dateOfBirth"
+                  type="text"
+                  placeholder={userInfo.dateOfBirth}
+                  onFocus={handleInputFocus}
+                  onChange={(event) => setDateOfBirth(event.target.value)}
+                />
+              )}
+             
 
               <p
                 id="noteedate"
@@ -279,12 +373,10 @@ const UpdateUser = () => {
                 You need to be at least 18 years old{" "}
               </p>
 
-              <label>Profile Picture</label>
-              <input
+                <input
                 id="imageUrl"
                 type="file"
                 name="imageUrl"
-                value={imageUrl}
                 accept=".png, .jpg, .jpeg"
                 onChange={(e) => setImageUrl(e.target.files[0])}
               ></input>
@@ -295,15 +387,18 @@ const UpdateUser = () => {
               >
                 Enter Valid image type : png , jpg or jpeg{" "}
               </p>
-
               <Button
                 style={{ marginTop: "5px" }}
                 type="submit"
               >
-               Update 
+                 Update 
               </Button>
+            </>
+          )}
         </form>
-     </div>
+        {/* fin form */}
+      </div>{" "}
+      {/* fin video background */}
       </>
   )
 }
