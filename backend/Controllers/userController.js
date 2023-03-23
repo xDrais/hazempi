@@ -466,15 +466,19 @@ const makeAdmin = asynHandler( async(req,res)  =>{
 const updateUser = asynHandler(async(req,res)=>{
   const {  firstName , lastName ,phone, email ,password,dateOfBirth,cin,} = req.body 
 
+  const  imageUrl =req.file.filename 
 
-  
+
+
   const user = await User.findById( req.params.id  )
-  if(!req.file){
-   
-    imageUrl = user.imageUrl
+  if(req.file.filename.length>0 ){
+    const  imageUrl =req.file.filename 
+
+
   }
   else{
-  const  imageUrl =req.file.filename 
+    const imageUrl = user.imageUrl
+
 }
   if (password) {
       
