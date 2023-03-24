@@ -12,12 +12,11 @@ import { getProducts } from "../../productredux/productaction";
 
 
 
- function ProductDashboard  (props) {
+ function ProductDashboard  ({match}) {
   const [refresh, setRefresh] = useState(false);
   const dispatch = useDispatch();
   const products = useSelector((state) => state.productGetReducer.products);
   const [searchResults, setSearchResults] = useState([]);
-
   const handleSearch = async (key) => {
     
     try {
@@ -33,6 +32,7 @@ import { getProducts } from "../../productredux/productaction";
       console.error(error);
     }
   };
+  console.log(products)
 
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 5;
@@ -186,7 +186,8 @@ import { getProducts } from "../../productredux/productaction";
                         <td>
                         <img style={{width:"200px",height:"auto"}} src={`${process.env.PUBLIC_URL}/images/${i.imageProduct}`} alt="My Image" />
                         </td>
-                                               
+                        <td><Link to={`/productdetail/${i._id}`} key={i._id} > detail </Link>
+                        </td>
                         </tr>
                         )
                       })} 

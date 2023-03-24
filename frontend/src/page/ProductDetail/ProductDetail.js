@@ -1,6 +1,21 @@
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "./ProductDetail.css"
+import { productDetails } from "../../productredux/productaction";
+import { useParams } from "react-router-dom";
+import mongoose from "mongoose";
+import { useRouteMatch } from 'react-router-dom';
 
-function ProductDetail(){
+
+const ProductDetail=({match})=>{
+    const dispatch= useDispatch()
+    const products = useSelector((state) => state.productGetReducer.products);
+    const [searchResults, setSearchResults] = useState([]);
+
+    
+
+    
+
     return (
         <><body className="bodydetail">
         <div class="container1">
@@ -13,7 +28,7 @@ function ProductDetail(){
     <div class="three"></div>
     <div class="four"></div>
   </div>
-  <p class="pick pdetail">choose size</p>
+  {/* <p class="pick pdetail">choose size</p>
   <div class="sizes">
     <div class="size">5</div>
     <div class="size">6</div>
@@ -23,11 +38,11 @@ function ProductDetail(){
     <div class="size">10</div>
     <div class="size">11</div>
     <div class="size">12</div>
-  </div>
-  <div class="product">
-    <p className="pdetail">Women's Running Shoe</p>
+  </div> */}
+  <div class="product1">
+    <p className="pdetail"></p>
     <h1 className="h1detail">Nike Epic React Flyknit</h1>
-    <h2 className="h2detail">$150</h2>
+    <h2 className="h2detail">150 Dt </h2>
     <p class="desc pdetail">The Nike Epic React Flyknit foam cushioning is responsive yet light-weight, durable yet soft. This creates a sensation that not only enhances the feeling of moving forward, but makes running feel fun, too.</p>
     <div class="buttons">
       <button class="add">Add to Cart</button>

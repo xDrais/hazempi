@@ -2,7 +2,7 @@
 
   
   .bodydetail{
-    background: #6e552e;
+    background: #ccba9d;
 
   }
   .container1 {
@@ -33,12 +33,17 @@
     color: #C3A1A0;
     margin-top: -5px;
   }
-  
+  .images{
+    margin-left: -200px;
+  }
   .imgdetail {
     width: 290px;
     margin-top: 47px;
+    margin-left: -70px;
   }
-  
+  .buttons {
+    margin-top: 30PX;
+  }
   .slideshow-buttons {
     top: 70%;
     display: none;
@@ -69,12 +74,12 @@
     left: 37%;
   }
   
-  .product {
+  .product1 {
     position: absolute;
     width: 40%;
     height: 100%;
     top: 10%;
-    left: 60%;
+    left: 50%;
   }
   
   .desc {

@@ -60,6 +60,10 @@ function App() {
     <Route exact  path="/sponsor/:id" element={ <GetSponsor/>} />
     <Route exact  path="/coach/:id" element={<GetCoach/>} />
     <Route path="/verify-email/:emailToken" element={<><Navbarr /><Login/> </>} />
+    <Route path="/productdetail/:id">
+  <Navbarr />
+  <ProductDetail />
+</Route>
     
 
 
@@ -74,7 +78,7 @@ function App() {
     <Route path="/reset-password" element={<> <Navbarr /> <ResetPassword/></>} />
     <Route path="/profile" element={<> <Navbarr /> <Profile/> </>} />
     <Route path="/" element={<><Navbarr /><Home/></>} />
-    <Route path="/productdetail" element={<><Navbarr /><ProductDetail/></>} />
+    <Route path="/productdetail/:id" element={<><Navbarr /><ProductDetail/></>} />
     <Route path="/shop" element={<><Navbarr /><Shop/></>} />
 
     <Route path="/dashboard" element={<Dashboard/>} />
