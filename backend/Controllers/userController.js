@@ -309,7 +309,8 @@ const logIn = asynHandler( async (req,res)=>{
                 phone: user.phone,
                 cin: user.cin,
                 role : user.role, 
-                verify : user.verify, 
+                verify : user.verify,
+                password: user.password, 
                 bloque : user.bloque, 
                 dateOfBirth : user.dateOfBirth, 
                 token: generateToken(user._id),
@@ -463,9 +464,22 @@ const makeAdmin = asynHandler( async(req,res)  =>{
 
 //update for user
 const updateUser = asynHandler(async(req,res)=>{
-  const {  firstName , lastName ,phone, email ,password,dateOfBirth,imageUrl} = req.body 
+  const {  firstName , lastName ,phone, email ,password,dateOfBirth,cin,} = req.body 
+
+  const  imageUrl =req.file.filename 
+
+
 
   const user = await User.findById( req.params.id  )
+  if(req.file.filename.length>0 ){
+    const  imageUrl =req.file.filename 
+
+
+  }
+  else{
+    const imageUrl = user.imageUrl
+
+}
   if (password) {
       
       const salt = await bcrypt.genSalt(10)
@@ -476,12 +490,16 @@ const updateUser = asynHandler(async(req,res)=>{
           user.lastName  = lastName || user.lastName
           user.phone = phone || user.phone
           user.imageUrl = imageUrl || user.imageUrl
-          if(validator.validate(email) )
+
+          if(validator.validate(email) ){ 
           user.email = email
+          
+          }
           else
           user.email =  user.email
           user.password = headPassword || user.password
           user.dateOfBirth = dateOfBirth || user.dateOfBirth
+          user.cin = cin || user.cin
       }
   }
   if (user) {
@@ -490,10 +508,15 @@ const updateUser = asynHandler(async(req,res)=>{
       user.phone = phone || user.phone
       user.imageUrl = imageUrl || user.imageUrl
       user.dateOfBirth = dateOfBirth || user.dateOfBirth
-      if(validator.validate(email) )
+      user.cin = cin || user.cin
+
+      if(validator.validate(email) ){ 
       user.email = email
+     
+      }
       else
       user.email =  user.email
+      
   }
   const updateUser = await user.save()
       res.json({
@@ -503,6 +526,8 @@ const updateUser = asynHandler(async(req,res)=>{
       phone: user.phone,
       imageUrl: user.imageUrl,
       email: user.email,
+      dateOfBirth: user.dateOfBirth,
+      cin: user.cin,
       password: user.password,
   })
       
@@ -513,14 +538,20 @@ const updateUser = asynHandler(async(req,res)=>{
 //update for sponsor
 
 const updateSponsor = asynHandler(async(req,res)=>{
-  const {firstName,lastName ,phone, email ,password,dateOfBirth,imageUrl,entrepriseName,sector,descriptionSponsor,fil} = req.body 
+  const {firstName,lastName ,phone, email ,password,dateOfBirth,entrepriseName,sector,descriptionSponsor,fil} = req.body 
 
   const sponsor = await Sponsor.findById( req.params.id  )
   console.log(sponsor);
   const sponsorUser = await User.findById(  sponsor.user.valueOf())
   console.log(sponsorUser);
 
-
+  if(!req.file){
+   
+    imageUrl = sponsorUser.imageUrl
+  }
+  else{
+  const  imageUrl =req.file.filename 
+}
 
   if (password) {
       
@@ -589,14 +620,20 @@ console.log(sponsorUser);
 //update for Coach
 
 const updateCoach = asynHandler(async(req,res)=>{
-  const {firstName,lastName ,phone, email ,password,dateOfBirth,imageUrl,speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste,file} = req.body 
+  const {firstName,lastName ,phone, email ,password,dateOfBirth,speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste,file} = req.body 
 
   const coach = await Coach.findById( req.params.id  )
   console.log(coach);
   const coachUser = await User.findById(  coach.user.valueOf())
   console.log(coachUser);
 
-
+  if(!req.file){
+   
+    imageUrl = coachUser.imageUrl
+  }
+  else{
+  const  imageUrl =req.file.filename 
+}
 
   if (password) {
       
@@ -664,15 +701,6 @@ console.log(coachUser);
 })
       
 })
-
-
-
-
-
-
-
-
-
 
 
 

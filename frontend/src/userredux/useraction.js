@@ -1,6 +1,12 @@
 import axios from 'axios'
-import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS ,USER_REGISTER_FAIL, APPROVE_USER_SUCCESS, GET_USERS_SUCCESS, FORGET_PASSWORD_REQUEST, FORGET_PASSWORD_SUCCESS, FORGET_PASSWORD_FAIL, RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAIL, BLOCK_USER, UNBLOCK_USER, USER_VERIFY_REQUEST, USER_VERIFY_SUCCESS, USER_VERIFY_FAIL, USER_BLOCK_REQUEST, USER_BLOCK_SUCCESS, USER_BLOCK_FAIL, ADD_COACH_REQUEST, ADD_COACH_SUCCESS, ADD_COACH_FAIL, ADD_SPONSOR_REQUEST, ADD_SPONSOR_SUCCESS, ADD_SPONSOR_FAIL} from "./userconstant"
-import { useNavigate } from 'react-router-dom'
+import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST,
+   USER_LOGIN_SUCCESS,USER_LOGOUT, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS ,USER_REGISTER_FAIL,
+    APPROVE_USER_SUCCESS, GET_USERS_SUCCESS, FORGET_PASSWORD_REQUEST, FORGET_PASSWORD_SUCCESS, 
+    FORGET_PASSWORD_FAIL, RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAIL, 
+    BLOCK_USER, UNBLOCK_USER, USER_VERIFY_REQUEST, USER_VERIFY_SUCCESS, USER_VERIFY_FAIL, USER_BLOCK_REQUEST,
+     USER_BLOCK_SUCCESS, USER_BLOCK_FAIL, ADD_COACH_REQUEST, ADD_COACH_SUCCESS, ADD_COACH_FAIL, ADD_SPONSOR_REQUEST, 
+     ADD_SPONSOR_SUCCESS, ADD_SPONSOR_FAIL,UPDATE_USER_REQUEST,UPDATE_USER_FAIL,UPDATE_USER_SUCCESS } from "./userconstant"
+import { useNavigate ,  redirect } from 'react-router-dom'
 
 export const login = (email,password) => async (dispatch)=>{
     try {
@@ -81,10 +87,14 @@ export const register = ({firstName,lastName,cin,phone,dateOfBirth,imageUrl,emai
 }
 
 export const Logout = ()=>(dispatch) =>{
+
     localStorage.removeItem('userInfo')
+   
     dispatch({
         type:USER_LOGOUT
-    })}
+    })
+    
+  }
 
 export const baseUrl = "http://localhost:5000/api";
 
@@ -387,5 +397,49 @@ export const sponsoraction = (sponsor) => async (dispatch)=>{
               : error.message,
         })
 
+  }
+}
+
+
+
+export const update = ({firstName,lastName,phone,email,cin,imageUrl,password,dateOfBirth,id}) => async (dispatch)=>{
+  try {
+        dispatch({
+            type:UPDATE_USER_REQUEST
+        })
+        const config = {
+            headers:{
+                'Content-Type' : 'multipart/form-data'
+            }
+        }
+
+        const { data } = await axios.put(
+          `http://localhost:5000/api/user/updateUser/${id}`,
+            {firstName,lastName,phone,email,cin,imageUrl,password,dateOfBirth},
+            config
+          );
+
+        dispatch({
+            type : UPDATE_USER_SUCCESS,
+            payload : data
+        })
+     
+       // localStorage.setItem('userInfo', JSON.stringify(data))
+
+       } catch(error){
+      if (error.response && error.response.data.message === 'User with this E-mail adress already exists') {
+          dispatch({
+              type: UPDATE_USER_FAIL,
+              payload: error.response.data.message
+          });
+      } else {
+          dispatch({
+              type: UPDATE_USER_FAIL,
+              payload: error.response && error.response.data.message
+                  ? error.response.data.data.message
+                  : error.message
+          });
+      }
+      console.log(error.response.data.message);
   }
 }

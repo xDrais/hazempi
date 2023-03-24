@@ -99,6 +99,9 @@ REGISTER                         </Link>
                         <LinkContainer  to='/profile'>
                             <NavDropdown.Item > <Link to="/profile" >PROFILE</Link> </NavDropdown.Item>
                         </LinkContainer>
+                        <LinkContainer  to='/userupdate'>
+                            <NavDropdown.Item > <Link to="/userupdate" >UPDATE PROFILE</Link> </NavDropdown.Item>
+                        </LinkContainer>
                         <NavDropdown.Item onClick={logoutHandler} >LOGOUT</NavDropdown.Item>
                     </NavDropdown>  </div>
             
