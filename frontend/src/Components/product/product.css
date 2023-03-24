@@ -1,7 +1,7 @@
 
   
   .containerproduit {
-    width: 200px;
+    width: 250px;
     height: 300px;
     position: relative;
     margin:30px;
@@ -9,6 +9,7 @@
     background-size: cover;
     cursor: pointer;
     box-shadow: 0 0 5px #000;
+    margin-left:40px;
   }
   
   .overlay {
@@ -47,7 +48,7 @@
   }
   
   .price {
-    font-size: 12px;
+    font-size: 22px;
     line-height: 10px;
     font-weight: bold;
     opacity: 0;

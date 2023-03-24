@@ -1,26 +1,31 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./ProductDetail.css"
-import { productDetails } from "../../productredux/productaction";
+import { getProducts, productDetails } from "../../productredux/productaction";
 import { useParams } from "react-router-dom";
 import mongoose from "mongoose";
-import { useRouteMatch } from 'react-router-dom';
+const { ObjectId } = mongoose.Types;
 
 
 const ProductDetail=({match})=>{
-    const dispatch= useDispatch()
-    const products = useSelector((state) => state.productGetReducer.products);
-    const [searchResults, setSearchResults] = useState([]);
+    const dispatch = useDispatch();
+      const products = useSelector((state) => state.productGetReducer.products);
+      const { id } = useParams();
 
-    
-
-    
-
+    console.log("ena el products" + products);
+    useEffect(() => {
+      dispatch(getProducts());
+    }, [dispatch ]);
+    console.table(products)
+    const product = products.find((p) => p._id === id);
+console.table(product);
+console.log(id);
     return (
-        <><body className="bodydetail">
+        <>
+         {product ? (<body className="bodydetail">
         <div class="container1">
   <div class="images">
-    <img className="imgdetail" src="http://mistillas.cl/wp-content/uploads/2018/04/Nike-Epic-React-Flyknit-%E2%80%9CPearl-Pink%E2%80%9D-01.jpg" />
+  <img className="imgdetail" src={`${process.env.PUBLIC_URL}/images/${product.imageProduct}`} />
   </div>
   <div class="slideshow-buttons">
     <div class="one"></div>
@@ -39,11 +44,11 @@ const ProductDetail=({match})=>{
     <div class="size">11</div>
     <div class="size">12</div>
   </div> */}
-  <div class="product1">
-    <p className="pdetail"></p>
-    <h1 className="h1detail">Nike Epic React Flyknit</h1>
-    <h2 className="h2detail">150 Dt </h2>
-    <p class="desc pdetail">The Nike Epic React Flyknit foam cushioning is responsive yet light-weight, durable yet soft. This creates a sensation that not only enhances the feeling of moving forward, but makes running feel fun, too.</p>
+  <div class="product1"> 
+    <p className="pdetail"> {product.category}- by {product?.user?.firstName} {product?.user?.lastName}</p>
+    <h1 className="h1detail">{product.productName}</h1>
+    <h2 className="h2detail">{product.price} Dt </h2>
+    <p class="desc pdetail">{product.description}.</p>
     <div class="buttons">
       <button class="add">Add to Cart</button>
       <button class="like"><span>♥</span></button>
@@ -51,7 +56,9 @@ const ProductDetail=({match})=>{
   </div>
 </div>
 
-</body>  </>
+</body>  ) : (
+        <p>No product found</p>
+      )} </>
     )
 }
 export default ProductDetail;

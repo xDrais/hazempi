@@ -3,6 +3,7 @@ import "./shop.css"
 import React, {useState,useEffect} from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from "../../productredux/productaction";
+import { Link } from "react-router-dom";
 
 function Shop()
 {
@@ -10,11 +11,12 @@ function Shop()
     const dispatch = useDispatch();
     const products = useSelector((state) => state.productGetReducer.products);
   
-    console.log(products);
+    console.log("ena el products" + products);
     useEffect(() => {
       dispatch(getProducts());
     }, [dispatch ]);
-  
+    console.log("ena el products" + Array.isArray(products) );
+
    
    const handleRefresh = () => {
      setTimeout(() => {
@@ -29,7 +31,9 @@ function Shop()
         <div className="shopcontainer">
             
         {Array.isArray(products) && products.map((p) => (
-          <Product product={p} ></Product>
+          <Product product={p} >
+
+          </Product>
         ))}
 
         </div>
