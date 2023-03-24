@@ -15,7 +15,7 @@ return(
 <HeroSection />
 <div align="center" className="eventbackground">
 <Events/> </div>
-<Products />
+
 
      <Section1 />
      <div align="center">

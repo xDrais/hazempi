@@ -78,7 +78,7 @@ function App() {
     <Route path="/reset-password" element={<> <Navbarr /> <ResetPassword/></>} />
     <Route path="/profile" element={<> <Navbarr /> <Profile/> </>} />
     <Route path="/" element={<><Navbarr /><Home/></>} />
-    <Route path="/productdetail/:id" element={<><Navbarr /><ProductDetail/></>} />
+    <Route path="/productdetail/:id" element={<> <div className="bgdetail"><Navbarr /><ProductDetail/></div></>} />
     <Route path="/shop" element={<><Navbarr /><Shop/></>} />
 
     <Route path="/dashboard" element={<Dashboard/>} />
