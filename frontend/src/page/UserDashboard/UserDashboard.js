@@ -1,7 +1,6 @@
 import "./UserDashboard.css"
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom'; 
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import SpecialButton from "../../Components/Button/button";
@@ -15,13 +14,15 @@ function UserDashboard(){
     const { loading, error,messageSuccess } = productAdd;
 
     const [showCreate, setShowCreate] = useState(false);
+
     const [product, setProduct] = useState([]);
+
     useEffect(() => {
       const getProduct = async () => {
         try {
           const response = await fetch(`http://localhost:5000/product/productById/${userInfo._id}`, { method: 'GET' });
           const data = await response.json();
-          setProduct(data.product);
+          setProduct(data);
         } catch (error) {
           console.error(error);
         }
@@ -150,7 +151,7 @@ const submitHandlerj = (e) => {
 <h3 className="library_trending_title">Review Your products</h3>
 
       <table>
-     {product.map((i , index) => {
+     {product && product.map((i , index) => {
            return(
         <tr key={i.id}>
           <td>

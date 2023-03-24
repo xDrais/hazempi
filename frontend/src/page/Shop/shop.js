@@ -25,9 +25,7 @@ function Shop()
 
     return (
         <>
-
         <div className="shopcontainer">
-            
         {Array.isArray(products) && products.map((p) => (
           <Product product={p} ></Product>
         ))}
