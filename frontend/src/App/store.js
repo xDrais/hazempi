@@ -4,7 +4,8 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import {userLoginReducer, userReducers, userRegisterReducer,
   forgetPassword,resetPassword,
   sponsorReducer,coachReducer} from '../userredux/userreducer'
-import { productAddReducer, productGetReducer } from '../productredux/productreducer';
+import { productAddReducer, productDetailReducer, productGetReducer } from '../productredux/productreducer';
+import { productDetails } from '../productredux/productaction';
 //el store houwa objet bch ykounou fih des données partagées bin el components lkol
 
 const reducer = combineReducers({
@@ -17,7 +18,8 @@ const reducer = combineReducers({
     sponsorReducer:sponsorReducer,
     coachReducer:coachReducer,
     productAdd : productAddReducer,
-    productGetReducer : productGetReducer
+    productGetReducer : productGetReducer,
+    productDetail: productDetailReducer
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null 

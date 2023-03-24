@@ -13,7 +13,6 @@ function Product(){
       <p className="new">$345</p>
     </div>
     <div className="items cart">
-       <span href= "/yo">   ADD TO CART</span>
   </div>
 </div>
 </div> 
