@@ -5,8 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import SpecialButton from "../../Components/Button/button";
 import { useDispatch , useSelector , } from "react-redux";
-import { productadd } from "../../productredux/productaction";
+import { productadd,deleteProduct } from "../../productredux/productaction";
 import Loader from "../../Components/Loader";
+
+import Swal from 'sweetalert2';
+
 function UserDashboard(){
     const userLogin = useSelector(state => state.userLogin)
     const {userInfo } = userLogin
@@ -16,6 +19,17 @@ function UserDashboard(){
     const [showCreate, setShowCreate] = useState(false);
 
     const [product, setProduct] = useState([]);
+    
+    const productDelete = useSelector((state) => state.productDelete);
+    const { loading: loadingDelete, error: errorDelete, success: successDelete } = productDelete;
+
+
+        const deleteHandler = (id) => {
+              dispatch(deleteProduct(id));
+          
+        };
+
+        
 
     useEffect(() => {
       const getProduct = async () => {
@@ -29,7 +43,8 @@ function UserDashboard(){
       };
     
       getProduct();
-    }, [userInfo._id]);
+    }, [userInfo._id , successDelete ]);
+
 
     const [productName,setName]=useState("");
     const [imageProduct,setImageProduct]=useState("");
@@ -65,7 +80,6 @@ const submitHandlerj = (e) => {
   const handleListClick = () => {
     setShowCreate(false);
   };
-
     return(
 
         <><body className="yoo">
@@ -73,8 +87,11 @@ const submitHandlerj = (e) => {
             <div style={{marginTop:"500px"}}>
             {error && <div className="alert">{error}</div>}
           {messageSuccess && <div className="alertgreen">{messageSuccess}</div>}
+          
 
           {loading && <Loader />}
+
+
   <div className="mp_sidebar">
     <div className="sidebar_logo">
       <img src={process.env.PUBLIC_URL + "/images/logo.png"}/>
@@ -121,8 +138,17 @@ const submitHandlerj = (e) => {
     <div id="list"        className={`create ${!showCreate ? "show" : "hide"} ${!showCreate ? "library_trending" : ""}`}
 >  <div className="library_album">
       <h3>User Dashboard</h3>
+
+
       <div className="library_album_albums">
         <div className="library_album_covers">
+
+          
+
+ {loadingDelete && <div className="alertgreen"> && <p>Loading...</p> </div>} 
+
+{errorDelete  && <div className="alertgreen"> && <p>{errorDelete}</p> </div>}
+{successDelete  && <div className="alertgreen"> && <p>{successDelete}</p> </div>}
           <img src="https://media.smallbiztrends.com/2021/05/beekeeping.png" alt="" className="album_cover" />
           <h5>Bee Keeping</h5>
           <p>Explore</p>
@@ -174,7 +200,25 @@ const submitHandlerj = (e) => {
             <p>{i.countInStock}</p>
           </td>
           <td>
-          <FontAwesomeIcon icon={faTrash} size="xl" />          </td>
+          <FontAwesomeIcon icon={faTrash} size="xl" 
+                  onClick={() => {
+                    Swal.fire({
+                      title: 'Do you want to Delete this Product?',
+                      showDenyButton: true,
+                      showCancelButton: true,
+                      confirmButtonText: 'Save',
+                      denyButtonText: `Don't save`,
+                    }).then((result) => {
+                      if (result.isConfirmed ) {
+                        deleteHandler(i._id);
+                        Swal.fire('Product Deleted!', '', 'success');
+                      } else if (result.isDenied) {
+                        Swal.fire('Product is not Deleted', '', 'info');
+                      }
+                    });
+                  }}
+            
+          />          </td>
           <td>
           <FontAwesomeIcon icon={faEdit} size="xl" />          </td>
         </tr>

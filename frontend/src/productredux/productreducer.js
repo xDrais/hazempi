@@ -1,5 +1,6 @@
 import { PRODUCT_ADD_FAIL, PRODUCT_ADD_REQUEST, PRODUCT_ADD_SUCCESS, PRODUCT_DETAIL_FAIL, PRODUCT_DETAIL_REQUEST, PRODUCT_DETAIL_SUCCESS } from "./productconstant"
-import { GET_PRODUCT_REQUEST, GET_PRODUCT_SUCCESS } from "./productconstant"
+import { GET_PRODUCT_REQUEST, GET_PRODUCT_SUCCESS,
+  DELETE_PRODUCT_FAIL, DELETE_PRODUCT_SUCCESS , DELETE_PRODUCT_REQUEST } from "./productconstant"
 
 export const productAddReducer=(state={},action)=>{
     // eslint-disable-next-line default-case
@@ -7,7 +8,7 @@ export const productAddReducer=(state={},action)=>{
         case PRODUCT_ADD_REQUEST : 
             return {loading : true}
         case PRODUCT_ADD_SUCCESS : 
-            return {loading : false ,messageSuccess : "Product added!"}
+            return {loading : false , success: true }
         case PRODUCT_ADD_FAIL :
             return {loading : false , error: action.payload }        
         default:
@@ -42,3 +43,18 @@ export const productAddReducer=(state={},action)=>{
         return state;
     }
   };
+
+  export const productDeleteReducer=(state={},action)=>{
+    // eslint-disable-next-line default-case
+    switch (action.type) {
+        case DELETE_PRODUCT_REQUEST : 
+            return {loading : true}
+        case DELETE_PRODUCT_SUCCESS : 
+            return {loading : false ,success : "Product deleted!"}
+        case DELETE_PRODUCT_FAIL :
+            return {loading : false , error: action.payload }        
+        default:
+            return state    
+
+    }
+ }

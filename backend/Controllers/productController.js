@@ -79,7 +79,7 @@ const deleteProduct = asynHandler(async (req, res) => {
 
   if (product) {
     await product.remove()
-    res.json({ message: 'Product removed' })
+    res.json("Product removed" )
   } else {
     res.status(404)
     throw new Error('Product not found')
