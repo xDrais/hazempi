@@ -80,7 +80,6 @@ const UpdateUser = () => {
     const submitHandler=async(e)=>{
       e.preventDefault();
 
-      console.log(imageUrl);
 
 const id=userInfo._id
 
@@ -98,7 +97,7 @@ const id=userInfo._id
          }
         )
       );
-      navigate("/profile"); 
+      navigate("/profile");
 
     
 
@@ -179,8 +178,7 @@ const id=userInfo._id
 
   useEffect(() => {
     const result = IMAGE_REGEX.test(imageUrl.name);
-    console.log(result);
-    console.log(imageUrl.name);
+  
     setValidImageUrl(result);
   }, [imageUrl]);
 

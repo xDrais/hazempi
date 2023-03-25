@@ -93,7 +93,6 @@ const UpdateCoach = () => {
     e.preventDefault();
 
 
-console.log(imageUrl.name)
   
  
 
@@ -118,7 +117,7 @@ console.log(imageUrl.name)
         id,
       })
     );
-   // navigate("/profile");
+    navigate("/profile");
   };
 
   const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
@@ -407,7 +406,6 @@ console.log(imageUrl.name)
               </p>
               <p>Certification</p>
               <UploadfFile setFile={setFile} setFi={setFi}></UploadfFile>
-              {console.log(file)}
             </>
           )}
           {/* step 5 mtaa terms of use w submit simple user */}

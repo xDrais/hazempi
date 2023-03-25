@@ -6,7 +6,8 @@ import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,
      RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAIL, UNBLOCK_USER, 
      USER_BLOCK_SUCCESS, ADD_COACH_REQUEST, ADD_COACH_SUCCESS, ADD_COACH_FAIL, ADD_SPONSOR_REQUEST,
       ADD_SPONSOR_SUCCESS, ADD_SPONSOR_FAIL,UPDATE_USER_REQUEST,UPDATE_USER_FAIL,UPDATE_USER_SUCCESS
-      ,UPDATE_COACH_REQUEST,UPDATE_COACH_FAIL,UPDATE_COACH_SUCCESS } from "./userconstant";
+      ,UPDATE_COACH_REQUEST,UPDATE_COACH_FAIL,UPDATE_COACH_SUCCESS,UPDATE_SPONSOR_REQUEST,UPDATE_SPONSOR_FAIL,
+      UPDATE_SPONSOR_SUCCESS } from "./userconstant";
 
  export const userLoginReducer=(state={},action)=>{
     // eslint-disable-next-line default-case
@@ -174,6 +175,20 @@ export const userUpdateReducer=(state={},action)=>{
         case UPDATE_COACH_SUCCESS : 
             return {loading : false ,messageSuccess : "Coach Updated!"}
         case UPDATE_COACH_FAIL :
+            return {loading : false , error: action.payload }        
+        default:
+            return state    
+
+    }
+ }
+ export const sponsorUpdateReducer=(state={},action)=>{
+    // eslint-disable-next-line default-case
+    switch (action.type) {
+        case UPDATE_SPONSOR_REQUEST : 
+            return {loading : true}
+        case UPDATE_SPONSOR_SUCCESS : 
+            return {loading : false ,messageSuccess : "Sponsor Updated!"}
+        case UPDATE_SPONSOR_FAIL :
             return {loading : false , error: action.payload }        
         default:
             return state    

@@ -1,104 +1,158 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, redirect } from "react-router-dom";
 import { Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import video from "../../Components/HeroSection/pottery2.mp4";
 import "../../Components/HeroSection/HeroSection.css";
-import "../Register/register.css"
+import "../Register/register.css";
+import { Logout } from "../../userredux/useraction";
+import UploadfFile from "../UploadfFile";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBuilding,
+  faChalkboardUser,
+} from "@fortawesome/free-solid-svg-icons";
 
-
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import {
+  ArrowWrapperLeft,
+  ArrowWrapperRight,
+} from "../../Components/Arrows/Arrows";
 import SpecialButton from "../../Components/Button/button";
 
 import Message from "../../Components/Message";
- import Loader from "../../Components/Loader";
- import { Alert } from "react-bootstrap";
- import FormContainer from "../../Components/FormContainer";
+import Loader from "../../Components/Loader";
+import { Alert } from "react-bootstrap";
+import FormContainer from "../../Components/FormContainer";
 
-import {update} from "../../userredux/useraction"
-const UpdateCoach = () => {
-
+import { updateSponsor } from "../../userredux/useraction";
 
 
-    const [firstName , setFirstName]=useState('')
-    const [lastName , setLastName] = useState('')
-    const [phone , setPhone]=useState('')
-    const [email , setEmail]=useState('')
-    const [imageUrl , setImageUrl] = useState('')
-    const [password , setPassword]=useState('')
-  
-    const [dateOfBirth , setDateOfBirth]=useState('')
+const UpdateSponsor = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [password, setPassword] = useState("");
 
-    const userLogin =useSelector(state =>state.userLogin)
-    const {userInfo} =userLogin
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  //coach states
+  //states taa Sponsor
+  const [sector, setSector] = useState("");
+  const [descriptionSponsor, setDescriptionSponsor] = useState("");
+  const [entrepriseName, setEntrepriseName] = useState("");
+  const [file, setFile] = useState("");
+  const [fil, setFi] = useState(file);
 
-      //validateurs simple user
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  //validateurs simple user
   const [validFirstName, setValidFirstName] = useState(false);
   const [validLastName, setValidLastName] = useState(false);
-
+  const [validDateDebutExperience, setValidDateDebutExperience] =
+    useState(false);
+  const [validDateFinExperience, setValidDateFinExperience] = useState(false);
   const [validPhone, setValidPhone] = useState(false);
   const [validDateOfBirth, setValidDateOfBirth] = useState(false);
   const [validImageUrl, setValidImageUrl] = useState(false);
   const [validEmail, setValidEmail] = useState(false);
   const [validConfirmPassword, setValidConfirmPassword] = useState(false);
   const [validPassword, setValidPassword] = useState(false);
+  const [validCin, setValidCin] = useState(false);
+  const [cin, setCin] = useState("");
 
 
-
-    // Clear the input field when the user interacts with it
-
-    function handleInputFocus(e) {
-        e.target.value = "";
-      }
+  
+//Validators taa sponsor
+  const [validSector, setValidSector] = useState("");
 
 
-    const userRegister = useSelector((state) => state.userRegister);
-    const { loading, error } = userRegister;
+  const [showPassword, setShowPassword] = useState(false);
 
-    const dispatch = useDispatch();
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+  //steps taa el form
+  const [step, setStep] = useState(1);
 
-      //hedhi bch taamelek el redirection
+  // Clear the input field when the user interacts with it
+
+  function handleInputFocus(e) {
+    e.target.value = "";
+  }
+
+  const userRegister = useSelector((state) => state.userRegister);
+  const { loading, error } = userRegister;
+
+  const dispatch = useDispatch();
+
+  //hedhi bch taamelek el redirection
   const navigate = useNavigate();
 
   const messageSuccess = "";
 
+  const submitHandler = async (e) => {
+    e.preventDefault();
 
 
+    const id = userInfo.sponsor._id;
 
-    const submitHandler=async(e)=>{
-      e.preventDefault();
+    dispatch(
+      updateSponsor({
+        firstName,
+        lastName,
+        phone,
+        email,
+        password,
+        cin,
+        dateOfBirth,
+        imageUrl,
+        entrepriseName,
+        sector,
+        descriptionSponsor,
+        file,
+        id,
+      })
+    );
+    navigate("/profile");
+  };
 
-       // dispatch(update(firstName,lastName,phone,email,imageUrl,password,dateOfBirth))
+  const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
+  const PHONE_REGEX = /^[2-9][0-9]{7}$/;
+  const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
-       let result = await fetch(`http://localhost:5000/api/user/updateUser/${userInfo._id}`,{
-        method:"put",
-        body:JSON.stringify({firstName,lastName,phone,email,imageUrl,password,dateOfBirth}),
-        headers:{
-            "Content-type":"application/json"
-        }
-       
-    })
+  const DATE_REGEX =
+    /^(?:19|20)\d{2}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])$/;
+  const IMAGE_REGEX = /\.(png|jpe?g)$/i;
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-
-    result = await result.json();
-    console.warn(result)
-
-
+  //Fonction Onclick taa el previous step
+  const handlePrevStep = () => {
+    if (step === 3) {
+      setStep(2);
+    } else if (step === 2) {
+      setStep(1);
+    } else if (step === 1) {
+      setStep(3);
     }
+  };
+  //Fonction Onclick taa el next step
 
+  const handleNextStep = () => {
+    if (step === 1) {
+      setStep(2);
+    } else if (step === 2) {
+      setStep(3);
+    } else if (step === 3) {
+      setStep(1);
+    }
+  };
 
-
-
-    const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
-    const PHONE_REGEX = /^[2-9][0-9]{7}$/;
-    const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-
-    const DATE_REGEX =/^(?:19|20)\d{2}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])$/;
-    const IMAGE_REGEX = /\.(png|jpe?g)$/i;
-    const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-
-
-{/* use effects taa controle de saisie */}
+  {
+    /* use effects taa controle de saisie */
+  }
 
   useEffect(() => {
     const result = USER_REGEX.test(firstName);
@@ -118,16 +172,11 @@ const UpdateCoach = () => {
     setValidEmail(result);
   }, [email]);
 
-
-  
   useEffect(() => {
     const result = PWD_REGEX.test(password);
 
     setValidPassword(result);
   }, [password]);
-
-
-
 
   useEffect(() => {
     const result = PHONE_REGEX.test(phone);
@@ -137,9 +186,9 @@ const UpdateCoach = () => {
 
   useEffect(() => {
     const result = IMAGE_REGEX.test(imageUrl.name);
-
     setValidImageUrl(result);
   }, [imageUrl]);
+
   useEffect(() => {
     if (dateOfBirth) {
       const inputDate = new Date(dateOfBirth);
@@ -154,17 +203,15 @@ const UpdateCoach = () => {
     }
   }, [dateOfBirth]);
 
+  const id = userInfo.sponsor._id;
 
-
- 
   return (
-    <>   
-
+    <>
       {/* el video taa el background */}
       <div className="hero-container">
         <video src={video} autoPlay loop muted />
         {/* el message taa el controle de saisie w el loader   */}
-       
+
         <section className="marginTops">
           {error && <div className="alert">{error}</div>}
           {messageSuccess && <div className="alertgreen">{messageSuccess}</div>}
@@ -176,22 +223,25 @@ const UpdateCoach = () => {
           className="register"
           onSubmit={submitHandler}
           encType="multipart/form-data"
-          
         >
           <div
             align="center"
             style={{ marginBottom: "20px", marginTop: "-20px" }}
-          >
-            {" "}
-            <h1>Update User</h1>{" "}
-          </div>
-            <label>First Name</label>
+          ></div>
+          {/* les boutons mtaa previous w next */}
+
+          <ArrowWrapperLeft onClick={handlePrevStep} />
+          <ArrowWrapperRight onClick={handleNextStep} />
+
+          {/* step lowla mtaa el form eli fiha el info taa simple user */}
+          {step === 1 && (
+            <>
+              <h1>Update account</h1>
               <input
                 id="firstName"
                 type="text"
-                placeholder={ userInfo.firstName}
+                placeholder={userInfo.firstName}
                 value={firstName}
-                
                 onChange={(e) => setFirstName(e.target.value)}
               ></input>
 
@@ -203,12 +253,10 @@ const UpdateCoach = () => {
                 characters or numbers
               </p>
 
-              <label>Last Name </label>
               <input
                 id="lastName"
-                
-                type="text"
                 placeholder={userInfo.lastName}
+                type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
               ></input>
@@ -219,13 +267,11 @@ const UpdateCoach = () => {
                 Last Name is at least 3 letters and cannot contain special
                 characters or numbers
               </p>
-              <label>Email</label>
               <input
                 id="email"
-                
-                type="email"
                 placeholder={userInfo.email}
-                 value={email}
+                type="email"
+                value={email}
                 onChange={(e) => setEmail(e.target.value)}
               ></input>
               <p
@@ -234,23 +280,84 @@ const UpdateCoach = () => {
               >
                 Enter a valid e-mail adress{" "}
               </p>
-              <label>Password</label>
+
               <input
                 id="password"
-                type="password"
-             
-                
-                placeholder="change password"
+                type={showPassword ? "text" : "password"}
+                placeholder="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               ></input>
+
+              <div className="visibility-icon" onClick={toggleShowPassword}>
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </div>
+
+              <p
+                id="notepwd"
+                className={password && !validPassword ? "none" : "hide"}
+              >
+                Password needs to contain at least 1 UpperCase letter , 1
+                LowerCase letter, 1 Number and at least 8{" "}
+              </p>
+
+              <input
+                id="cin"
+                type="text"
+                placeholder={userInfo.cin}
+                value={cin}
+                onChange={(e) => setCin(e.target.value)}
+              ></input>
+              <p id="noteCIN" className={cin && !validCin ? "none" : "hide"}>
+                Cin begins with 0 or 1 and is 8 digits long{" "}
+              </p>
+            </>
+          )}
+          {/* step 4 mtaa be9i el form for Coach */}
+
+          {step === 2 && <>
+          
+
+
+            <FontAwesomeIcon className="fontcenter" icon={faBuilding} size="3x" />
+               <input
+                id="sector"
+                type="text"
+                placeholder={'sector: '+userInfo.sponsor.sector}
+                value={sector}
+                onChange={(e) => setSector(e.target.value)}
+              ></input>
+
+              <input
+                id="descriptionSponsor"
+                type="text"
+                placeholder={'description Sponsor: '+userInfo.sponsor.descriptionSponsor}
+                value={descriptionSponsor}
+                onChange={(e) => setDescriptionSponsor(e.target.value)}
+              ></input>
+          <h1 className="h111">Drop Your Company Name & Certification For REVIEW</h1>
+
+              <input
+                id="EntrepriseName"
+                type="text"
+                placeholder={'Entreprise Name: '+userInfo.sponsor.entrepriseName}
+                value={entrepriseName}
+                onChange={(e) => setEntrepriseName(e.target.value)}
+              ></input> 
+              <UploadfFile setFile={setFile} setFi={setFi}></UploadfFile>
              
-              <label>Phone</label>
+
+            
+
+
+          </>}
+          {/* step 5 mtaa terms of use w submit simple user */}
+          {step === 3 && (
+            <>
               <input
                 id="phone"
                 type="phone"
                 placeholder={userInfo.phone}
-                
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
               ></input>
@@ -260,17 +367,23 @@ const UpdateCoach = () => {
               >
                 Phone contains 8 digits{" "}
               </p>
-
-
-              <label>Date Of Birth</label>
+              {dateOfBirth ? (
                 <input
                   id="dateOfBirth"
-                  type="date"  
-                  
+                  type="date"
+                  value={dateOfBirth}
                   onFocus={handleInputFocus}
                   onChange={(event) => setDateOfBirth(event.target.value)}
                 />
-              
+              ) : (
+                <input
+                  id="dateOfBirth"
+                  type="text"
+                  placeholder={userInfo.dateOfBirth}
+                  onFocus={handleInputFocus}
+                  onChange={(event) => setDateOfBirth(event.target.value)}
+                />
+              )}
 
               <p
                 id="noteedate"
@@ -278,13 +391,12 @@ const UpdateCoach = () => {
               >
                 You need to be at least 18 years old{" "}
               </p>
+              <label>profile pic</label>
 
-              <label>Profile Picture</label>
               <input
                 id="imageUrl"
                 type="file"
                 name="imageUrl"
-                value={imageUrl}
                 accept=".png, .jpg, .jpeg"
                 onChange={(e) => setImageUrl(e.target.files[0])}
               ></input>
@@ -295,20 +407,16 @@ const UpdateCoach = () => {
               >
                 Enter Valid image type : png , jpg or jpeg{" "}
               </p>
-
-              <Button
-                style={{ marginTop: "5px" }}
-                type="submit"
-              >
-               Update 
+              <Button style={{ marginTop: "5px" }} type="submit">
+                Update
               </Button>
+            </>
+          )}
         </form>
-     </div>
-      </>
-  )
-}
-
-export default UpdateCoach
-
-
-
+        {/* fin form */}
+      </div>{" "}
+      {/* fin video background */}
+    </>
+  );
+};
+export default UpdateSponsor;

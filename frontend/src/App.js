@@ -12,6 +12,7 @@ import Home from './page/Home/home';
 import  { useEffect, useState } from "react";
 import UpdateUser from './page/Modifyaccount/updateUser'
 import UpdateCoach from './page/Modifyaccount/updateCoach'
+import UpdateSponsor from './page/Modifyaccount/updateSponsor'
 import { useDispatch , useSelector , } from "react-redux";
 import axios from "axios";
 import UserDashboard from './page/UserDashboard/UserDashboard';
@@ -86,6 +87,7 @@ function App() {
     <Route exact  path="/sponsor/:id" element={ <GetSponsor/>} />
     <Route exact  path="/coach/:id" element={<GetCoach/>} />
     <Route path="/coachupdate" element={<> <Navbarr /> <UpdateCoach></UpdateCoach> </>} />
+    <Route path="/spnsorupdate" element={<> <Navbarr /> <UpdateSponsor></UpdateSponsor> </>} />
     <Route path="/userdashboard" element={<><div className='yo'><Navbarr /> <UserDashboard></UserDashboard></div></> } /> 
     <Route path="/productdashboard" element={<ProductDashboard/>} />
  

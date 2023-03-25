@@ -299,6 +299,7 @@ const logIn = asynHandler( async (req,res)=>{
         
         const user = await User.findOne({ email: email })
         const coach = await Coach.findOne({ user: user._id })
+        const sponsor = await Sponsor.findOne({ user: user._id })
 
         if (user &&(await bcrypt.compare(password,user.password) ) ) {
             res.json({
@@ -316,7 +317,8 @@ const logIn = asynHandler( async (req,res)=>{
                 dateOfBirth : user.dateOfBirth, 
                 token: generateToken(user._id),
                 certified : user.certified,
-                coach: coach
+                coach: coach,
+                sponsor: sponsor
             })
             
         }else{
@@ -606,6 +608,7 @@ console.log(coachUser);
 //update for sponsor
 const updateSponsor = asynHandler(async(req,res)=>{
   const {firstName,lastName ,phone, email ,password,cin,dateOfBirth,entrepriseName,sector,descriptionSponsor,fil} = req.body 
+  const  imageUrl =req.file.filename 
 
   const sponsor = await Sponsor.findById( req.params.id  )
   console.log(sponsor);
