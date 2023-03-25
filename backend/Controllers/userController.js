@@ -298,6 +298,7 @@ const logIn = asynHandler( async (req,res)=>{
         const  { email , password } = req.body
         
         const user = await User.findOne({ email: email })
+        const coach = await Coach.findOne({ user: user._id })
 
         if (user &&(await bcrypt.compare(password,user.password) ) ) {
             res.json({
@@ -314,7 +315,8 @@ const logIn = asynHandler( async (req,res)=>{
                 bloque : user.bloque, 
                 dateOfBirth : user.dateOfBirth, 
                 token: generateToken(user._id),
-                certified : user.certified
+                certified : user.certified,
+                coach: coach
             })
             
         }else{
@@ -461,39 +463,27 @@ const makeAdmin = asynHandler( async(req,res)  =>{
 
 
 
-
 //update for user
 const updateUser = asynHandler(async(req,res)=>{
-  const {  firstName , lastName ,phone, email ,password,dateOfBirth,cin,} = req.body 
-
+  const {  firstName , lastName ,phone, email ,password,dateOfBirth,cin} = req.body 
   const  imageUrl =req.file.filename 
-
-
-
   const user = await User.findById( req.params.id  )
   if(req.file.filename.length>0 ){
     const  imageUrl =req.file.filename 
-
-
   }
   else{
     const imageUrl = user.imageUrl
-
 }
   if (password) {
-      
       const salt = await bcrypt.genSalt(10)
       const headPassword = await bcrypt.hash(password,salt)
-  
       if (user) {
           user.firstName = firstName  || user.firstName
           user.lastName  = lastName || user.lastName
           user.phone = phone || user.phone
           user.imageUrl = imageUrl || user.imageUrl
-
           if(validator.validate(email) ){ 
           user.email = email
-          
           }
           else
           user.email =  user.email
@@ -509,14 +499,11 @@ const updateUser = asynHandler(async(req,res)=>{
       user.imageUrl = imageUrl || user.imageUrl
       user.dateOfBirth = dateOfBirth || user.dateOfBirth
       user.cin = cin || user.cin
-
       if(validator.validate(email) ){ 
       user.email = email
-     
       }
       else
       user.email =  user.email
-      
   }
   const updateUser = await user.save()
       res.json({
@@ -535,10 +522,90 @@ const updateUser = asynHandler(async(req,res)=>{
 
 
 
-//update for sponsor
+//update for Coach
+const updateCoach = asynHandler(async(req,res)=>{
+  const {firstName,lastName ,phone, email ,password,cin,dateOfBirth,speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste,file} = req.body 
+  const coach = await Coach.findById( req.params.id  )
+  const coachUser = await User.findById(  coach.user.valueOf())
+  const  imageUrl =  req.file.filename
 
+
+
+
+
+
+  if (password) {
+      const salt = await bcrypt.genSalt(10)
+      const headPassword = await bcrypt.hash(password,salt)
+      if (coachUser) {
+        coachUser.firstName = firstName  || coachUser.firstName
+          coachUser.lastName  = lastName || coachUser.lastName
+          coachUser.phone = phone || coachUser.phone
+          coachUser.cin = cin || coachUser.cin
+
+          coachUser.imageUrl = imageUrl 
+
+          if(validator.validate(email) )
+          coachUser.email = email
+          else
+          coachUser.email =  coachUser.email
+          coachUser.password = headPassword || coachUser.password
+          coachUser.dateOfBirth = dateOfBirth || coachUser.dateOfBirth
+          coach.speciality = speciality || coach.speciality
+          coach.descriptionCoach = descriptionCoach || coach.descriptionCoach
+          coach.dateDebutExperience = dateDebutExperience || coach.dateDebutExperience
+          coach.dateFinExperience = dateFinExperience || coach.dateFinExperience
+          coach.titrePoste = titrePoste || coach.titrePoste
+          coach.file = file || coach.file
+      }
+      else {
+        res.Error(404)
+        throw new Error(" User not found ")
+       }
+  }
+  if (coachUser) {
+    coachUser.firstName = firstName  || coachUser.firstName
+    coachUser.lastName  = lastName || coachUser.lastName
+    coachUser.phone = phone || coachUser.phone
+    coachUser.cin = cin || coachUser.cin
+    coachUser.imageUrl = imageUrl || coachUser.imageUrl
+    if(validator.validate(email) )
+    coachUser.email = email
+    else
+    coachUser.email =  coachUser.email
+    coachUser.dateOfBirth = dateOfBirth || coachUser.dateOfBirth
+    coach.speciality = speciality || coach.speciality
+    coach.descriptionCoach = descriptionCoach || coach.descriptionCoach
+    coach.dateDebutExperience = dateDebutExperience || coach.dateDebutExperience
+    coach.dateFinExperience = dateFinExperience || coach.dateFinExperience
+    coach.titrePoste = titrePoste || coach.titrePoste
+    coach.file = file || coach.file
+  }
+  const coachUserupdate = await coachUser.save()
+  const coachupdate = await coach.save()
+console.log(coachUser);
+  res.json({
+    _id: coachUser._id,
+    firstName: coachUser.firstName,
+    lastName: coachUser.lastName,
+    phone: coachUser.phone,
+    imageUrl: coachUser.imageUrl,
+    email: coachUser.email,
+    coachUser:coachUser.cin,
+    password: coachUser.password,
+    speciality:  coach.speciality ,
+    descriptionCoach:coach.descriptionCoach,
+    dateFinExperience:coach.dateFinExperience,
+    titrePoste:coach.titrePoste,
+    file:coach.file,
+})
+})
+
+
+
+//update for sponsor
 const updateSponsor = asynHandler(async(req,res)=>{
-  const {firstName,lastName ,phone, email ,password,dateOfBirth,entrepriseName,sector,descriptionSponsor,fil} = req.body 
+  const {firstName,lastName ,phone, email ,password,cin,dateOfBirth,entrepriseName,sector,descriptionSponsor,fil} = req.body 
 
   const sponsor = await Sponsor.findById( req.params.id  )
   console.log(sponsor);
@@ -562,6 +629,8 @@ const updateSponsor = asynHandler(async(req,res)=>{
           sponsorUser.firstName = firstName  || sponsorUser.firstName
           sponsorUser.lastName  = lastName || sponsorUser.lastName
           sponsorUser.phone = phone || sponsorUser.phone
+          sponsorUser.cin = cin || sponsorUser.cin
+
           sponsorUser.imageUrl = imageUrl || sponsorUser.imageUrl
           if(validator.validate(email) )
           sponsorUser.email = email
@@ -584,6 +653,8 @@ const updateSponsor = asynHandler(async(req,res)=>{
       sponsorUser.firstName = firstName  || sponsorUser.firstName
       sponsorUser.lastName  = lastName || sponsorUser.lastName
       sponsorUser.phone = phone || sponsorUser.phone
+      sponsorUser.cin = cin || sponsorUser.cin
+
       sponsorUser.imageUrl = imageUrl || sponsorUser.imageUrl
       if(validator.validate(email) )
       sponsorUser.email = email
@@ -614,94 +685,6 @@ console.log(sponsorUser);
 })
       
 })
-
-
-
-//update for Coach
-
-const updateCoach = asynHandler(async(req,res)=>{
-  const {firstName,lastName ,phone, email ,password,dateOfBirth,speciality,descriptionCoach,dateDebutExperience,dateFinExperience,titrePoste,file} = req.body 
-
-  const coach = await Coach.findById( req.params.id  )
-  console.log(coach);
-  const coachUser = await User.findById(  coach.user.valueOf())
-  console.log(coachUser);
-
-  if(!req.file){
-   
-    imageUrl = coachUser.imageUrl
-  }
-  else{
-  const  imageUrl =req.file.filename 
-}
-
-  if (password) {
-      
-      const salt = await bcrypt.genSalt(10)
-      const headPassword = await bcrypt.hash(password,salt)
-  
-      if (coachUser) {
-        coachUser.firstName = firstName  || coachUser.firstName
-          coachUser.lastName  = lastName || coachUser.lastName
-          coachUser.phone = phone || coachUser.phone
-          coachUser.imageUrl = imageUrl || coachUser.imageUrl
-          if(validator.validate(email) )
-          coachUser.email = email
-          else
-          coachUser.email =  coachUser.email
-          coachUser.password = headPassword || coachUser.password
-          coachUser.dateOfBirth = dateOfBirth || coachUser.dateOfBirth
-          coach.speciality = speciality || coach.speciality
-          coach.descriptionCoach = descriptionCoach || coach.descriptionCoach
-          coach.dateDebutExperience = dateDebutExperience || coach.dateDebutExperience
-          coach.dateFinExperience = dateFinExperience || coach.dateFinExperience
-          coach.titrePoste = titrePoste || coach.titrePoste
-          coach.file = file || coach.file
-
-      }
-      else {
-        res.Error(404)
-        throw new Error(" User not found ")
-       }
-  }
-  if (coachUser) {
-    coachUser.firstName = firstName  || coachUser.firstName
-    coachUser.lastName  = lastName || coachUser.lastName
-    coachUser.phone = phone || coachUser.phone
-    coachUser.imageUrl = imageUrl || coachUser.imageUrl
-    if(validator.validate(email) )
-    coachUser.email = email
-    else
-    coachUser.email =  coachUser.email
-    coachUser.dateOfBirth = dateOfBirth || coachUser.dateOfBirth
-    coach.speciality = speciality || coach.speciality
-    coach.descriptionCoach = descriptionCoach || coach.descriptionCoach
-    coach.dateDebutExperience = dateDebutExperience || coach.dateDebutExperience
-    coach.dateFinExperience = dateFinExperience || coach.dateFinExperience
-    coach.titrePoste = titrePoste || coach.titrePoste
-    coach.file = file || coach.file
-  }
-  const coachUserupdate = await coachUser.save()
-  const coachupdate = await coach.save()
-
-console.log(coachUser);
-  res.json({
-    _id: coachUser._id,
-    firstName: coachUser.firstName,
-    lastName: coachUser.lastName,
-    phone: coachUser.phone,
-    imageUrl: coachUser.imageUrl,
-    email: coachUser.email,
-    password: coachUser.password,
-    speciality:  coach.speciality ,
-    descriptionCoach:coach.descriptionCoach,
-    dateFinExperience:coach.dateFinExperience,
-    titrePoste:coach.titrePoste,
-    file:coach.file,
-})
-      
-})
-
 
 
 

@@ -5,7 +5,8 @@ import { USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,
      FORGET_PASSWORD_REQUEST, FORGET_PASSWORD_SUCCESS, FORGET_PASSWORD_FAIL, 
      RESET_PASSWORD_REQUEST, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_FAIL, UNBLOCK_USER, 
      USER_BLOCK_SUCCESS, ADD_COACH_REQUEST, ADD_COACH_SUCCESS, ADD_COACH_FAIL, ADD_SPONSOR_REQUEST,
-      ADD_SPONSOR_SUCCESS, ADD_SPONSOR_FAIL,UPDATE_USER_REQUEST,UPDATE_USER_FAIL,UPDATE_USER_SUCCESS } from "./userconstant";
+      ADD_SPONSOR_SUCCESS, ADD_SPONSOR_FAIL,UPDATE_USER_REQUEST,UPDATE_USER_FAIL,UPDATE_USER_SUCCESS
+      ,UPDATE_COACH_REQUEST,UPDATE_COACH_FAIL,UPDATE_COACH_SUCCESS } from "./userconstant";
 
  export const userLoginReducer=(state={},action)=>{
     // eslint-disable-next-line default-case
@@ -156,8 +157,23 @@ export const userUpdateReducer=(state={},action)=>{
         case UPDATE_USER_REQUEST : 
             return {loading : true}
         case UPDATE_USER_SUCCESS : 
-            return {loading : false ,messageSuccess : "User Update!"}
+            return {loading : false ,messageSuccess : "User Updated!"}
         case UPDATE_USER_FAIL :
+            return {loading : false , error: action.payload }        
+        default:
+            return state    
+
+    }
+ }
+
+ export const coachUpdateReducer=(state={},action)=>{
+    // eslint-disable-next-line default-case
+    switch (action.type) {
+        case UPDATE_COACH_REQUEST : 
+            return {loading : true}
+        case UPDATE_COACH_SUCCESS : 
+            return {loading : false ,messageSuccess : "Coach Updated!"}
+        case UPDATE_COACH_FAIL :
             return {loading : false , error: action.payload }        
         default:
             return state    

@@ -59,9 +59,13 @@ router.put('/verify-email/:token',verifyEmail)
 router.post('/login',logIn)
 router.post('/forget-password',forgetPass)
 router.post('/reset-password',validator,reset)
+
 router.put('/updateUser/:id',upload.single('imageUrl'),updateUser)
+
 router.put('/updateSponsor/:id',upload.single('imageUrl'),updateSponsor)
+
 router.put('/updateCoach/:id',upload.single('imageUrl'),updateCoach)
+
 router.get('/getuser/:id',protectSimpleUser,findUserById)
 router.get('/getalluser',getAllUser)
 router.get('/coach/:userId',GetCoach)
