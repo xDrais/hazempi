@@ -8,9 +8,10 @@ const cookieSession = require('cookie-session');
 const passport = require('passport')
 const passportSetUp=require('./passport.js')
 const authRoute = require('./routes/auth.js')
+const {graphqlHTTP} = require('express-graphql')
+const Schema = require('./Schema/Schema')
 //connect database
 mongodb() 
-
 const app =express()
 app.use(express.json())
 app.use(
@@ -34,5 +35,14 @@ app.use('/api/user',require('./routes/userRoute.js'));
 app.use('/product',require('./routes/productRoute.js'));
 app.use('/api/upload', require('./routes/uploadRoute'));
 app.use("/auth",authRoute);
+
+
+app.use('/graphql',
+graphqlHTTP({
+  schema:Schema,
+  graphiql:true
+}))
+
 // npm run dev
 app.listen(port , ()=> console.log(`SERVER CONNECTED ${port}`))
+

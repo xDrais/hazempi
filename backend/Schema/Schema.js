@@ -1,0 +1,255 @@
+const Event = require('../Models/event')
+const Project = require('../Models/project')
+const {GraphQLID,GraphQLString,GraphQLObjectType, GraphQLList,GraphQLInt,GraphQLNonNull,GraphQLSchema } =require('graphql')
+var GraphQLDate = require('graphql-date')
+const User = require('../Models/user')
+
+//event crud
+
+const EventType = new GraphQLObjectType({
+    name : 'event',
+    fields: () =>({
+        id: {type:GraphQLID},
+        name: {type:GraphQLString},
+        description: {type:GraphQLString},
+        dateEnd: {type:GraphQLDate},
+        participantsnumber:{type:GraphQLInt} ,
+        imageUrl: {type:GraphQLString},
+        eventCreator: {type:UserType,
+        resolve(parent,args){
+            return User.findById(parent.eventCreator)
+        } }
+
+
+    })
+    ,
+
+})
+
+const UserType = new GraphQLObjectType({
+    name : 'user',
+    fields: () =>({
+        id: {type:GraphQLID},
+        email: {type:GraphQLString},
+        lastName: {type:GraphQLString},
+        firstName: {type:GraphQLString},
+        phone: {type:GraphQLString},
+        cin: {type:GraphQLInt},
+        imageUrl: {type:GraphQLString}
+    })
+})
+
+
+const ProjectType = new GraphQLObjectType({
+    name : 'project',
+    fields: () =>({
+        id: {type:GraphQLID},
+        projectCreator: {type:GraphQLObjectType},
+        name: {type:GraphQLString},
+        description: {type:GraphQLString},
+        imageUrl: {type:GraphQLString},
+        projectCreator: {type:UserType,
+            resolve(parent,args){
+                console.log(parent.projectCreator)
+                return User.findById(parent.projectCreator)
+            } }
+    })
+})
+
+ 
+
+
+
+
+ //Query
+ const RootQuery = new GraphQLObjectType({
+    name : 'RootQueryType',
+        fields: {
+                    //get all events
+
+            events:{
+                type: new GraphQLList(EventType),
+                resolve(parent,args){
+                    return Event.find()
+                }
+            },
+                    //get event by id
+
+            event:{
+                type :EventType,
+                args:{id:{type:GraphQLID}},
+                resolve(parent,args){
+                    return Event.findById(args.id)
+                }
+                
+            },
+                  //get all projects
+
+                  projects:{
+                    type: new GraphQLList(ProjectType),
+                    resolve(parent,args){
+                        return Project.find()
+                    }
+                },
+                //get project by id
+
+                  project:{
+                    type :ProjectType,
+                    args:{id:{type:GraphQLID}},
+                    resolve(parent,args){
+                        return Project.findById(args.id)
+                    }
+            
+                 }
+
+        }
+    } 
+ )
+
+
+
+
+
+ //mutation
+
+ const mutation = new GraphQLObjectType({
+    name:'RootMutationType',
+    fields: {
+          //add event
+        addevent: {           
+            type:EventType,
+            args:{
+                name: {type:new GraphQLNonNull(GraphQLString)},
+                description: {type:new GraphQLNonNull(GraphQLString)},
+                dateEnd: {type:GraphQLDate},
+                participantsnumber:{type:GraphQLInt} ,
+                imageUrl: {type:new GraphQLNonNull(GraphQLString)},
+                eventCreator: {type:new GraphQLNonNull(GraphQLID)},
+            },
+            resolve(parent,args){
+                const event = Event.create({
+                    name: args.name,
+                    description:args.description,
+                    dateEnd :args.dateEnd,
+                    participantsnumber :args.participantsnumber,
+                    imageUrl :args.imageUrl,
+                    eventCreator: args.eventCreator
+
+                })
+                return event
+            }
+            
+        },
+        //delete event
+        deleteevent:{type: EventType,
+            args:{id:{type:new GraphQLNonNull(GraphQLID)}},
+            resolve(parent,args){
+                return Event.findByIdAndDelete(args.id)
+            }
+            
+    },
+    //update event
+    updateevent:{
+        type:EventType,
+            args:{
+                id:{type:new GraphQLNonNull(GraphQLID)},
+                name: {type:GraphQLString},
+                description: {type: (GraphQLString)},
+                dateEnd: {type:GraphQLDate},
+                participantsnumber:{type:GraphQLInt} ,
+                imageUrl: {type: (GraphQLString)},
+            },
+            resolve(parent,args){
+            return Event.findByIdAndUpdate(args.id,
+                {
+                    $set:{
+                        name: args.name,
+                        description:args.description,
+                        dateEnd :args.dateEnd,
+                        participantsnumber :args.participantsnumber,
+                        imageUrl :args.imageUrl,
+                    }
+                })
+        }
+    },
+
+//add project
+    addproject: {           
+        type:ProjectType,
+        args:{
+            name: {type:new GraphQLNonNull(GraphQLString)},
+            description: {type:new GraphQLNonNull(GraphQLString)},
+            imageUrl: {type:new GraphQLNonNull(GraphQLString)},
+            projectCreator: {type:new GraphQLNonNull(GraphQLID)},
+        },
+        resolve(parent,args){
+            const project = Project.create({
+                name: args.name,
+                description:args.description,
+                imageUrl :args.imageUrl,
+                projectCreator: args.projectCreator
+            })
+            return project
+        }
+        
+    },
+    
+        //delete project
+        deleteproject:{type: ProjectType,
+            args:{id:{type:new GraphQLNonNull(GraphQLID)}},
+            resolve(parent,args){
+                return Project.findByIdAndDelete(args.id)
+            }
+            
+    },
+     //update project
+     updateproject:{
+        type:ProjectType,
+            args:{
+                id:{type:new GraphQLNonNull(GraphQLID)},
+                name: {type:GraphQLString},
+                description: {type: (GraphQLString)},
+                imageUrl: {type: (GraphQLString)},
+            },
+            resolve(parent,args){
+            return Project.findByIdAndUpdate(args.id,
+                {
+                    $set:{
+                        name: args.name,
+                        description:args.description,
+                        imageUrl :args.imageUrl,
+                    }
+                })
+        }
+    }
+
+
+
+
+
+
+
+ }
+
+
+
+
+}
+ 
+ 
+ )
+
+
+
+
+
+
+
+
+
+
+ module.exports = new GraphQLSchema({
+ 
+    query: RootQuery,
+    mutation: mutation
+ })

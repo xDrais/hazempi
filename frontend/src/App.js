@@ -18,6 +18,17 @@ import axios from "axios";
 import UserDashboard from './page/UserDashboard/UserDashboard';
 import ProductDetail from './page/ProductDetail/ProductDetail';
 import Shop from './page/Shop/shop';
+
+import {client} from './apollo.js'
+import { ApolloProvider } from '@apollo/client';
+import Project from './Components/Project/Project';
+import Getallprojects from './Components/Project/Getallprojects';
+import Addproject from './Components/Project/Addproject';
+import Updateproject from './Components/Project/Updateproject';
+import Getallevents from './Components/Eve/Getallevents';
+import Event from './Components/Eve/Event';
+
+
 const ForgetPassword =lazy(() => import('./page/ForgetPassword'));
 const ResetPassword = lazy(()=>import('./page/ResetPassword'))
 const Profile = lazy(()=>import('./page/Profile'))
@@ -33,20 +44,18 @@ function App() {
 		try {
 			const url = `http://localhost:5000/auth/login/success`;
 			const { data } = await axios.get(url, { withCredentials: true });
-      console.log(data.user)
 			setUser(data.user._json);
 		} catch (err) {
-			console.log(err);
 		}
 	};
 
 	useEffect(() => {
 		getUser();
-    console.log(getUser())
 	}, []);
 
 
   return (
+    <ApolloProvider client={client}>
     <Suspense fallback={<Loader />}>
     <Router>
     {isAdmin ? (
@@ -77,7 +86,24 @@ function App() {
     <Route path="/register" element={<> <Navbarr /><Register/> </>} />     
     <Route path="/forget-password" element={ <> <Navbarr /><ForgetPassword/> </> } />
     <Route path="/reset-password" element={<> <Navbarr /> <ResetPassword/></>} />
-    <Route path="/profile" element={<> <Navbarr /> <Profile/> </>} />
+
+   
+    <Route path="/profile" element={<>   <Navbarr /> <Profile/>  </> } />
+
+
+    <Route path="/project" element={<>   <Navbarr /> <Project/>  </> } />
+    <Route path="/projects" element={<>    <Getallprojects/>  </> } />
+    <Route path="/addproject" element={<>   <Navbarr /> <Addproject/>  </> } />
+    <Route path="/updateproject" element={<>   <Navbarr /> <Updateproject/>  </> } />
+
+
+
+    <Route path="/events" element={<>    <Getallevents/>  </> } />
+    <Route path="/event" element={<>    <Event/>  </> } />
+
+
+  
+
     <Route path="/" element={<><Navbarr /><Home/></>} />
     <Route path="/productdetail/:id" element={<> <div className="bgdetail"><Navbarr /><ProductDetail/></div></>} />
     <Route path="/shop" element={<><Navbarr /><Shop/></>} />
@@ -96,7 +122,7 @@ function App() {
     </Router>
     
     </Suspense>
-    
+    </ApolloProvider>
   );
 }
 

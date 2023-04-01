@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 import Camera from "@material-ui/icons/Camera";
 import Palette from "@material-ui/icons/Palette";
+import WorkIcon from "@material-ui/icons/Work"; 
 import add from "@material-ui/icons/Add";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShop, faShopLock} from '@fortawesome/free-solid-svg-icons';
@@ -18,7 +19,7 @@ import GridContainer from "../Components/Grid/GridContainer.js";
 import GridItem from "../Components/Grid/GridItem.js";
 import NavPills from "../Components/NavPills/NavPills.js"
 import Parallax from "../Components/Parallax/Parallax.js";
-
+import Project from "../Components/Project/Project"
 import styles from "../Components/styles/jss/nextjs-material-kit/pages/profilePage.js";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Components/Loader.js";
@@ -75,6 +76,7 @@ const GotoUserDashboard=()=>{
   const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
   return (
     <div>
+      
     {loading && <Loader></Loader>}
       <Parallax small filter image="/images/handmade.jpg" />
       <div style={{backgroundColor: "#FCFFE7"}} className={classNames(classes.main, classes.mainRaised)}>
@@ -189,6 +191,25 @@ const GotoUserDashboard=()=>{
                               className={navImageClasses}
                             />
                           </GridItem>
+                        </GridContainer>
+                      )
+                    },
+                    {
+                      tabButton: "Projects",
+                      tabIcon: WorkIcon ,
+                      tabContent: (
+                        <GridContainer justify="center">
+                          <GridItem xs={12} sm={12} md={4}>
+
+
+                          <Project></Project>
+
+                       
+
+                          
+                          </GridItem>
+                         
+                        
                         </GridContainer>
                       )
                     },
