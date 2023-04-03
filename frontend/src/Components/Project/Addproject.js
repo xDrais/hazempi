@@ -2,7 +2,8 @@ import React,{ useState} from 'react'
 import { useMutation } from '@apollo/client'
 import { Form ,Button,Container } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
-import {add_Event} from '../../Mutation/eventMutation'
+import {add_Project} from '../../Mutation/projetMutation'
+import axios from 'axios'
 
 const Addproject = () => {
 
@@ -14,21 +15,42 @@ const Addproject = () => {
     const userLogin =useSelector(state =>state.userLogin)
     const {userInfo} =userLogin
     const projectCreator =userInfo._id
-    const [addProject] =useMutation(add_Event,{
+    const [addProject] =useMutation(add_Project,{
         variables:{name,description,imageUrl,projectCreator}
     })
 
 
    
     
+    const imageupload=async(e)=>{
+      e.preventDefault();
+
+      const image=  e.target.files[0]
+
+      const formdata = new FormData();
+      formdata.append('imageUrl',image)
+
+      try {
+        const config = {
+          Headers:{
+            'Content-Type':'multipart/form-data'
+          }
+        }
+        const {data} = await axios.post(`http://localhost:5000/image`, formdata,config );
+        console.log(data)
+        setImageUrl(data.message)
+        console.log(imageUrl)
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
       
 
    const submitHandler=async(e)=>{
         e.preventDefault();
         console.log(imageUrl)
-        console.log(typeof imageUrl.name)
-        console.log(imageUrl.name)
-        console.log(projectCreator)
+
         addProject(name,description,imageUrl,projectCreator)
       }
 
@@ -74,7 +96,7 @@ const Addproject = () => {
                 type="file"
                 name="imageUrl"
                 accept=".png, .jpg, .jpeg"
-                onChange={(e) => setImageUrl(e.target.files[0].name)}  
+                onChange={imageupload}  
                  >
                 </Form.Control>
             </Form.Group>

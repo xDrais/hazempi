@@ -10,9 +10,7 @@ mutation addProject($name : String! , $description:String! ,$imageUrl:String!, $
     description
     imageUrl
     projectCreator{
-      firstName
-      lastName
-      email
+     id
     }
         }      
 }

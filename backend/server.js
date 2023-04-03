@@ -8,6 +8,7 @@ const cookieSession = require('cookie-session');
 const passport = require('passport')
 const passportSetUp=require('./passport.js')
 const authRoute = require('./routes/auth.js')
+const image = require('./routes/image.js')
 const {graphqlHTTP} = require('express-graphql')
 const Schema = require('./Schema/Schema')
 //connect database
@@ -35,6 +36,7 @@ app.use('/api/user',require('./routes/userRoute.js'));
 app.use('/product',require('./routes/productRoute.js'));
 app.use('/api/upload', require('./routes/uploadRoute'));
 app.use("/auth",authRoute);
+app.use("/image",image);
 
 
 app.use('/graphql',

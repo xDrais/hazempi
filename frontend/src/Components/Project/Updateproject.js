@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client'
 import { Form ,Button,Container } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import {update_Project} from '../../Mutation/projetMutation'
+import { useParams } from 'react-router-dom'
 
 const Updateproject = () => {
 
@@ -13,7 +14,8 @@ const Updateproject = () => {
     
     const userLogin =useSelector(state =>state.userLogin)
     const {userInfo} =userLogin
-    const id ="6425b72d212e2c064aa94fc4"
+    const {id} = useParams()
+    console.log(id)
     const [updateProject] =useMutation(update_Project,{
         variables:{name,description,imageUrl,id}
     })

@@ -6,10 +6,10 @@ import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 import Camera from "@material-ui/icons/Camera";
 import Palette from "@material-ui/icons/Palette";
-import WorkIcon from "@material-ui/icons/Work"; 
+import WorkIcon from "@material-ui/icons/Work";
 import add from "@material-ui/icons/Add";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShop, faShopLock} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShop, faShopLock } from "@fortawesome/free-solid-svg-icons";
 import Favorite from "@material-ui/icons/Favorite";
 // core components
 // import Header from "/components/Header/Header.js";
@@ -17,14 +17,14 @@ import Favorite from "@material-ui/icons/Favorite";
 import Button from "../Components/CustomButtons/Button.js";
 import GridContainer from "../Components/Grid/GridContainer.js";
 import GridItem from "../Components/Grid/GridItem.js";
-import NavPills from "../Components/NavPills/NavPills.js"
+import NavPills from "../Components/NavPills/NavPills.js";
 import Parallax from "../Components/Parallax/Parallax.js";
-import Project from "../Components/Project/Project"
+import Getallprojects from "../Components/Project/Getallprojects.js";
 import styles from "../Components/styles/jss/nextjs-material-kit/pages/profilePage.js";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Components/Loader.js";
-import { toast,ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Input from "../Components/Input.jsx";
 import UploadfFile from "./UploadfFile.jsx";
@@ -35,38 +35,34 @@ const useStyles = makeStyles(styles);
 export default function Profile() {
   const navigate = useNavigate();
 
-const GotoUserDashboard=()=>{
-
-  navigate('/userdashboard');
-
-}
-  const handle=()=>{
-    if (show ){
-      return setShow(!show)
+  const GotoUserDashboard = () => {
+    navigate("/userdashboard");
+  };
+  const handle = () => {
+    if (show) {
+      return setShow(!show);
     }
-    return setShow(!show)
-  }
-    const [toggle,setToggle]=useState(()=> {return ['a']}) 
-    const userLogin = useSelector(state => state.userLogin)
-    const {loading , error,userInfo } = userLogin  
-    
-    const addFiled=()=>{
-      if (toggle.length<5) {
-        setToggle([...toggle,'&'])
-      }
-    }
-    
+    return setShow(!show);
+  };
+  const [toggle, setToggle] = useState(() => {
+    return ["a"];
+  });
+  const userLogin = useSelector((state) => state.userLogin);
+  const { loading, error, userInfo } = userLogin;
 
-  
-    const [show,setShow]=useState(false)
-   
-    useEffect(()=>{
-      
- 
-        if(error){
-            toast.error(error)
-        }
-    },[error])
+  const addFiled = () => {
+    if (toggle.length < 5) {
+      setToggle([...toggle, "&"]);
+    }
+  };
+
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
   const classes = useStyles();
   const imageClasses = classNames(
     classes.imgRaised,
@@ -76,31 +72,45 @@ const GotoUserDashboard=()=>{
   const navImageClasses = classNames(classes.imgRounded, classes.imgGallery);
   return (
     <div>
-      
-    {loading && <Loader></Loader>}
+      {loading && <Loader></Loader>}
       <Parallax small filter image="/images/handmade.jpg" />
-      <div style={{backgroundColor: "#FCFFE7"}} className={classNames(classes.main, classes.mainRaised)}>
-        <div> <div></div>
+      <div
+        style={{ backgroundColor: "#FCFFE7" }}
+        className={classNames(classes.main, classes.mainRaised)}
+      >
+        <div>
+          {" "}
+          <div></div>
           <div className={classes.container}>
-            <GridContainer  justify="center">
+            <GridContainer justify="center">
               <GridItem xs={12} sm={12} md={6}>
                 <div className={classes.profile}>
                   <div>
                     <img
-                      src={"/images/"+userInfo.imageUrl}
+                      src={"/images/" + userInfo.imageUrl}
                       alt="..."
-                      style={{"borderRadius": "50%","height":"160px"}}
+                      style={{ borderRadius: "50%", height: "160px" }}
                     />
                   </div>
-                  {userInfo.certified ? 
-                  <FontAwesomeIcon style={{marginTop:"-300px"}} onClick={GotoUserDashboard} icon={faShop} size="2x" /> 
-           :     
-           <FontAwesomeIcon style={{marginTop:"-300px"}} icon={faShopLock} size="2x" /> 
-
-           } 
-                  <div className={classes.name +"py-3"}>
-                    <h3 style={{ color: "#93643b"}}className={classes.title}>{userInfo.lastName+" "+userInfo.firstName}</h3>
-                     <h6>{userInfo.role.name}</h6> 
+                  {userInfo.certified ? (
+                    <FontAwesomeIcon
+                      style={{ marginTop: "-300px" }}
+                      onClick={GotoUserDashboard}
+                      icon={faShop}
+                      size="2x"
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      style={{ marginTop: "-300px" }}
+                      icon={faShopLock}
+                      size="2x"
+                    />
+                  )}
+                  <div className={classes.name + "py-3"}>
+                    <h3 style={{ color: "#93643b" }} className={classes.title}>
+                      {userInfo.lastName + " " + userInfo.firstName}
+                    </h3>
+                    <h6>{userInfo.role.name}</h6>
                     <Button justIcon link className={classes.margin5}>
                       <i className={"fab fa-twitter"} />
                     </Button>
@@ -115,9 +125,7 @@ const GotoUserDashboard=()=>{
               </GridItem>
             </GridContainer>
             <div className={classes.description}>
-              <p>
-               
-              </p>
+              <p></p>
             </div>
             <GridContainer justify="center">
               <GridItem xs={12} sm={12} md={8} className={classes.navWrapper}>
@@ -155,7 +163,7 @@ const GotoUserDashboard=()=>{
                             />
                           </GridItem>
                         </GridContainer>
-                      )
+                      ),
                     },
                     {
                       tabButton: "Events",
@@ -192,26 +200,17 @@ const GotoUserDashboard=()=>{
                             />
                           </GridItem>
                         </GridContainer>
-                      )
+                      ),
                     },
                     {
                       tabButton: "Projects",
-                      tabIcon: WorkIcon ,
+                      tabIcon: WorkIcon,
                       tabContent: (
                         <GridContainer justify="center">
-                          <GridItem xs={12} sm={12} md={4}>
-
-
-                          <Project></Project>
-
-                       
-
-                          
-                          </GridItem>
-                         
-                        
+                          <Button onClick={()=>{navigate('/addproject')}} > add </Button>
+                          <Getallprojects></Getallprojects>
                         </GridContainer>
-                      )
+                      ),
                     },
                     {
                       tabButton: "Favorite",
@@ -248,37 +247,29 @@ const GotoUserDashboard=()=>{
                             />
                           </GridItem>
                         </GridContainer>
-                      )
-                    }
+                      ),
+                    },
                   ]}
                 />
                 <GridContainer justify="center">
-                  {userInfo.role.name==="coach"  &&
-                  <Button  onClick={handle}>add more Experiance</Button>
-                  }
-                  {userInfo.role.name==="sponsor"  &&
-                  <Button  onClick={handle}  >add more Experiance</Button>
-                  }
-                  
-
+                  {userInfo.role.name === "coach" && (
+                    <Button onClick={handle}>add more Experiance</Button>
+                  )}
+                  {userInfo.role.name === "sponsor" && (
+                    <Button onClick={handle}>add more Experiance</Button>
+                  )}
                 </GridContainer>
-                
-                  
-                  {show && 
+
+                {show && (
                   <>
-                   {toggle.map((index)=>{
-                  return <Input
-                  key={Math.random()}
-                  /> 
-                  })} 
-                  <Button onClick={addFiled} > Add Filed</Button>
+                    {toggle.map((index) => {
+                      return <Input key={Math.random()} />;
+                    })}
+                    <Button onClick={addFiled}> Add Filed</Button>
                   </>
-                  }
-                  
-                  
+                )}
               </GridItem>
             </GridContainer>
-            
           </div>
         </div>
       </div>

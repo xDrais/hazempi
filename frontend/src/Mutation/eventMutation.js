@@ -9,10 +9,8 @@ mutation addEvent($name : String! , $description:String!,$dateEnd:Date!,$partici
             name
     description
     imageUrl
-    projectCreator{
-      firstName
-      lastName
-      email
+    eventCreator{
+     id
     }
         }      
 }
@@ -28,7 +26,7 @@ mutation updateEvent($name : String! , $description:String!,$dateEnd:Date!,$part
             name
             description
             imageUrl
-            projectCreator{
+            eventCreator{
               firstName
               lastName
               email
@@ -46,7 +44,7 @@ mutation deleteEvent( $id: ID! ){
             name
             description
             imageUrl
-            projectCreator{
+            eventCreator{
               firstName
               lastName
               email

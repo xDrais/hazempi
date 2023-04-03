@@ -27,6 +27,8 @@ import Addproject from './Components/Project/Addproject';
 import Updateproject from './Components/Project/Updateproject';
 import Getallevents from './Components/Eve/Getallevents';
 import Event from './Components/Eve/Event';
+import Updateevent from './Components/Eve/Updateevent';
+import Addevent from './Components/Eve/Addevent';
 
 
 const ForgetPassword =lazy(() => import('./page/ForgetPassword'));
@@ -94,12 +96,14 @@ function App() {
     <Route path="/project" element={<>   <Navbarr /> <Project/>  </> } />
     <Route path="/projects" element={<>    <Getallprojects/>  </> } />
     <Route path="/addproject" element={<>   <Navbarr /> <Addproject/>  </> } />
-    <Route path="/updateproject" element={<>   <Navbarr /> <Updateproject/>  </> } />
+    <Route path="/updateproject/:id" element={<>   <Navbarr /> <Updateproject/>  </> } />
 
 
 
     <Route path="/events" element={<>    <Getallevents/>  </> } />
     <Route path="/event" element={<>    <Event/>  </> } />
+    <Route path="/addevent" element={<>    <Addevent/>  </> } />
+    <Route path="/updateevent/:id" element={<>    <Updateevent/>  </> } />
 
 
   
