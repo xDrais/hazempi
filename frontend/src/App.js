@@ -94,16 +94,16 @@ function App() {
 
 
     <Route path="/project" element={<>   <Navbarr /> <Project/>  </> } />
-    <Route path="/projects" element={<>    <Getallprojects/>  </> } />
+    <Route path="/projects" element={<>    <Navbarr /> <Getallprojects/>  </> } />
     <Route path="/addproject" element={<>   <Navbarr /> <Addproject/>  </> } />
     <Route path="/updateproject/:id" element={<>   <Navbarr /> <Updateproject/>  </> } />
 
 
 
-    <Route path="/events" element={<>    <Getallevents/>  </> } />
-    <Route path="/event" element={<>    <Event/>  </> } />
-    <Route path="/addevent" element={<>    <Addevent/>  </> } />
-    <Route path="/updateevent/:id" element={<>    <Updateevent/>  </> } />
+    <Route path="/events" element={<>  <Navbarr />  <Getallevents/>  </> } />
+    <Route path="/event" element={<>   <Navbarr /> <Event/>  </> } />
+    <Route path="/addevent" element={<> <Navbarr />   <Addevent/>  </> } />
+    <Route path="/updateevent/:id" element={<> <Navbarr />   <Updateevent/>  </> } />
 
 
   

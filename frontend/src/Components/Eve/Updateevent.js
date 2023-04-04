@@ -1,9 +1,9 @@
 import React,{ useState} from 'react'
 import { useMutation } from '@apollo/client'
-import { Form ,Button,Container } from 'react-bootstrap'
+import { Form ,Button,Col} from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import {update_Event} from '../../Mutation/eventMutation'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 
 const Updateevent = () => {
@@ -22,6 +22,7 @@ const Updateevent = () => {
       variables:{name,description,dateEnd,participantsnumber:parseInt(participantsnumber),imageUrl,id}
   })
 
+  const navigate=useNavigate()
 
   const imageupload=async(e)=>{
     e.preventDefault();
@@ -47,7 +48,9 @@ const Updateevent = () => {
     }
   }
 
-
+  const getallevents=()=>{
+    navigate('/events')
+  }
 
 
   const submitHandler=async(e)=>{
@@ -58,45 +61,49 @@ const Updateevent = () => {
 
 
   return (
-    <Container>
-       <div>
+   <>
+    <div className='py-5'
+    style={{marginTop:"50px"}}>
+    <Button variant='info' 
+      className='btn-sm ' 
+      onClick={() => {getallevents()}}
+      > Back
+       <i class="fa-sharp fa-solid fa-arrow-left"></i>
+      </Button>
     </div>
-    <div className='hero-container'>
+      
 
-      <Form className='login' onSubmit={submitHandler}>
-      <center><h3 className="sign">ADD Event</h3></center>
-
+    
+       <center><h3 className="py-5">Update Event</h3></center>
+      <Col md={6} style={{float:'right',marginRight:'450px'}}>
+      <Form  onSubmit={submitHandler}>
             <Form.Group controlId="name">
                 <Form.Label>
                    name
                 </Form.Label>
-                <Form.Control 
+                <Form.Control
                  type="name"
                  placeholder="name"
-                 minLength={8} 
-                 value={name} 
-                 onChange={(e)=> 
+                 minLength={8}
+                 value={name}
+                 onChange={(e)=>
                     setName(e.target.value)}>
                 </Form.Control>
             </Form.Group>
-
-
             <Form.Group controlId="description">
                 <Form.Label>
                    description
                 </Form.Label>
-                <Form.Control 
+                <Form.Control
                  type="description"
                  placeholder="description"
-                 minLength={8} 
-                 value={description} 
-                 onChange={(e)=> 
+                 minLength={8}
+                 value={description}
+                 onChange={(e)=>
                     setDescription(e.target.value)}>
                 </Form.Control>
             </Form.Group>
-
-
-            <Form.Group controlId="dateEnd">
+ <Form.Group controlId="dateEnd">
                 <Form.Label>
                 Date End
                 </Form.Label>
@@ -108,7 +115,7 @@ const Updateevent = () => {
                   setDateEnd(e.target.value)}>
                 </Form.Control>
             </Form.Group>
-            <Form.Group controlId="participantsnumber">
+<Form.Group controlId="participantsnumber">
                 <Form.Label>
                    Participants Number
                 </Form.Label>
@@ -123,7 +130,7 @@ const Updateevent = () => {
             <Form.Group controlId="imageUrl">
                 <Form.Label>
                    imageUrl
-                </Form.Label> 
+                </Form.Label>
                 <Form.Control 
                 type="file"
                 name="imageUrl"
@@ -134,8 +141,8 @@ const Updateevent = () => {
             </Form.Group>
             <Button type="submit" variant="primary" >Submit</Button>
         </Form>
-        </div>
-    </Container>
+      </Col>
+    </>
      )
 }
 

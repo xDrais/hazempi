@@ -2,7 +2,9 @@ import {useQuery,useMutation} from '@apollo/client'
 import  {getEvents} from '../../Query/eventQuerry'
 import { delete_Event } from '../../Mutation/eventMutation';
 import { useNavigate } from 'react-router-dom';
-
+import {Button,Table} from 'react-bootstrap'
+import  Loader  from '../Loader'
+import  Message  from '../Message'
 import './Eve.css'
 const Getallevents = () => {
 
@@ -19,44 +21,66 @@ const Getallevents = () => {
     }
 
     const gotoupdate=(id)=>{
-      navigate(`/updateproject/${id}`)
+      navigate(`/updateevent/${id}`)
 
     }
-
+    const addevent=()=>{
+      navigate(`/addevent`)
+     }
 
   return (
     <>
-   <div class="container">
-  
-	<div class="table">
-		<div class="table-header">
-			<div class="header__item"><a id="name" class="filter__link" >Name</a></div>
-			<div class="header__item"><a id="description" class="filter__link filter__link--number" >description</a></div>
-			<div class="header__item"><a id="losses" class="filter__link filter__link--number" >update</a></div>
-			<div class="header__item"><a id="total" class="filter__link filter__link--number" >delete</a></div>
-		</div>
-    {data?.events.length>0 ? (
-data?.events.map((p)=>(
-		<div class="table-content" key={p.id}>	
-			<div class="table-row">		
-				<div class="table-data">{p.name}</div>
-				<div class="table-data"> {p.description}</div>
+    <h1 className='py-5'>Event</h1>
+   
+    {console.log(loading)}
+    {loading ? <Loader>hhhhhhhhhhhhh</Loader> : error ? <Message>{error}</Message>:(
+      <>
+      <Button variant='success' 
+      className='btn-sm offset-10' 
+      onClick={() => {addevent()}}
+      > add
+       <i class="fa-sharp fa-solid fa-plus"></i>
+      </Button>
+         <Table striped bordered hover responsive className='table-sm'>
+ 
+         <thead>
+             <tr>
+                 <th>Name</th>
+                 <th>Description</th>   
+             </tr>
+         </thead >
+         <tbody>
+         {data?.events.map(event => (
+             <tr key={event.id}>
+             <td>{event.name}</td>
+             <td>{event.description}</td>
+          
+             <td>
+                 <div >
+                 <Button variant='light' className='btn-sm' onClick={() => {gotoupdate(event.id)}}>
+                         <i className='fas fa-edit'></i>
+                     </Button>
+                 </div>
+                 <Button variant='danger' 
+                     className='btn-sm' 
+                     onClick={() => {deleteevent(event.id)}}
+                     >
+                      <i className='fas fa-trash'></i>
+                     </Button>
+                     
+             </td>
 
-        <div class="table-data">
-          <input type="button" value="delete" onClick={() => deleteevent(p.id)}  ></input>
-         </div>
-        <div class="table-data">
-          <input type="button" value="update" onClick={() => gotoupdate(p.id)} ></input>
-                        
-        </div>
+             </tr>
+         ))}
+         
 
-			</div>
-		</div>	
-    ))
-    ):(<p>no projects</p>)}
-    </div>
-</div>
-</>  )
+         </tbody>
+     </Table>
+     </>
+    )}
+
+    </>
+     )
 }
 
 export default Getallevents

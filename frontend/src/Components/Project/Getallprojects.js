@@ -1,57 +1,113 @@
 import {useQuery,useMutation} from '@apollo/client'
-import  {getProjects} from '../../Query/projectQuery'
+import  {getProjects,projectbyid} from '../../Query/projectQuery'
 import { delete_Project } from '../../Mutation/projetMutation';
 import { useNavigate } from 'react-router-dom';
-import {Image} from 'react-bootstrap'
+import {Button,Table,Pagination} from 'react-bootstrap'
+import  Loader  from '../Loader'
+import  Message  from '../Message'
 import './Projectsss.css'
-const Getallprojects = () => {
-    const {loading,error,data} = useQuery(getProjects)
-  const navigate = useNavigate();
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
+const Getallprojects = () => {
+  const [limit,setLimit]=useState(1)
+  const userLogin =useSelector(state =>state.userLogin)
+  const {userInfo} =userLogin
+  const id= userInfo._id
+  const page=2
+  const {loading,error,data} = useQuery(projectbyid,{variables:{
+    id,limit:parseInt(limit),page
+  }})
+
+  const pages= Math.ceil(data?.projectbyid.totalCount / page)
+  console.log(pages)
+  const navigate = useNavigate();
     const [deleteProject] =useMutation(delete_Project
   )
     const deleteproj=(id)=>{
+      if (window.confirm('Are you sure')) {
       deleteProject({
         variables: { id: id },
       })
-      console.log(id) 
+
     }
+    }
+    const next=()=>{
+      if(limit<pages){
+      setLimit((p)=>p+1)
+      console.log(limit)
+      }
+    }
+    const back=()=>{
+      if (limit>1){
+      setLimit((p)=>p-1)
+      console.log(limit)
+    }
+  }
 
    const gotoupdate=(id)=>{
     navigate(`/updateproject/${id}`)
    }
+   const addproject=()=>{
+    navigate(`/addproject`)
+   }
 
   return (
     <>
-<div class="container">
-  
-	<div class="table">
-		<div class="table-header">
-			<div class="header__item"><a id="name" class="filter__link" >Name</a></div>
-			<div class="header__item"><a id="description" class="filter__link filter__link--number" >description</a></div>
-			<div class="header__item"><a id="losses" class="filter__link filter__link--number" >update</a></div>
-			<div class="header__item"><a id="total" class="filter__link filter__link--number" >delete</a></div>
-		</div>
-{data?.projects.length>0 ? (
-        data?.projects.map((p)=>(
-		<div class="table-content" key={p.id}>	
-			<div class="table-row">		
-				<div class="table-data">{p.name}</div>
-				<div class="table-data"> {p.description}</div>
-        <div class="table-data">
-          <input type="button" value="delete" onClick={() => deleteproj(p.id)}  ></input>
-         </div>
-        <div class="table-data">
-          <input type="button" value="update" onClick={() => gotoupdate(p.id)} ></input>
-                        
-        </div>
+    <h1 className='py-5'>Project</h1>
+   
+    {loading ? <Loader></Loader> : error ? <Message>{error}</Message>:(
+      <>
+      <Button variant='success' 
+      className='btn-sm offset-10' 
+      onClick={() => {addproject()}}
+      > add
+       <i class="fa-sharp fa-solid fa-plus"></i>
+      </Button>
+         <Table striped bordered hover responsive className='table-sm'>
+ 
+         <thead>
+             <tr>
+                 <th>Name</th>
+                 <th>Description</th>   
+             </tr>
+         </thead >
+         <tbody>
+         {data?.projectbyid.data.map(project => (
+             <tr key={project.id}>
+             <td>{project.name}</td>
+             <td>{project.description}</td>
+          
+             <td>
+                 <div >
+                 <Button variant='light' className='btn-sm' onClick={() => {gotoupdate(project.id)}}>
+                         <i className='fas fa-edit'></i>
+                     </Button>
+                 </div>
+                 <Button variant='danger' 
+                     className='btn-sm' 
+                     onClick={() => {deleteproj(project.id)}}
+                     >
+                      <i className='fas fa-trash'></i>
+                     </Button>
+                     
+             </td>
 
-			</div>
-		</div>	
-    ))
-    ):(<p>no projects</p>)}
-    </div>
-</div>
+             </tr>
+         ))}
+         
+
+         </tbody>
+     </Table>
+     <Pagination className='offset-10'>
+     <Pagination.Prev  onClick={back}/>
+     {Array.from(Array(pages),(e,i)=>{
+       return <Pagination.Item  onClick={() => setLimit(i+1)}>{i+1}</Pagination.Item>
+     })}
+     <Pagination.Next onClick={next} />
+     </Pagination>
+     </>
+    )}
 
     </>
   )

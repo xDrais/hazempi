@@ -91,11 +91,15 @@ function Navbarr () {
 
 REGISTER                         </Link>
 
-           
        {userInfo?(
            <div style={{marginLeft: '1120px',marginTop: '-27.8px'}} > 
                     <NavDropdown   title={userInfo.lastName + " " + userInfo.firstName } id="username">
-                      
+                    {userInfo.role.name === "userRole"  && <LinkContainer  to='/projects'>
+                            <NavDropdown.Item > <Link to="/projects" >Project</Link> </NavDropdown.Item>
+                        </LinkContainer> }
+                    {userInfo.role.name === "sponsorRole"  && <LinkContainer  to='/events'>
+                            <NavDropdown.Item > <Link to="/events" >Events</Link> </NavDropdown.Item>
+                        </LinkContainer> }
                         <LinkContainer  to='/profile'>
                             <NavDropdown.Item > <Link to="/profile" >PROFILE</Link> </NavDropdown.Item>
                         </LinkContainer>
@@ -103,9 +107,13 @@ REGISTER                         </Link>
                             <NavDropdown.Item > <Link to="/userupdate" >UPDATE PROFILE</Link> </NavDropdown.Item>
                         </LinkContainer>
                         <NavDropdown.Item onClick={logoutHandler} >LOGOUT</NavDropdown.Item>
-                    </NavDropdown>  </div>
-            
-            )  : 
+                      
+                  
+                  
+                  </NavDropdown>
+
+                  </div>
+            )  :  
             <Link className="nav_links" to={"/login"}>
                 SIGNIN
                 </Link>         

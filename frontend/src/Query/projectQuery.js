@@ -2,8 +2,8 @@ import {gql}  from '@apollo/client'
 
 const getProjects = gql`
 
-query getProjects{
-    projects
+query getProjects($limit:Int){
+    projects(limit:$limit)
         {
             id
             name
@@ -20,11 +20,30 @@ query getProjects{
 }
 
 `;
+
 const getProject = gql`
     query getProject($id:ID){
         project(id:$id){
+            id
+            name
+    description
+    imageUrl
+    projectCreator{
+      firstName
+      lastName
+      email
+    }
+        }
+        }
+`;
+const projectbyid = gql`
+    query projectbyid($id:ID,$limit:Int,$page:Int){
+        projectbyid(id:$id,limit:$limit,page:$page){
+            totalCount
+            data{
+                id
+            name
             description
-            imageUrl
             projectCreator{
             firstName
             lastName
@@ -32,5 +51,6 @@ const getProject = gql`
             }
             }
         }
+    }
 `;
-export {getProject,getProjects}
+export {getProject,getProjects,projectbyid}

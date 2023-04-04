@@ -3,8 +3,11 @@ const Project = require('../Models/project')
 const {GraphQLID,GraphQLString,GraphQLObjectType, GraphQLList,GraphQLInt,GraphQLNonNull,GraphQLSchema } =require('graphql')
 var GraphQLDate = require('graphql-date')
 const User = require('../Models/user')
+const project = require('../Models/project')
 
 //event crud
+
+
 
 const EventType = new GraphQLObjectType({
     name : 'event',
@@ -50,21 +53,50 @@ const ProjectType = new GraphQLObjectType({
         imageUrl: {type:GraphQLString},
         projectCreator: {type:UserType,
             resolve(parent,args){
-                console.log(parent.projectCreator)
+                
                 return User.findById(parent.projectCreator)
-            } }
-    })
+            } },
+            
+          
+    }),
+ 
 })
 
- 
 
-
-
+const Page = (itemType) => {
+    return new GraphQLObjectType({
+        name: 'PageType',
+        fields: () => ({
+            totalCount: { type: GraphQLInt,
+                resolve(parent,args){
+                    return Project.find({projectCreator:parent[0].projectCreator}).count()
+                } },
+            data: { type: new GraphQLList(itemType),resolve(parent,args){
+                return parent;
+            } },
+        })
+    })
+}
 
  //Query
  const RootQuery = new GraphQLObjectType({
     name : 'RootQueryType',
         fields: {
+            //get project by user id
+            projectbyid:{
+
+                type: Page(ProjectType),
+                args:{
+                    id:{type:GraphQLID},
+                    limit:{type:GraphQLInt},
+                    page :{type:GraphQLInt}
+                  },
+              resolve(parent,args){
+                  
+                  return Project.find({projectCreator:args.id}).limit(args.page).skip(args.page *((args.limit)-1))
+              }
+      
+           },
                     //get all events
 
             events:{
@@ -84,11 +116,16 @@ const ProjectType = new GraphQLObjectType({
                 
             },
                   //get all projects
-
+                    
                   projects:{
+                    
                     type: new GraphQLList(ProjectType),
+                    args:{limit:{type:GraphQLInt}},
                     resolve(parent,args){
-                        return Project.find()
+                        const page=2;
+                        return  Project.find().limit(page).skip(page *(args.limit-1))
+                        
+                        
                     }
                 },
                 //get project by id
@@ -100,7 +137,8 @@ const ProjectType = new GraphQLObjectType({
                         return Project.findById(args.id)
                     }
             
-                 }
+                 },
+                 
 
         }
     } 
