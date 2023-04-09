@@ -29,7 +29,10 @@ import Getallevents from './Components/Eve/Getallevents';
 import Event from './Components/Eve/Event';
 import Updateevent from './Components/Eve/Updateevent';
 import Addevent from './Components/Eve/Addevent';
-
+import Participant from './Components/Eve/Participant';
+import Video from './page/Video/Video'
+import HomePage from './page/Video/HomePage'
+import Calendar from './Components/FullCalendar/Calendar'
 
 const ForgetPassword =lazy(() => import('./page/ForgetPassword'));
 const ResetPassword = lazy(()=>import('./page/ResetPassword'))
@@ -101,9 +104,15 @@ function App() {
 
 
     <Route path="/events" element={<>  <Navbarr />  <Getallevents/>  </> } />
+		<Route path="/video/:url" element={<><Navbarr /> <Video /></>} />
+		<Route path="/meet" element={<><Navbarr /> <HomePage /></>} />
     <Route path="/event" element={<>   <Navbarr /> <Event/>  </> } />
+    <Route path="/participant" element={<>   <Navbarr /> <Participant/>  </> } />
     <Route path="/addevent" element={<> <Navbarr />   <Addevent/>  </> } />
     <Route path="/updateevent/:id" element={<> <Navbarr />   <Updateevent/>  </> } />
+
+
+    <Route path="/calendar" element={<> <Navbarr />   <Calendar/>  </> } />
 
 
   

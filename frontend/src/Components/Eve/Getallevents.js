@@ -6,10 +6,14 @@ import {Button,Table} from 'react-bootstrap'
 import  Loader  from '../Loader'
 import  Message  from '../Message'
 import './Eve.css'
+import { useState } from 'react';
+
 const Getallevents = () => {
 
   const navigate = useNavigate();
     const {loading,error,data} = useQuery(getEvents)
+    
+    
 
     const [deleteEvent] =useMutation(delete_Event)
     const deleteevent=(id)=>{
@@ -27,13 +31,17 @@ const Getallevents = () => {
     const addevent=()=>{
       navigate(`/addevent`)
      }
-
+    const meet=(id)=>{
+      navigate(`/video/${id}`)
+     }
+    
   return (
     <>
+
     <h1 className='py-5'>Event</h1>
    
     {console.log(loading)}
-    {loading ? <Loader>hhhhhhhhhhhhh</Loader> : error ? <Message>{error}</Message>:(
+    {loading ? <Loader></Loader> : error ? <Message>{error}</Message>:(
       <>
       <Button variant='success' 
       className='btn-sm offset-10' 
@@ -41,12 +49,15 @@ const Getallevents = () => {
       > add
        <i class="fa-sharp fa-solid fa-plus"></i>
       </Button>
+    
          <Table striped bordered hover responsive className='table-sm'>
  
          <thead>
              <tr>
                  <th>Name</th>
                  <th>Description</th>   
+                 <th>participantsnumber</th>   
+                 <th>Start Meet</th>   
              </tr>
          </thead >
          <tbody>
@@ -54,7 +65,14 @@ const Getallevents = () => {
              <tr key={event.id}>
              <td>{event.name}</td>
              <td>{event.description}</td>
-          
+             <td>{event.participantsnumber}</td>
+             <td><Button variant='info' 
+                  className='btn-sm ' 
+                  onClick={() => {meet(event.id)}}
+                  > meet
+                  <i class="fa-regular fa-handshake"></i>
+                  </Button>
+                  </td>
              <td>
                  <div >
                  <Button variant='light' className='btn-sm' onClick={() => {gotoupdate(event.id)}}>
@@ -67,6 +85,7 @@ const Getallevents = () => {
                      >
                       <i className='fas fa-trash'></i>
                      </Button>
+                     
                      
              </td>
 

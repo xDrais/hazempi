@@ -29,10 +29,19 @@ import "react-toastify/dist/ReactToastify.css";
 import Input from "../Components/Input.jsx";
 import UploadfFile from "./UploadfFile.jsx";
 import { useNavigate } from "react-router-dom";
+import {useQuery,useMutation} from '@apollo/client'
+
+import  {getEvents} from '../Query/eventQuerry'
+import  {getProjects} from '../Query/projectQuery.js'
 
 const useStyles = makeStyles(styles);
 
 export default function Profile() {
+
+
+  const {loading:lo,error:er,data} = useQuery(getEvents)
+  const {loading:loa,error:err,data:da} = useQuery(getProjects)
+
   const navigate = useNavigate();
 
   const GotoUserDashboard = () => {
@@ -170,35 +179,15 @@ export default function Profile() {
                       tabIcon: Palette,
                       tabContent: (
                         <GridContainer justify="center">
+                           {data?.events.map(event => (
                           <GridItem xs={12} sm={12} md={4}>
+                            {console.log(event.imageUrl)}
                             <img
                               alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
+                              src={`/images/${event.imageUrl}`}
                               className={navImageClasses}
                             />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={4}>
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                            <img
-                              alt="..."
-                              src="/images/1e8e248f-04de-428d-bb5a-ef1b4992550e-1678730933200.png"
-                              className={navImageClasses}
-                            />
-                          </GridItem>
+                          </GridItem>))}
                         </GridContainer>
                       ),
                     },
@@ -207,8 +196,15 @@ export default function Profile() {
                       tabIcon: WorkIcon,
                       tabContent: (
                         <GridContainer justify="center">
-                          <Button onClick={()=>{navigate('/addproject')}} > add </Button>
-                          <Getallprojects></Getallprojects>
+                          {da?.projects.map(p => (
+                          <GridItem xs={12} sm={12} md={4}>
+                            {console.log(p.imageUrl)}
+                            <img
+                              alt="..."
+                              src={`/images/${p.imageUrl}`}
+                              className={navImageClasses}
+                            />
+                          </GridItem>))}
                         </GridContainer>
                       ),
                     },

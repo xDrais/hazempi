@@ -9,6 +9,7 @@ query getEvents{
             name
     description
     dateEnd
+    dateStart
     participantsnumber
     imageUrl
     eventCreator{

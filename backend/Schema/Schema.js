@@ -16,6 +16,7 @@ const EventType = new GraphQLObjectType({
         name: {type:GraphQLString},
         description: {type:GraphQLString},
         dateEnd: {type:GraphQLDate},
+        dateStart: {type:GraphQLDate},
         participantsnumber:{type:GraphQLInt} ,
         imageUrl: {type:GraphQLString},
         eventCreator: {type:UserType,
@@ -123,7 +124,7 @@ const Page = (itemType) => {
                     args:{limit:{type:GraphQLInt}},
                     resolve(parent,args){
                         const page=2;
-                        return  Project.find().limit(page).skip(page *(args.limit-1))
+                        return  Project.find()
                         
                         
                     }

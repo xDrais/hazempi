@@ -18,6 +18,7 @@ const Getallprojects = () => {
   const {loading,error,data} = useQuery(projectbyid,{variables:{
     id,limit:parseInt(limit),page
   }})
+  console.log(data?.projectbyid.totalCount)
 
   const pages= Math.ceil(data?.projectbyid.totalCount / page)
   console.log(pages)

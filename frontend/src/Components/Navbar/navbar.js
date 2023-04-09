@@ -94,8 +94,11 @@ REGISTER                         </Link>
        {userInfo?(
            <div style={{marginLeft: '1120px',marginTop: '-27.8px'}} > 
                     <NavDropdown   title={userInfo.lastName + " " + userInfo.firstName } id="username">
-                    {userInfo.role.name === "userRole"  && <LinkContainer  to='/projects'>
+                    {userInfo.role.name   && <LinkContainer  to='/projects'>
                             <NavDropdown.Item > <Link to="/projects" >Project</Link> </NavDropdown.Item>
+                        </LinkContainer> }
+                    {userInfo.role.name === "userRole"  && <LinkContainer  to='/participant'>
+                            <NavDropdown.Item > <Link to="/participant" >events</Link> </NavDropdown.Item>
                         </LinkContainer> }
                     {userInfo.role.name === "sponsorRole"  && <LinkContainer  to='/events'>
                             <NavDropdown.Item > <Link to="/events" >Events</Link> </NavDropdown.Item>
@@ -105,6 +108,9 @@ REGISTER                         </Link>
                         </LinkContainer>
                         <LinkContainer  to='/userupdate'>
                             <NavDropdown.Item > <Link to="/userupdate" >UPDATE PROFILE</Link> </NavDropdown.Item>
+                        </LinkContainer>
+                        <LinkContainer  to='/calendar'>
+                            <NavDropdown.Item > <Link to="/calendar" >Calendar</Link> </NavDropdown.Item>
                         </LinkContainer>
                         <NavDropdown.Item onClick={logoutHandler} >LOGOUT</NavDropdown.Item>
                       
