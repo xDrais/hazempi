@@ -5,19 +5,21 @@ import { useSelector } from 'react-redux'
 import {add_Project} from '../../Mutation/projetMutation'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import backg from "./backg.jpg";
 
 const Addproject = () => {
 
     const [name,setName]=useState(()=>{return ""})
     const [description,setDescription]=useState("")
     const [imageUrl, setImageUrl] = useState("");
+    const [ammounttocollect, setAmmounttocollect] = useState("");
     
     
     const userLogin =useSelector(state =>state.userLogin)
     const {userInfo} =userLogin
     const projectCreator =userInfo._id
     const [addProject] =useMutation(add_Project,{
-        variables:{name,description,imageUrl,projectCreator}
+        variables:{name,description,imageUrl,ammounttocollect:parseInt(ammounttocollect),projectCreator}
     })
 
 
@@ -55,21 +57,13 @@ const Addproject = () => {
         e.preventDefault();
         console.log(imageUrl)
 
-        addProject(name,description,imageUrl,projectCreator)
+        addProject(name,description,imageUrl,ammounttocollect,projectCreator)
       }
 
   return (
     <>
   
-  <div className='py-5'
-    style={{marginTop:"50px"}}>
-    <Button variant='info' 
-      className='btn-sm ' 
-      onClick={() => {getallprojects()}}
-      > Back
-       <i class="fa-sharp fa-solid fa-arrow-left"></i>
-      </Button>
-    </div>
+  <body style={{backgroundImage:`url(${backg})`,height:'720px'}}>
       
 
     
@@ -78,7 +72,7 @@ const Addproject = () => {
       <Form  onSubmit={submitHandler}>
             <Form.Group controlId="name">
                 <Form.Label>
-                   name
+                   
                 </Form.Label>
                 <Form.Control
                  type="name"
@@ -91,7 +85,7 @@ const Addproject = () => {
             </Form.Group>
             <Form.Group controlId="description">
                 <Form.Label>
-                   description
+                   
                 </Form.Label>
                 <Form.Control
                  type="description"
@@ -102,9 +96,22 @@ const Addproject = () => {
                     setDescription(e.target.value)}>
                 </Form.Control>
             </Form.Group>
+            <Form.Group controlId="ammounttocollect">
+                <Form.Label>
+                
+                </Form.Label>
+                <Form.Control
+                 type="number"
+                 placeholder="ammounttocollect"
+                
+                 value={ammounttocollect}
+                 onChange={(e)=>
+                  setAmmounttocollect(e.target.value)}>
+                </Form.Control>
+            </Form.Group>
             <Form.Group controlId="imageUrl">
                 <Form.Label>
-                   imageUrl
+                   
                 </Form.Label>
                 <Form.Control 
                 type="file"
@@ -114,9 +121,13 @@ const Addproject = () => {
                  >
                 </Form.Control>
             </Form.Group>
-            <Button type="submit" variant="primary" >Submit</Button>
-        </Form>
+            <div className='py-5'>
+            <Button  type="submit"  variant="primary" >Submit</Button>
+            </div>        
+            </Form>
       </Col>
+      </body>
+
     </> 
   )
 }

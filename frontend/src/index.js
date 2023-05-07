@@ -5,14 +5,19 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store from './App/store';
 import { Provider } from 'react-redux';
+import { TransactionProvider } from './Context/Transaction';
 import Dashboard from './page/Dashboard';
 import './bootstrap.min.css'
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  
   <Provider store={store}>
+    <TransactionProvider>
     <App />
+    </TransactionProvider>
   </Provider>
 );
 

@@ -18,7 +18,12 @@ var xss = require("xss")
 mongodb() 
 const app =express()
 var server = http.createServer(app)
-var io = require('socket.io')(server)
+var io = require('socket.io')(server, {
+	cors: {
+	  origin: "*",
+	  methods: ["GET", "POST"]
+	}
+  })
 app.use(express.json())
 app.use(
     cookieSession({ name: "session", keys: ["fares"], maxAge: 24 * 60 * 60 * 100 })
@@ -40,6 +45,7 @@ app.use(express.urlencoded({extended : false}))
 app.use('/api/user',require('./routes/userRoute.js'));
 app.use('/product',require('./routes/productRoute.js'));
 app.use('/api/upload', require('./routes/uploadRoute'));
+app.use('/api/event', require('./routes/Event.js'));
 app.use("/auth",authRoute);
 app.use("/image",image);
 
@@ -146,5 +152,5 @@ io.on('connection', (socket) => {
 		}
 	})
 })
-server.listen(port , ()=> console.log(`SERVER CONNECTED ${port}`))
+server.listen(5000 , ()=> console.log(`SERVER CONNECTED ${port}`))
 

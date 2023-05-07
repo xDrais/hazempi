@@ -6,7 +6,7 @@ function SpecialButton (props)
     
 <div className="container1">
 
-<a href="#" className="button" onClick={props.onClick}>
+<a href="#" className="button" onClick={props.onClick} >
   <div className="button__line"></div>
   <div className="button__line"></div>
   <span className="button__text">{props.name}</span>

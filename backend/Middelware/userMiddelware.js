@@ -38,6 +38,16 @@ const isAdmin  = asynHandler(async (req, res, next) => {
     }
   
   })
+
+  const isCoach  = asynHandler(async (req, res, next) => {
+    if (req.user && req.user.role.name==="coach") {
+      next()
+    } else {
+      res.status(401)
+      throw new Error ('Not Authorized as a couch')
+    }
+  
+  })
 const validator  = asynHandler(async (req, res, next) => {
     const {token,id} = req.query
     console.log("======")
@@ -69,4 +79,4 @@ const validator  = asynHandler(async (req, res, next) => {
     req.user=user
     next()
   })
-module.exports={ protectSimpleUser, validator,isAdmin }
+module.exports={ protectSimpleUser, validator,isAdmin,isCoach }

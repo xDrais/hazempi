@@ -1,8 +1,8 @@
 .containerdetail {
-    position: absolute;
+    position: relative;
     margin: auto;
-    margin-left: 300px;
-    margin-top: 80px;
+    margin-left: 340px;
+    margin-top: 120px;
     margin-bottom: 80px;
     overflow: hidden;
     width: 820px;
@@ -10,11 +10,12 @@
     background: #F5F5F5;
     box-shadow: 5px 5px 15px rgba(151, 139, 97, 0.5);
     border-radius: 10px;
+    
   }
-  .bodydetail{
-    background-color: #4E4E4E;
+
+  .bodyd{
+    background-color: black;
   }
-  
   .pdetail {
     font-size: 0.9em;
     color: #BA7E7E;
@@ -33,7 +34,10 @@
     color: #C3A1A0;
     margin-top: -5px;
   }
- 
+ .stock{
+  color: #C3A1A0;
+font-size: 0.9rem;
+ }
   .imgdetail {
     width: 390px;
     margin-top: 47px;
@@ -43,8 +47,9 @@
     margin-left: 30px;
   }
   .buttons {
-    bottom: -40% ;
+    bottom: -250px ;
     position: relative;
+    margin-top: -250px;
   }
   .slideshow-buttons {
     top: 70%;
@@ -131,6 +136,12 @@
     grid-gap: 4px;
     margin-left: 20px;
     margin-top: 5px;
+  }
+  .disabled-button {
+    background: #ccc;
+    color: #999;
+    cursor: not-allowed;
+    pointer-events: none;
   }
   .sizes:hover {
     cursor: pointer;

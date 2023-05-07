@@ -4,6 +4,7 @@ import { Form ,Button,Container ,Col} from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import {update_Project} from '../../Mutation/projetMutation'
 import { useParams, Link, useNavigate} from 'react-router-dom'
+import backg from "./backg.jpg";
 
 const Updateproject = () => {
 
@@ -29,15 +30,7 @@ const Updateproject = () => {
 
   return (
  <>
-    <div className='py-5'
-    style={{marginTop:"50px"}}>
-    <Button variant='info' 
-      className='btn-sm ' 
-      onClick={() => {getallprojects()}}
-      > Back
-       <i class="fa-sharp fa-solid fa-arrow-left"></i>
-      </Button>
-    </div>
+   <body style={{backgroundImage:`url(${backg})`,height:'720px'}}>
       
 
     
@@ -46,7 +39,7 @@ const Updateproject = () => {
       <Form  onSubmit={submitHandler}>
             <Form.Group controlId="name">
                 <Form.Label>
-                   name
+                   
                 </Form.Label>
                 <Form.Control
                  type="name"
@@ -59,7 +52,7 @@ const Updateproject = () => {
             </Form.Group>
             <Form.Group controlId="description">
                 <Form.Label>
-                   description
+                   
                 </Form.Label>
                 <Form.Control
                  type="description"
@@ -72,7 +65,7 @@ const Updateproject = () => {
             </Form.Group>
             <Form.Group controlId="imageUrl">
                 <Form.Label>
-                   imageUrl
+                   
                 </Form.Label>
                 <Form.Control
                 type="file"
@@ -82,9 +75,12 @@ const Updateproject = () => {
                  >
                 </Form.Control>
             </Form.Group>
-            <Button type="submit" variant="primary" >Submit</Button>
-        </Form>
+            <div className='py-5'>
+            <Button  type="submit"  variant="primary" >Submit</Button>
+            </div>        
+            </Form>
       </Col>
+      </body>
     </>  )
 }
 

@@ -6,14 +6,30 @@ import {Button,Table} from 'react-bootstrap'
 import  Loader  from '../Loader'
 import  Message  from '../Message'
 import './Eve.css'
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {  participateEvent,getPart} from "../../redux/action";
+import { useEffect } from 'react';
+import backg from "./backg.jpg";
+import { Link } from "react-router-dom";
+import { Card } from 'react-bootstrap'
 
 const Getallevents = () => {
 
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const participateevent = useSelector((state) => state.participateevent);
+  const { success,part } = participateevent;
+
+  
+  const getpart = useSelector((state) => state.getpart);
+  const { success:succ,part:getpa } = getpart;
+  console.log('===============')
+ 
   const navigate = useNavigate();
     const {loading,error,data} = useQuery(getEvents)
-    
-    
+
+    const dispatch = useDispatch();
 
     const [deleteEvent] =useMutation(delete_Event)
     const deleteevent=(id)=>{
@@ -23,7 +39,22 @@ const Getallevents = () => {
       console.log(id) 
 
     }
+    
+    const gotoparticipate=(idevent,userid)=>{
+      console.log(idevent)
+      console.log(userid)
+     
 
+      dispatch(
+        participateEvent(
+          {eventId:idevent,userId:userid}
+     
+        )
+       
+      );
+      console.log(success)
+      console.log(part)
+    }
     const gotoupdate=(id)=>{
       navigate(`/updateevent/${id}`)
 
@@ -31,72 +62,39 @@ const Getallevents = () => {
     const addevent=()=>{
       navigate(`/addevent`)
      }
-    const meet=(id)=>{
-      navigate(`/video/${id}`)
-     }
-    
+
+     useEffect(() => {
+      dispatch(getPart())
+     
+      
+     }, []);
   return (
     <>
-
-    <h1 className='py-5'>Event</h1>
+    <> <body style={{backgroundImage:`url(${backg})`,height:"1900px"}}>
+   <div style={{marginBottom:"-130px",color:"beige"}}><h1 style={{color:"white"}}className="SectionTitle">EVENTS</h1>
+       <p style={{color:"white"}} className="paragraph2"> </p></div> 
+       
+   <div className="shopcontainer">
+   {data?.events.map((p) => (
+          <Link to={`/event/${p.id}`} key={p.id} >
+  
+          <div align="center" className="containerproduit" style={{backgroundImage: `url(${process.env.PUBLIC_URL}/images/${p.imageUrl})`}}>
+      <div className="overlay" draggable="false">
+        <div className = "items head">
+          <p>{p?.name}</p>
+        </div><hr />
+        <div className = "items price">
+          <p className="new">{p.description} </p>
+        </div>
+        <Card.Text as='div'>   
+          </Card.Text>
+    </div>
+    </div> </Link>
+        ))}
    
-    {console.log(loading)}
-    {loading ? <Loader></Loader> : error ? <Message>{error}</Message>:(
-      <>
-      <Button variant='success' 
-      className='btn-sm offset-10' 
-      onClick={() => {addevent()}}
-      > add
-       <i class="fa-sharp fa-solid fa-plus"></i>
-      </Button>
-    
-         <Table striped bordered hover responsive className='table-sm'>
- 
-         <thead>
-             <tr>
-                 <th>Name</th>
-                 <th>Description</th>   
-                 <th>participantsnumber</th>   
-                 <th>Start Meet</th>   
-             </tr>
-         </thead >
-         <tbody>
-         {data?.events.map(event => (
-             <tr key={event.id}>
-             <td>{event.name}</td>
-             <td>{event.description}</td>
-             <td>{event.participantsnumber}</td>
-             <td><Button variant='info' 
-                  className='btn-sm ' 
-                  onClick={() => {meet(event.id)}}
-                  > meet
-                  <i class="fa-regular fa-handshake"></i>
-                  </Button>
-                  </td>
-             <td>
-                 <div >
-                 <Button variant='light' className='btn-sm' onClick={() => {gotoupdate(event.id)}}>
-                         <i className='fas fa-edit'></i>
-                     </Button>
-                 </div>
-                 <Button variant='danger' 
-                     className='btn-sm' 
-                     onClick={() => {deleteevent(event.id)}}
-                     >
-                      <i className='fas fa-trash'></i>
-                     </Button>
-                     
-                     
-             </td>
-
-             </tr>
-         ))}
-         
-
-         </tbody>
-     </Table>
-     </>
-    )}
+   </div>
+   </body>  </>
+   
 
     </>
      )

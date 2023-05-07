@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import {add_Event} from '../../Mutation/eventMutation'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import backg from "./backg.jpg";
 
 const Addevent = () => {
   const [name,setName]=useState(()=>{return ""})
@@ -16,7 +17,7 @@ const Addevent = () => {
   const userLogin =useSelector(state =>state.userLogin)
   const {userInfo} =userLogin
   const eventCreator =userInfo._id
-
+  console.log(eventCreator)
 
   const [addEvent] =useMutation(add_Event,{
     variables:{name,description,dateEnd,participantsnumber:parseInt(participantsnumber),imageUrl,eventCreator}
@@ -58,15 +59,8 @@ const submitHandler=async(e)=>{
 
   return (
     <>
-     <div className='py-5'
-    style={{marginTop:"50px"}}>
-    <Button variant='info' 
-      className='btn-sm ' 
-      onClick={() => {getallevents()}}
-      > Back
-       <i class="fa-sharp fa-solid fa-arrow-left"></i>
-      </Button>
-    </div>
+    <body style={{backgroundImage:`url(${backg})`,height:'720px'}}>
+    
       
 
     
@@ -75,7 +69,7 @@ const submitHandler=async(e)=>{
       <Form  onSubmit={submitHandler}>
             <Form.Group controlId="name">
                 <Form.Label>
-                   name
+                   
                 </Form.Label>
                 <Form.Control
                  type="name"
@@ -88,7 +82,6 @@ const submitHandler=async(e)=>{
             </Form.Group>
             <Form.Group controlId="description">
                 <Form.Label>
-                   description
                 </Form.Label>
                 <Form.Control
                  type="description"
@@ -101,7 +94,6 @@ const submitHandler=async(e)=>{
             </Form.Group>
  <Form.Group controlId="dateEnd">
                 <Form.Label>
-                Date End
                 </Form.Label>
                 <Form.Control 
                  type="date"
@@ -113,7 +105,6 @@ const submitHandler=async(e)=>{
             </Form.Group>
 <Form.Group controlId="participantsnumber">
                 <Form.Label>
-                   Participants Number
                 </Form.Label>
                 <Form.Control 
                  type="Number"
@@ -125,7 +116,6 @@ const submitHandler=async(e)=>{
             </Form.Group>
             <Form.Group controlId="imageUrl">
                 <Form.Label>
-                   imageUrl
                 </Form.Label>
                 <Form.Control 
                 type="file"
@@ -135,9 +125,12 @@ const submitHandler=async(e)=>{
                  >
                 </Form.Control>
             </Form.Group>
-            <Button type="submit" variant="primary" >Submit</Button>
+            <div className='py-5'>
+            <Button  type="submit"  variant="primary" >Submit</Button>
+            </div>
         </Form>
       </Col>
+      </body>
     </>
   )
 }

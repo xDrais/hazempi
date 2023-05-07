@@ -19,7 +19,11 @@ const EventType = new GraphQLObjectType({
         dateStart: {type:GraphQLDate},
         participantsnumber:{type:GraphQLInt} ,
         imageUrl: {type:GraphQLString},
-        eventCreator: {type:UserType,
+        participant: {type:GraphQLList(UserType),
+           
+        },
+        eventCreator: {type:(UserType),
+            
         resolve(parent,args){
             return User.findById(parent.eventCreator)
         } }
@@ -44,24 +48,48 @@ const UserType = new GraphQLObjectType({
 })
 
 
+const ComentType = new GraphQLObjectType({
+    name : 'comment',
+    fields: () =>({
+        id: {type:GraphQLID},
+       
+        user: {type:GraphQLObjectType},
+        like: {type:GraphQLInt},
+        msg: {type:GraphQLString},
+        user:{type:UserType,
+            resolve(parent,args){
+                
+                return User.findById(parent.user)
+            } },
+    })
+})
+
 const ProjectType = new GraphQLObjectType({
     name : 'project',
     fields: () =>({
         id: {type:GraphQLID},
         projectCreator: {type:GraphQLObjectType},
+        comment: {type:GraphQLList(ComentType)},
+        name: {type:GraphQLString},
         name: {type:GraphQLString},
         description: {type:GraphQLString},
         imageUrl: {type:GraphQLString},
+        ammounttocollect: {type:GraphQLInt},
         projectCreator: {type:UserType,
             resolve(parent,args){
                 
                 return User.findById(parent.projectCreator)
             } },
+           
+
+            
             
           
     }),
  
 })
+
+
 
 
 const Page = (itemType) => {
@@ -121,10 +149,13 @@ const Page = (itemType) => {
                   projects:{
                     
                     type: new GraphQLList(ProjectType),
-                    args:{limit:{type:GraphQLInt}},
+                    args:{limit:{type:GraphQLInt},
+                    page :{type:GraphQLInt}
+                    },
+                    
                     resolve(parent,args){
-                        const page=2;
-                        return  Project.find()
+                        
+                        return  Project.find().limit(args.page).skip(args.page *(args.limit-1))
                         
                         
                     }
@@ -220,13 +251,15 @@ const Page = (itemType) => {
             description: {type:new GraphQLNonNull(GraphQLString)},
             imageUrl: {type:new GraphQLNonNull(GraphQLString)},
             projectCreator: {type:new GraphQLNonNull(GraphQLID)},
+            ammounttocollect: {type:new GraphQLNonNull(GraphQLInt)}
         },
         resolve(parent,args){
             const project = Project.create({
                 name: args.name,
                 description:args.description,
                 imageUrl :args.imageUrl,
-                projectCreator: args.projectCreator
+                projectCreator: args.projectCreator,
+                ammounttocollect: args.ammounttocollect
             })
             return project
         }

@@ -2,8 +2,8 @@ const mongoose = require ('mongoose')
 const reviewSchema = mongoose.Schema(
     {
       name: { type: String, required: true },
-      rating: { type: Number, required: true },
-      comment: { type: String, required: true },
+      rating: { type: Number,  },
+      comment: { type: String,  },
       user: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -11,6 +11,7 @@ const reviewSchema = mongoose.Schema(
       },
     },
   )
+
 
 const ProductSchema = new mongoose.Schema({
     user : {type: mongoose.Types.ObjectId,ref:'User'},
@@ -51,3 +52,4 @@ const ProductSchema = new mongoose.Schema({
 
 })
 module.exports = mongoose.model('Product', ProductSchema)
+
