@@ -5,20 +5,17 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store from './App/store';
 import { Provider } from 'react-redux';
-import { TransactionProvider } from './Context/Transaction';
 import Dashboard from './page/Dashboard';
 import './bootstrap.min.css'
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-
+import { ContextProvider } from './page/VideoChat/context';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  
   <Provider store={store}>
-    <TransactionProvider>
-    <App />
-    </TransactionProvider>
-  </Provider>
+<ContextProvider>
+      <App />
+    </ContextProvider>  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -35,7 +35,6 @@ const [validPrice, setValidPrice] = useState(false);
 const [validDescription, setValidDescription] = useState(false);
 const [validCategory, setValidCategory] = useState(false);
 const [validCountInStock, setValidCountInStock] = useState(false);
-const [validImageProduct, setValidImageProduct] = useState(false);
 
 
   //Controle de saisie 
@@ -44,7 +43,7 @@ const [validImageProduct, setValidImageProduct] = useState(false);
   const PRICE_REGEX = /^[1-9][0-9]*(\.[0-9]{1,2})?$/;
 
   const NUMBER_REGEX = /^([1-9]|[1-9][0-9]|1000)$/;
-  const IMAGE_REGEX = /\.(png|jpe?g)$/i;
+
 
 
 
@@ -113,12 +112,7 @@ useEffect(() => {
   setValidPrice(result);
 }, [price]);
 
-useEffect(() => {
-  const result = IMAGE_REGEX.test(imageProduct);
-  console.log(result);
-  console.log(imageProduct);
-  setValidImageProduct(result);
-}, [imageProduct]);
+
 
   const submitHandler=async(e)=>{
      e.preventDefault();
@@ -335,12 +329,6 @@ if (successUpdateLink) {
               style={{ padding: '1rem',marginLeft: '7rem', borderRadius: '5px', border: '1px solid white', width: '500px', 
               marginBottom: '0.5rem', fontSize:'1rem' ,   backgroundColor: 'transparent',}}
             />
-            <p
-                id="ima"
-                className={imageProduct && !validImageProduct ? "none" : "hide"}
-              >
-                Enter Valid image type : png , jpg or jpeg{" "}
-              </p>
             
             </div>
 
@@ -348,37 +336,46 @@ if (successUpdateLink) {
 
                         
                         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginLeft: '17rem' }}>
-  <button
-    onClick={submitHandler}
+ 
+
+  <div className="container1">
+            <button
+     onClick={submitHandler}
     type="submit"
-    style={{
-      backgroundColor: '#007bff',
-      color: 'white',
-      border: 'none',
-      padding: '0.5rem 1rem',
-      borderRadius: '0.25rem',
-      cursor: 'pointer',
-      marginRight: '1rem',
-      opacity: (validProductName && validCategory && validCountInStock && validDescription && validPrice &&validImageProduct) ? '1' : '0.5'
-    }}
-    disabled={!validProductName || !validCategory || !validCountInStock || !validDescription  ||!validPrice || !validImageProduct }
-  >
-    SAVE
+    className="button"
+    style={{ borderRadius: '30%',     backgroundColor: !validProductName || !validCategory || !validCountInStock || !validDescription  ||!validPrice
+    ? "grey"
+    : "initial" }}
+
+    disabled={!validProductName || !validCategory || !validCountInStock || !validDescription  ||!validPrice }
+    >
+  <div className="button__line"></div>
+  <div className="button__line"></div>
+  <span className="button__text">  Update</span>
+  <div className="button__drow1"></div>
+  <div className="button__drow2"></div>
+  
   </button>
-  <button
-    onClick={handleBackClick}
+  </div>
+  
+  
+  <div className="container1">
+            <button
+     onClick={handleBackClick}
     type="submit"
-    style={{
-      backgroundColor: 'gray',
-      color: 'white',
-      border: 'none',
-      padding: '0.5rem 1rem',
-      borderRadius: '0.25rem',
-      cursor: 'pointer'
-    }}
-  >
-    BACK TO LIST
+    className="button"
+    style={{ borderRadius: '30%'}}
+
+    disabled={!validProductName || !validCategory || !validCountInStock || !validDescription  ||!validPrice }
+    >
+  <div className="button__line"></div>
+  <div className="button__line"></div>
+  <span className="button__text">  Back To List</span>
+  <div className="button__drow1"></div>
+  <div className="button__drow2"></div>
+  
   </button>
+  </div>
 </div>
 
         </form>

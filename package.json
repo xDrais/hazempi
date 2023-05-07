@@ -23,9 +23,6 @@
     "email-validator": "^2.0.4",
     "express": "^4.18.2",
     "express-async-handler": "^1.2.0",
-    "express-graphql": "^0.12.0",
-    "graphql-date": "^1.0.3",
-    "graphql-http": "^1.18.0",
     "handlebars": "^4.7.7",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.9.2",
@@ -43,8 +40,6 @@
     "react-redux": "^8.0.5",
     "redux-devtools-extension": "^2.13.9",
     "socket.io": "^4.6.1",
-    "socket.io-client": "^4.6.1",
-    "victory": "^36.6.8",
-    "xss": "^1.0.14"
+    "victory": "^36.6.8"
   }
 }

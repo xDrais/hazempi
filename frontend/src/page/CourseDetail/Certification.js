@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     textShadow: '2px 2px 2px #000000',
     position: 'absolute',
     top: '63%',
-    left: '32%',
+    left: '30%',
     transform: 'translate(-50%, -50%)'
   },
 

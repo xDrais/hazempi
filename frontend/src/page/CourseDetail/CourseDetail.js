@@ -54,6 +54,57 @@ const CourseDetail= () => {
       const [showLessons,setShowLessons]= useState(true);
 
 
+      // ***************** ROOMID********************************
+      const [testPassed, setTestPassed] = useState(false);
+      const [buttonText, setButtonText] = useState('Meet Link');
+
+
+      function generateRoomId(length) {
+        let result = '';
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        const charactersLength = characters.length;
+        for (let i = 0; i < length; i++) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+      }
+      
+      const roomId = generateRoomId(8);
+      const handleShareLink = async () => {
+        const url = `${window.location.origin}/room/${roomId}`;
+        navigator.clipboard.writeText(url);
+        alert(`Meet Link copied to clipboard`);
+       const subject = 'Meet Link';
+       const body = `Here is the link to join the Meet Validation: ${url}`;
+       const to = userInfo.email;
+
+  try {
+    const response = await fetch('http://localhost:5000/course/send-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ to, subject, body })
+    });
+    if (response.ok) {
+      alert('check ur email for the Link to the Validation Meet');
+    } else {
+      alert('Error sending email');
+    }
+  } catch (error) {
+    console.error('Error sending email:', error);
+    alert('Error sending email');
+  }
+  setButtonText('Send !');
+  setIsLinkSent(true);
+
+      };
+      const [isLinkSent, setIsLinkSent] = useState(false);
+
+
+      // ************************************************
+
+
     useEffect(() => {
       dispatch(getCourses());
     }, [id]);
@@ -135,12 +186,13 @@ const TestFailed=(enrollId) => {
               spread: 100
             });
             TestPassed(enrollId);
+            setTestPassed(true);
             toast("Congrats for passing this course! Check your e-mail!");
             document.getElementById("testbutton").disabled = true;
 
           } else {
             TestFailed(enrollId);
-
+            setTestPassed(false);
             toast.error("Oops... You can redo this test by reloading the page !", {
               hideProgressBar: true});
                           document.getElementById("testbutton").disabled = true;
@@ -155,7 +207,7 @@ const TestFailed=(enrollId) => {
           return <Loader/>;
         }
 
-        console.log(coursse?.coach?.firstName);
+        console.log(coursse?.coach);
         
         const submitHandler = (e)=>{
           e.preventDefault()
@@ -373,12 +425,14 @@ const TestFailed=(enrollId) => {
              </Card.Text>
               </Card.Body>
             </Card> */}
-
             </Row>
 
       <PDFDownloadLink document={<Certification name={userInfo.firstName } lastname={userInfo.lastName } paragraph={coursse.titleCourse}   date={date}   />} fileName="certificate.pdf">
   {({ blob, url, loading, error }) => (loading ? 'Generating PDF...' : 'Your Certifcate')}
 </PDFDownloadLink>
+
+<button onClick={handleShareLink} disabled={!testPassed || isLinkSent} style={{ backgroundColor: testPassed ? 'initial' : 'initial' }}>{buttonText}</button>
+
 
             <ListGroup.Item  style={{color: "#362824"}}> 
                   <Rating
