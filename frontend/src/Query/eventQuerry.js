@@ -8,10 +8,16 @@ query getEvents{
             id
             name
     description
-    dateEnd
     dateStart
+    dateEnd
     participantsnumber
     imageUrl
+    participant{
+      firstName
+      lastName
+      email
+    }
+    
     eventCreator{
       firstName
       lastName
@@ -33,11 +39,17 @@ const getEvent = gql`
     dateEnd
     participantsnumber
     imageUrl
+    participant{
+      firstName
+      lastName
+      email
+    }
     eventCreator{
       firstName
       lastName
       email
     }
+
             }
         }
 `;

@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import {update_Event} from '../../Mutation/eventMutation'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
+import backg from "./backg.jpg";
 
 const Updateevent = () => {
 
@@ -47,7 +48,7 @@ const Updateevent = () => {
       console.error(error);
     }
   }
-
+  var today = new Date();
   const getallevents=()=>{
     navigate('/events')
   }
@@ -62,24 +63,13 @@ const Updateevent = () => {
 
   return (
    <>
-    <div className='py-5'
-    style={{marginTop:"50px"}}>
-    <Button variant='info' 
-      className='btn-sm ' 
-      onClick={() => {getallevents()}}
-      > Back
-       <i class="fa-sharp fa-solid fa-arrow-left"></i>
-      </Button>
-    </div>
-      
-
-    
+<body style={{backgroundImage:`url(${backg})`,height:'720px'}}>
        <center><h3 className="py-5">Update Event</h3></center>
       <Col md={6} style={{float:'right',marginRight:'450px'}}>
       <Form  onSubmit={submitHandler}>
             <Form.Group controlId="name">
                 <Form.Label>
-                   name
+                   
                 </Form.Label>
                 <Form.Control
                  type="name"
@@ -92,7 +82,7 @@ const Updateevent = () => {
             </Form.Group>
             <Form.Group controlId="description">
                 <Form.Label>
-                   description
+                   
                 </Form.Label>
                 <Form.Control
                  type="description"
@@ -105,19 +95,18 @@ const Updateevent = () => {
             </Form.Group>
  <Form.Group controlId="dateEnd">
                 <Form.Label>
-                Date End
                 </Form.Label>
                 <Form.Control 
                  type="date"
                  placeholder="Date End"
                  value={dateEnd} 
+                 min={today}
                  onChange={(e)=> 
                   setDateEnd(e.target.value)}>
                 </Form.Control>
             </Form.Group>
 <Form.Group controlId="participantsnumber">
                 <Form.Label>
-                   Participants Number
                 </Form.Label>
                 <Form.Control 
                  type="Number"
@@ -129,7 +118,6 @@ const Updateevent = () => {
             </Form.Group>
             <Form.Group controlId="imageUrl">
                 <Form.Label>
-                   imageUrl
                 </Form.Label>
                 <Form.Control 
                 type="file"
@@ -139,9 +127,12 @@ const Updateevent = () => {
                  >
                 </Form.Control>
             </Form.Group>
-            <Button type="submit" variant="primary" >Submit</Button>
+            <div className='py-5'>
+            <Button  type="submit"  variant="primary" >Submit</Button>
+            </div>
         </Form>
       </Col>
+      </body>
     </>
      )
 }

@@ -8,5 +8,6 @@ const EventSchema = new mongoose.Schema({
     dateEnd: {type : Date , required : false},
     participantsnumber: {type : Number , required : false},
     imageUrl: {type:String},
+    participant:[{type: mongoose.Types.ObjectId,unique:true,ref:"User"}]
 })
 module.exports = mongoose.model('Event', EventSchema)

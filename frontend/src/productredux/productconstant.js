@@ -9,8 +9,20 @@ export const PRODUCT_DETAIL_REQUEST = 'PRODUCT_DETAIL_REQUEST'
 export const PRODUCT_DETAIL_FAIL = 'PRODUCT_DETAIL_FAIL'
 export const PRODUCT_DETAIL_SUCCESS = 'PRODUCT_DETAIL_SUCCESS'
 
-// ===================================================
+//===================================================
 
 export const DELETE_PRODUCT_SUCCESS = 'DELETE_PRODUCT_SUCCESS';
 export const DELETE_PRODUCT_REQUEST = 'DELETE_PRODUCT_REQUEST';
 export const DELETE_PRODUCT_FAIL = 'DELETE_PRODUCT_FAIL';
+
+//============================================================
+export const CREATE_REVIEW_REQUEST = 'CREATE_REVIEW_REQUEST'
+export const CREATE_REVIEW_FAIL = 'CREATE_REVIEW_FAIL'
+export const CREATE_REVIEW_SUCCESS = 'CREATE_REVIEW_SUCCESS'
+export const CREATE_REVIEW_RESET = 'CREATE_REVIEW_RESET'
+
+// ===================================================
+
+export const PRODUCT_UPDATE_SUCCESS = 'PRODUCT_UPDATE_SUCCESS';
+export const PRODUCT_UPDATE_REQUEST = 'PRODUCT_UPDATE_REQUEST';
+export const PRODUCT_UPDATE_FAIL = 'PRODUCT_UPDATE_FAIL';

@@ -2,13 +2,14 @@ import {gql}  from '@apollo/client'
 
 const getProjects = gql`
 
-query getProjects($limit:Int){
-    projects(limit:$limit)
+query getProjects($limit:Int,$page:Int){
+    projects(limit:$limit,page:$page)
         {
             id
             name
     description
     imageUrl
+    ammounttocollect
     projectCreator{
       firstName
       lastName
@@ -28,6 +29,17 @@ const getProject = gql`
             name
     description
     imageUrl
+    ammounttocollect
+    comment{
+        id
+        like
+        msg
+        user{
+            
+            firstName
+            lastName
+        }
+    }
     projectCreator{
       firstName
       lastName

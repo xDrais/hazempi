@@ -1,6 +1,5 @@
 import React, { Component } from "react"
 import io from "socket.io-client"
-import faker from "faker"
 
 import { IconButton, Badge, Input, Button } from "@material-ui/core"
 import VideocamIcon from "@material-ui/icons/Videocam"
@@ -14,7 +13,6 @@ import ChatIcon from "@material-ui/icons/Chat"
 import { useDispatch, useSelector } from "react-redux"
 
 import { message } from "antd"
-import "antd/dist/antd.css"
 
 import { Row } from "reactstrap"
 import Modal from "react-bootstrap/Modal"

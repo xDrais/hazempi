@@ -13,14 +13,16 @@ return(
 
 <>
 <HeroSection />
-<div align="center" className="eventbackground">
-<Events/> </div>
+{/* <div align="center" className="eventbackground">
+<Events/> </div> */}
 
 
      <Section1 />
+     <Products/>
      <div align="center">
      <Crowdfunding /></div>
 <br />
+
      <Partenairec />
      <br />
      </>);

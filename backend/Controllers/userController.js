@@ -20,7 +20,7 @@ const registerUser = asynHandler( async ( req , res )=> {
         cin  ,
         dateOfBirth , 
         role ,
-        phone, 
+        phone, enrollment
     } = req.body
     const  imageUrl =req.file.filename 
 
@@ -46,10 +46,13 @@ const registerUser = asynHandler( async ( req , res )=> {
     //bcryptjs password cryptage
     const salt = await bcrypt.genSalt(10)
     const headPassword = await bcrypt.hash(password,salt)
+
     const test = generatorOTP()
 
-    const [otp, expirationStr] = test.split('|');
-     expiration = new Date(expirationStr);
+
+    const otp = generatorOTP()
+     //expiration = new Date(expirationStr);
+
 
 
     //create user
@@ -65,7 +68,17 @@ const registerUser = asynHandler( async ( req , res )=> {
         phone,
         status: entrepriseName  ? 'pendingAsSponsor' : speciality  ? 'pendingAsCoach' : '',
         role: {name: "userRole"},
-                emailToken: otp
+                emailToken: otp, enrollment : {
+                  completionStatus: 'Not started',
+                  course: '6433be583b30a00a9d74e733',
+                  enrollmentDate: "2023-04-10T07:44:24.122Z",
+                  learner: '64234336c380a99f8bec23d8',
+                  test: 'Not started',
+                  createdAt: "2023-04-10T07:44:24.122Z",
+                  updatedAt: "2023-04-10T07:44:24.122Z",
+                  __v: 0,
+                  _id: '6433be583b30a00a9d74e733'
+              }
 
         
     })
@@ -122,26 +135,25 @@ const registerUser = asynHandler( async ( req , res )=> {
        <html>
          <head>
            <style>
-             /* Define your CSS styles here */
              h1 {
-               color: #FFFFFF; /* Set header text color to blue */
+               color: #FFFFFF; 
                text-align: center;
              }
              p {
-               color: #444444; /* Set paragraph text color to dark gray */
+               color: #444444;
                font-size: 16px;
                text-align: justify;
              }
              a {
-               color: #ffffff; /* Set link text color to white */
-               background-color: #AB7F42; /* Set link background color to the desired color */
+               color: #ffffff; 
+               background-color: #AB7F42; 
                padding: 12px 24px;
                display: inline-block;
                text-decoration: none;
                border-radius: 4px;
              }
              a:hover {
-               background-color: #007bff; /* Set link background color to darker blue on hover */
+               background-color: #007bff; 
              }
            </style>
          </head>
@@ -186,7 +198,8 @@ const registerUser = asynHandler( async ( req , res )=> {
            cin: user.cin,
            dateOfBirth: user.dateOfBirth,
            role : user.role,    
-           verfication : user.emailToken       
+           verfication : user.emailToken,
+           enrollment : user.enrollment
        })
    }
    else{
@@ -229,26 +242,14 @@ const  verifyEmail = asynHandler( async (req,res) => {
   // if false = email token is defined
   console.log("emailToken is undefined:", !emailToken);
 
-const user = await User.findOne({ emailToken });
+const user = await User.findOne({emailToken});
   if (!emailToken.trim()) {
     // email is incorrect
          console.log("Invalid emailToken :", emailToken);
          res.status(400);
          throw new Error("Invalid request");
 
-  } else if (expiration < Date.now()) {
-    if (user) {
-      user.emailToken= null;
-    
-      await user.save(); 
-    // OTP has expired
-        console.log(" the token is expired:", expiration);
-      res.status(400);
-      throw new Error("Invalid request");
-
-    }
   } else {
-    // OTP is valid
 
                 if (!user) {
                   res.status(404);
@@ -267,6 +268,7 @@ const user = await User.findOne({ emailToken });
                 if (user) {
                 user.emailToken= null;
                 user.verify=true;
+                console.log(user.email);
               
                 await user.save(); 
                     mailTransport().sendMail({
@@ -286,10 +288,12 @@ const user = await User.findOne({ emailToken });
                         </td>
                       `
                       
-                    });
+                    }); 
+                    
 
                  
-              
+                    res.json(user)
+
   }
   
 }
@@ -297,11 +301,24 @@ const user = await User.findOne({ emailToken });
 const logIn = asynHandler( async (req,res)=>{
         const  { email , password } = req.body
         
-        const user = await User.findOne({ email: email })
+        const user = await User.findOne({ empail: email }).poulate('enrollment');
         const coach = await Coach.findOne({ user: user._id })
         const sponsor = await Sponsor.findOne({ user: user._id })
 
         if (user &&(await bcrypt.compare(password,user.password) ) ) {
+          if (!user.enrollment) {
+            user.enrollment = {
+                completionStatus: 'Not started',
+                course: 'Placeholder course id',
+                enrollmentDate: 'Placeholder enrollment date',
+                learner: 'Placeholder learner id',
+                test: 'Not started',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                __v: 0,
+                _id: 'Placeholder enrollement id'
+            };
+        }
             res.json({
                 _id: user._id,
                 email: user.email,
@@ -317,6 +334,7 @@ const logIn = asynHandler( async (req,res)=>{
                 dateOfBirth : user.dateOfBirth, 
                 token: generateToken(user._id),
                 certified : user.certified,
+                enrollement : user.enrollment,
                 coach: coach,
                 sponsor: sponsor
             })

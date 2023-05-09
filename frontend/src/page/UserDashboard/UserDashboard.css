@@ -6,10 +6,27 @@ body {
 
   
 }
+
+.containerproductadd {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.video-containerproductadd {
+  flex: 1;
+  margin-right: 20px;
+  margin-left: 600px;
+  margin-top: 60px;
+  position: absolute;
+}
+#created {
+  flex: 1;
+}
 .yoo{
     background-size: cover ; 
     background-repeat: repeat ; 
-    background-image: url(https://www.thegreekfoundation.com/wp-content/uploads/2021/12/the-greek-foundation-pilosclayart11-500x750.jpg);
+    background-image: url(pexels-roman-odintsov-8063840.jpg);
 
     
 }
@@ -22,9 +39,9 @@ body {
   transform: translate(-50%, -50%);
   width: 1300px;
   height: 760px;
-background: rgba(116, 108, 108, 0.089);
+  background: rgba(215, 200, 200, 0.299);
   box-shadow: 4px 4px 50px rgba(0, 0, 0, 0.49);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(60px);
   border-radius: 20px;
   z-index: 99;
 }
@@ -96,7 +113,7 @@ background: rgba(116, 108, 108, 0.089);
 
 .mp_library .library_search {
   padding-top: 30px;
-  width: 850px;
+  width: 1000px;
   height: 60px;
   display: flex;
   justify-content: space-between;
@@ -104,7 +121,7 @@ background: rgba(116, 108, 108, 0.089);
 }
 
 .library_search .searchbar {
-  width: 600px;
+  width: 1000px;
   height: 40px;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 50px;
@@ -219,7 +236,7 @@ background: rgba(116, 108, 108, 0.089);
 
 /* ------------------ Library (part 3 )------------------- */
 .library_trending {
-  width: 850px;
+  width: 1150px;
   height: auto;
   padding: 0 20px;
   overflow-y: scroll;
@@ -228,7 +245,7 @@ background: rgba(116, 108, 108, 0.089);
 }
 
 .library_trending_create {
-    width: 850px;
+    width: 1000px;
     height: 800px;
     padding: 0 20px;
     overflow-y: scroll;
@@ -273,7 +290,7 @@ background: rgba(116, 108, 108, 0.089);
 
 .library_trending table tr:hover {
   cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(76, 65, 46, 0.2);
 }
 
 .library_trending table tr td {
@@ -321,7 +338,7 @@ background-image: url(../../../public/images/logo.png);
 
 .library_trending table tr .song p {
   font-size: 13px;
-  color: rgb(209, 199, 156);
+  color: #362824;
 }
 
 .library_trending .song_cover {
@@ -541,4 +558,154 @@ background-image: url(../../../public/images/logo.png);
 .develop_by span {
   font-size: 20px;
   font-weight: 900;
+}
+/* For screens smaller than 768px */
+@media only screen and (max-width: 767px) {
+  .mp_playlist{
+    display: none;
+  }
+  .mp_main {
+    margin-top: -400px;
+
+    width: 90%;
+    height: auto;
+    top: 10%;
+    left: 5%;
+    transform: none;
+  }
+  
+  .mp_sidebar {
+    width: 80px;
+    border-radius: 20px 0 0 20px;
+  }
+  
+  .mp_library {
+    left: 80px;
+    width: auto;
+    padding: 0;
+  }
+  
+  .library_search {
+    width: auto;
+    margin: 10px;
+  }
+  
+  .library_search .searchbar {
+    width: 60%;
+    margin-left: 10px;
+  }
+  
+  .library_search .searchbar p {
+    display: none;
+  }
+  
+  .library_search .account {
+    margin-right: 10px;
+  }
+  
+  .library_search .account p {
+    font-size: 14px;
+  }
+  
+  .library_album {
+    margin: 10px;
+  }
+  
+  .library_album h3 {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  .library_album_covers {
+    width: 100%;
+    height: 100px;
+  }
+  
+  .library_album_covers img {
+    width: 20px;
+  }
+  
+  .library_album_covers h5 {
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  .library_album_covers p {
+    font-size: 10px;
+  }
+}
+
+/* For screens between 768px and 1023px */
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  .mp_playlist{
+    display: none;
+  }
+  .mp_main {
+    margin-top: -300px;
+    width: 90%;
+    height: auto;
+    top: 10%;
+    left: 5%;
+    transform: none;
+  }
+  
+  .mp_sidebar {
+    width: 100px;
+    border-radius: 20px 0 0 20px;
+  }
+  
+  .mp_library {
+    left: 100px;
+    width: auto;
+    padding: 0;
+  }
+  
+  .library_search {
+    width: auto;
+    margin: 10px;
+  }
+  
+  .library_search .searchbar {
+    width: 60%;
+    margin-left: 10px;
+  }
+  
+  .library_search .searchbar p {
+    display: none;
+  }
+  
+  .library_search .account {
+    margin-right: 10px;
+  }
+  
+  .library_search .account p {
+    font-size: 14px;
+  }
+  
+  .library_album {
+    margin: 10px;
+  }
+  
+  .library_album h3 {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  .library_album_covers {
+    width: 100%;
+    height: 100px;
+  }
+  
+  .library_album_covers img {
+    width: 20px;
+  }
+  
+  .library_album_covers h5 {
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  .library_album_covers p {
+    font-size: 10px;
+  }
 }

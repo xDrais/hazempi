@@ -56,7 +56,7 @@ a:hover {
 }
 .card{
   margin:5px;
-  height: 100%px;
+  height: 300px;
 }
 .card__image {
   border-radius: 3px;
@@ -103,7 +103,7 @@ a:hover {
 }
 
 .card__overlay--indigo {
-  background-image: linear-gradient(to bottom, rgba(92, 107, 192, 0), rgba(6, 85, 36, 0.521));
+  background-image: linear-gradient(to bottom, rgba(164, 165, 172, 0.968), rgba(219, 175, 73, 0.521));
   z-index: 2;
 }
 

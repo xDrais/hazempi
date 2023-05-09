@@ -45,7 +45,7 @@ router.post('/',(req,res)=>{
                 const newFile = await UploadFile.create({
                     file:req.files
                 })
-            res.json({"success":true,"message":"uploaded","file":newFile}).status(200)
+            res.status(200).json({"success":true,"message":"uploaded","file":newFile})
             } catch (error) {
                 res.json({"success":false,"message":"upload failed"}).status(400)
             }

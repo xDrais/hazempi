@@ -13,7 +13,7 @@ const Loader = () => {
         display: 'block',
         position : 'relative',
         zIndex: 100,
-        color: 'black'
+        color: 'white'
       }}
     >
       <span className='sr-only'>Loading...</span>

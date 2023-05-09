@@ -2,10 +2,11 @@ const path = require("path")
 const { v4 : uuid4 } = require('uuid');
 const multer = require('multer')
 const express = require('express');
-const { createProduct, getAllProducts, deleteProduct, updateProduct, SearchProduct, GetProductsById } = require("../Controllers/productController");
+const { createProduct, getAllProducts ,getProductById, deleteProduct, updateProduct, SearchProduct, GetProductsById,createReview, getProductByIdProduct, updateStock } = require("../Controllers/productController");
 const router = express.Router()
+const { protectSimpleUser,validator,isAdmin }= require('../Middelware/userMiddelware.js')
 
-const storage = multer.diskStorage({
+ const storage = multer.diskStorage({
     destination: function(req, file, cb) {
       cb(null, path.join(__dirname, '../../frontend/public/images')); // use absolute path for uploaded files
   },
@@ -27,12 +28,13 @@ const storage = multer.diskStorage({
   let upload = multer({ storage, fileFilter});
 router.post('/createProduct',upload.single('imageProduct') ,createProduct),
 router.get('/getAll' ,getAllProducts),
-router.get('/:id',GetProductsById)
+router.get('/:id',getProductById),
 router.delete('/delete/:id' ,deleteProduct),
-router.put('/updateProduct/:id' ,updateProduct),
+router.put('/updateProduct/:id',upload.single('imageProduct')  ,updateProduct),
+router.put('/updateStock/:id' ,updateStock),
+router.get('/productByIdProduct/:productId',getProductByIdProduct),
 router.get('/search/:key',SearchProduct),
 router.get('/productById/:userId',GetProductsById)
-
-
+router.post('/:id/reviews' ,protectSimpleUser, createReview)
 
 module.exports = router
