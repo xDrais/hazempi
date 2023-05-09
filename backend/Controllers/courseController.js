@@ -2,6 +2,7 @@ const Course = require('../models/course');
 const Lesson = require('../models/lesson');
 const Test = require('../models/test');
 const Question = require ('../models/test');
+const nodemailer = require('nodemailer');
 const Enrollment = require ('../models/enrollement.js');
 const User = require ('../Models/user.js');
 const asynHandler = require("express-async-handler")
@@ -631,9 +632,39 @@ const createCourseReview = asynHandler(async (req, res) => {
   }
 })
 
+const SendMail = asynHandler(async (req, res) => {
+  try {
+    const { to, subject, body } = req.body;
+
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: process.env.user,
+        pass: process.env.pass
+      }
+    });
+
+    const mailOptions = {
+      from: 'zainebhamdi2013@gmail.com',
+      to,
+      subject,
+      html: body,
+      
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).send('Email sent successfully.' + to);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred while sending the email.');
+  }
+});
+
+
 module.exports={
 
   createCourse,createLesson,getAgePercentage,updateEnrollforUser,DisplayLesson,getCoursesByIds,updateCompletionStatus,countEnroll,countCompletedEnrollments,countinProgressEnrollments,
   deleteCourse,updateCourse,SearchCourse,getCourseById,countNotStartedEnrollments,popularCategory,setTestFailed,setTestPassed,createCourseReview,
-  getCoursesById,updateLesson,calculateSuccessRate, getLessonById, deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest
+  getCoursesById,updateLesson,calculateSuccessRate, getLessonById, deleteLessonFromCourse,GetLessons,createTest,createEnroll,DisplayEnrollment,deleteTest,SendMail
 }

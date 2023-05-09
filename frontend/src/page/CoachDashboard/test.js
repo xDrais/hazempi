@@ -48,13 +48,13 @@ function TEST() {
   data={popularCourseData}          colorScale={colorScale}
   animate={animation}
   style={{
-  labels: { fontSize: 3, fill: "white" }
+  labels: { fontSize: 1.8, fill: "white" } 
 }}
   x="label"
   y="value"
   labelRadius={14}
-  height={150}
-  width={150}  
+  height={120}
+  width={120}  
 
 /> </div>
     ) : (

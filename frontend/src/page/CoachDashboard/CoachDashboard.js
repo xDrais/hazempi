@@ -629,7 +629,7 @@ console.log(data);
                 showDetail ? "library_trending" : ""
               }`}
             > 
-            {coursse && <><h3 className="library_trending_title"> Course Statitics </h3><div style={{align:"center",width:"500px",marginLeft:"100px",display:"flex"}} > <div style={{display:"flex"}}>< CoursesChart courseId={coursse._id} /></div></div> </> }
+            {coursse && <><h3 className="library_trending_title"> Course Statitics </h3><div style={{align:"center",width:"500px",marginLeft:"300px",display:"flex"}} > <div style={{display:"flex"}}>< CoursesChart courseId={coursse._id} /></div></div> </> }
               <h3 className="library_trending_title">
                 Lessons{" "}
                 <lord-icon

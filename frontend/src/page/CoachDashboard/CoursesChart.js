@@ -64,7 +64,7 @@ const CoursesChart = ({ courseId }) => {
 
   return (
     <animated.div style={props}>
-      <div style={{display:'flex',Left:'600px'}} ><AgeSectionPourcentage courseIdd={courseId} />
+      <div style={{display:'flex',Left:'600px'}} ><AgeSectionPourcentage courseId={courseId} />
       <div> <h3 style={{color:'white'}}> Completion rate </h3>
         <h4 style={{ color: "white", marginBottom : "-30px" }}>{titleCourse}</h4>
         <VictoryPie

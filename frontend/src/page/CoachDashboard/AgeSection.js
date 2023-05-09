@@ -3,14 +3,14 @@ import axios from "axios";
 import { VictoryPie } from "victory";
 import { useSelector } from "react-redux";
 
-const AgeSectionPourcentage = ({ courseIdd }) => {
+const AgeSectionPourcentage = ({courseId }) => {
   const [courseData, setCourseData] = useState([]);
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
   const getCourse = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/course/courseByIds/${courseIdd}`);
+      const res = await axios.get(`http://localhost:5000/course/courseByIds/${courseId}`);
       setCourseData(res.data);
       return res.data;
     } catch (err) {
@@ -18,9 +18,9 @@ const AgeSectionPourcentage = ({ courseIdd }) => {
     }
   };
 
-  const AgePourcentage = async (courseIdd) => {
+  const AgePourcentage = async (courseId) => {
     try {
-      const res = await axios.get(`http://localhost:5000/course/getAgePourcentage/${courseIdd}`);
+      const res = await axios.get(`http://localhost:5000/course/getAgePourcentage/${courseId}`);
       const data = res.data;
       const total = data.above30 + data.below30;
       const below30 = total > 0 ? ((data.below30 / total) * 100).toFixed(0) : 0;

@@ -323,6 +323,33 @@ const sendOutOfStockEmail = asynHandler(async  (req, res) => {
   }
 });
 
+const popularCategoryy = async (req, res) => {
+  try {
+    const products = await Product.find();
+    const categories = {};
+
+    products.forEach((product) => {
+      if (!categories[product.category]) {
+        categories[product.category] = 1;
+      } else {
+        categories[product.category]++;
+      }
+    });
+
+    const categoryCount = Object.keys(categories).map((category) => ({
+      category: category,
+      count: categories[category],
+    }));
+
+    categoryCount.sort((a, b) => b.count - a.count);
+
+    res.status(200).json(categoryCount);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 
 
 module.exports = { 
@@ -336,7 +363,7 @@ module.exports = {
    createReview,
    getProductByIdProduct,
    updateStock,
-   sendOutOfStockEmail
+   sendOutOfStockEmail,popularCategoryy
 
 }
   

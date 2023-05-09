@@ -21,7 +21,8 @@ const {
     Unbloque,
     Search,
     coach,
-    sponsor
+    sponsor,
+    allUsers
 
 } = require('../Controllers/userController.js')
 
@@ -75,6 +76,9 @@ router.get('/search/:key',Search)
 router.post('/coach',coach)
 router.post('/sponsor',sponsor)
 
+
+
+router.get("/chatGetUsers",protectSimpleUser, allUsers);
 //router.get('/test',protectSimpleUser,test)
 
 module.exports = router

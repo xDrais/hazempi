@@ -301,7 +301,7 @@ const user = await User.findOne({emailToken});
 const logIn = asynHandler( async (req,res)=>{
         const  { email , password } = req.body
         
-        const user = await User.findOne({ empail: email }).poulate('enrollment');
+        const user = await User.findOne({ email: email }).populate('enrollment');
         const coach = await Coach.findOne({ user: user._id })
         const sponsor = await Sponsor.findOne({ user: user._id })
 
@@ -812,6 +812,22 @@ const coach = asynHandler(async (req,res)=>{
 
   })
   
+
+  //for chat 
+  const allUsers = asynHandler(async (req, res) => {
+    const keyword = req.query.search
+      ? {
+          $or: [
+            { firstName: { $regex: req.query.search, $options: "i" } },
+            { email: { $regex: req.query.search, $options: "i" } },
+          ],
+        }
+      : {};
+  
+    const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+    res.send(users);
+  });
+  
 module.exports = { 
     registerUser,
     verifyEmail,
@@ -833,6 +849,7 @@ module.exports = {
     Unbloque,
     Search,
     coach,
-    sponsor
+    sponsor,
+    allUsers
     
  }

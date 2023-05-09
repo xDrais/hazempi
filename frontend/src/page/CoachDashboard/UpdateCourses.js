@@ -47,7 +47,7 @@ const [validThumbnailCourse, setValidThumbnailCourse] = useState(false);
   const NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9-_ ]{2,88}$/;
   const DESC_REGEX = /^[\w\d\s\-.,!?:;"'()À-ÖØ-öø-ÿ]{3,500}$/;
   const CAT_REGEX = /^[a-zA-Z][a-zA-Z0-9-_ ]{2,88}$/;
-  const IMAGE_REGEX = /\.(png|jpeg|jpg)$/;
+  
 
   /* use effects des controle de saisie */
 
@@ -72,12 +72,6 @@ const [validThumbnailCourse, setValidThumbnailCourse] = useState(false);
     setValidCategory(result);
   }, [category]);
 
-  useEffect(() => {
-    const result = IMAGE_REGEX.test(thumbnailCourse);
-    console.log(result);
-    console.log(thumbnailCourse);
-    setValidThumbnailCourse(result);
-  }, [thumbnailCourse]);
   
 
 
@@ -219,24 +213,16 @@ const coach=userInfo._id
                 <input type="file" accept=".png, .jpg, .jpeg"  name="thumbnailCourse" 
                 onChange={(e) => setThumbnailCourse(e.target.files[0])}></input>
 
-<p
-                id="ima" 
-                className={thumbnailCourse && !validThumbnailCourse ? "none" : "hide"}
-              >
-                <Alert variant="danger" style={{ margin: "10px auto" ,fontSize: "14px", padding: "10px" , width: '650px', height: '40px' }}>
-                Enter Valid image type : png , jpg or jpeg{" "}
-                </Alert>
-            </p>
             <div className="container1">
             <button
     onClick={submitHandler}
     type="submit"
     className="button"
-    style={{ borderRadius: '30%',     backgroundColor: !validTitleCourse || !validCategory || !validDescriptionCourse || !validThumbnailCourse
+    style={{ borderRadius: '30%',     backgroundColor: !validTitleCourse || !validCategory || !validDescriptionCourse 
     ? "grey"
     : "initial" }}
 
-    disabled={!validTitleCourse || !validCategory || !validDescriptionCourse || !validThumbnailCourse }
+    disabled={!validTitleCourse || !validCategory || !validDescriptionCourse  }
     >
   <div className="button__line"></div>
   <div className="button__line"></div>

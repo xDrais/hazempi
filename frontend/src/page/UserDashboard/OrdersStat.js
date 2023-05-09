@@ -51,17 +51,20 @@ function OrdersStat() {
         } 
         fetchBestSeller();
       }, [userInfo._id,productf]);
-    
+      const color = '#b58770'; // set the color to be used for the chart
+
   return (
     <div>
-      <h3 style={{color:"white"}}> Your Personal Best Sellers</h3>
+      <h2 style={{color:"white"}}> Your Personal Best Sellers</h2>
       <div style={{display:'flex'}}>
    
       {bestSeller && bestSeller.map((seller, index) => (
         <div key={index}>
           <h3>{seller.name}</h3>
-          <VictoryPie data={[{ x: `number of orders: ${seller.sales}`, y: seller.sales }]} />
-        </div> 
+          <VictoryPie
+  data={[{ x: `number of orders: ${seller.sales}`, y: seller.sales }]}
+  colorScale={[color]} // set the colorScale prop with an array containing only the desired color
+/>        </div> 
       ))}
     </div> </div> )
 }
