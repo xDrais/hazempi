@@ -1,0 +1,18 @@
+export const PROJECT_COMMENT_SUCCESS = 'PROJECT_COMMENT_SUCCESS';
+export const PROJECT_COMMENT_REQUEST = 'PROJECT_COMMENT_REQUEST';
+export const PROJECT_COMMENT_FAIL = 'PROJECT_COMMENT_FAIL';
+export const PROJECT_UNCOMMENT_SUCCESS = 'PROJECT_UNCOMMENT_SUCCESS';
+export const PROJECT_UNCOMMENT_REQUEST = 'PROJECT_UNCOMMENT_REQUEST';
+export const PROJECT_UNCOMMENT_FAIL = 'PROJECT_UNCOMMENT_FAIL';
+//=================================================================================
+export const PARTICIPATE_EVENT_SUCCESS = 'PARTICIPATE_EVENT_SUCCESS';
+export const PARTICIPATE_EVENT_REQUEST = 'PARTICIPATE_EVENT_REQUEST';
+export const PARTICIPATE_EVENT_FAIL = 'PARTICIPATE_EVENT_FAIL';
+//=================================================================================
+export const UNPARTICIPATE_EVENT_SUCCESS = 'UNPARTICIPATE_EVENT_SUCCESS';
+export const UNPARTICIPATE_EVENT_REQUEST = 'UNPARTICIPATE_EVENT_REQUEST';
+export const UNPARTICIPATE_EVENT_FAIL = 'UNPARTICIPATE_EVENT_FAIL';
+//=================================================================================
+export const GET_PARTI_EVENT_SUCCESS = 'GET_PARTI_EVENT_SUCCESS';
+export const GET_PARTI_EVENT_REQUEST = 'GET_PARTI_EVENT_REQUEST';
+export const GET_PARTI_EVENT_FAIL = 'GET_PARTI_EVENT_FAIL';
